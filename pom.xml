@@ -29,6 +29,7 @@
   <modules>
     <module>ast</module>
     <module>core</module>
+    <module>pointer</module>
   </modules>
 
   <scm>
