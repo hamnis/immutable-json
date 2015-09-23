@@ -6,11 +6,14 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public final class JsonObject implements JsonValue {
     public final Map<String, JsonValue> value;
+
+    public static JsonObject empty() {
+        return new JsonObject(new LinkedHashMap<>());
+    }
 
     public static JsonObject of(Map<String, JsonValue> map) {
         if (map instanceof LinkedHashMap) {
@@ -32,7 +35,7 @@ public final class JsonObject implements JsonValue {
         return (u,v) -> { throw new IllegalStateException(String.format("Duplicate key %s", u)); };
     }
 
-    public JsonObject(LinkedHashMap<String, JsonValue> value) {
+    JsonObject(LinkedHashMap<String, JsonValue> value) {
         this.value = Collections.unmodifiableMap(value);
     }
 
@@ -92,4 +95,5 @@ public final class JsonObject implements JsonValue {
     public Map<String, JsonValue> getValue() {
         return value;
     }
+
 }

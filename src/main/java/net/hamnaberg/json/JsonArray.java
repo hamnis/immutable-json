@@ -7,6 +7,10 @@ import java.util.stream.StreamSupport;
 public final class JsonArray implements JsonValue {
     public final List<JsonValue> value;
 
+    public static JsonArray empty() {
+        return new JsonArray(Collections.emptyList());
+    }
+
     public static JsonArray of(JsonValue v1, JsonValue... rest) {
         ArrayList<JsonValue> list = new ArrayList<>(rest.length + 1);
         list.add(v1);
