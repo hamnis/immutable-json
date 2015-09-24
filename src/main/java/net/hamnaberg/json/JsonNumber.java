@@ -6,19 +6,19 @@ import java.util.Objects;
 public final class JsonNumber implements JsonValue {
     public final BigDecimal value;
 
-    public JsonNumber of(int n) {
+    public static JsonNumber of(int n) {
         return new JsonNumber(new BigDecimal(n));
     }
 
-    public JsonNumber of(double n) {
+    public static JsonNumber of(double n) {
         return new JsonNumber(new BigDecimal(n));
     }
 
-    public JsonNumber of(long n) {
+    public static JsonNumber of(long n) {
         return new JsonNumber(new BigDecimal(n));
     }
 
-    public JsonNumber of(Number n) {
+    public static JsonNumber of(Number n) {
         return new JsonNumber(new BigDecimal(n.toString()));
     }
 

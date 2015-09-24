@@ -22,6 +22,13 @@ public final class JsonObject implements JsonValue {
         return of(map.entrySet());
     }
 
+    public static JsonObject of(Map.Entry<String, JsonValue> first, Map.Entry<String, JsonValue>... rest) {
+        List<Map.Entry<String, JsonValue>> list = new ArrayList<>(rest.length + 1);
+        list.add(first);
+        list.addAll(Arrays.asList(rest));
+        return of(list);
+    }
+
     public static JsonObject of(Iterable<Map.Entry<String, JsonValue>> iterable) {
         return new JsonObject(StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toMap(
                 Map.Entry::getKey,
