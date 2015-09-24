@@ -19,6 +19,9 @@ public final class JsonNumber implements JsonValue {
     }
 
     public static JsonNumber of(Number n) {
+        if (n instanceof BigDecimal) {
+            return new JsonNumber((BigDecimal) n);
+        }
         return new JsonNumber(new BigDecimal(n.toString()));
     }
 
