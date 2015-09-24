@@ -26,11 +26,11 @@ public class JacksonJsonParser extends JsonParser {
         } else if (tree.isArray()) {
             return convertArray(tree);
         } else if (tree.isTextual()) {
-            return new JsonString(tree.asText());
+            return JsonString.of(tree.asText());
         } else if (tree.isNumber()) {
-            return new JsonNumber(tree.decimalValue());
+            return JsonNumber.of(tree.decimalValue());
         } else if (tree.isBoolean()) {
-            return new JsonBoolean(tree.booleanValue());
+            return JsonBoolean.of(tree.booleanValue());
         }
         return JsonNull.INSTANCE;
     }
