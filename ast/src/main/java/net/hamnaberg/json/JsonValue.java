@@ -1,7 +1,5 @@
 package net.hamnaberg.json;
 
-import net.hamnaberg.json.io.JsonSerializer;
-
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.function.Function;
@@ -76,9 +74,5 @@ public interface JsonValue {
 
     default <B> Optional<B> to(Function<JsonValue, Optional<B>> f) {
         return f.apply(this);
-    }
-
-    default <T> T toJson(JsonSerializer<T> serializer) {
-        return serializer.toJson(this);
     }
 }
