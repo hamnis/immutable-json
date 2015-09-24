@@ -31,6 +31,7 @@
     <module>ast</module>
     <module>core</module>
     <module>pointer</module>
+    <module>jackson</module>
   </modules>
 
   <scm>
