@@ -72,6 +72,8 @@ public interface JsonValue {
         return asJsonNumber().map(JsonNumber::getValue);
     }
 
+    default Optional<Boolean> asBoolean() { return asJsonBoolean().map(JsonBoolean::isValue); }
+
     default <B> Optional<B> to(Function<JsonValue, Optional<B>> f) {
         return f.apply(this);
     }

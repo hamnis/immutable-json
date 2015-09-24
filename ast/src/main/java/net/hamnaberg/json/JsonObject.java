@@ -6,9 +6,10 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class JsonObject implements JsonValue {
+public final class JsonObject implements JsonValue, Iterable<Map.Entry<String, JsonValue>> {
     public final Map<String, JsonValue> value;
 
     public static JsonObject empty() {
@@ -95,6 +96,15 @@ public final class JsonObject implements JsonValue {
 
     public Set<String> keySet() {
         return value.keySet();
+    }
+
+    @Override
+    public Iterator<Map.Entry<String, JsonValue>> iterator() {
+        return entrySet().iterator();
+    }
+
+    public Stream<Map.Entry<String, JsonValue>> stream() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     public Map<String, JsonValue> getValue() {
