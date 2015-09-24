@@ -14,16 +14,34 @@ public final class JsonArray implements JsonValue, Iterable<JsonValue> {
         return new JsonArray(Collections.emptyList());
     }
 
+    public static JsonArray of(String v1, String... rest) {
+        return of(listOf(v1, rest), JsonString::new);
+    }
+
+    public static JsonArray of(Number v1, Number... rest) {
+        return of(listOf(v1, rest), JsonNumber::of);
+    }
+
     public static JsonArray of(JsonValue v1, JsonValue... rest) {
-        ArrayList<JsonValue> list = new ArrayList<>(rest.length + 1);
-        list.add(v1);
-        list.addAll(Arrays.asList(rest));
-        return new JsonArray(list);
+        return new JsonArray(listOf(v1, rest));
+    }
+
+    public static <A> JsonArray of(List<A> list, Function<A, JsonValue> f) {
+        List<JsonValue> value = list.stream().map(f).collect(Collectors.toList());
+        return new JsonArray(value);
     }
 
     public static JsonArray of(Iterable<JsonValue> iterable) {
         List<JsonValue> list = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
         return new JsonArray(list);
+    }
+
+    @SafeVarargs
+    public static <A> List<A> listOf(A v1, A... rest) {
+        ArrayList<A> list = new ArrayList<>(rest.length + 1);
+        list.add(v1);
+        list.addAll(Arrays.asList(rest));
+        return list;
     }
 
     public JsonArray(List<JsonValue> value) {
