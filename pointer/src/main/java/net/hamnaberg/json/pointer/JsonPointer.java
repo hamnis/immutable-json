@@ -1,6 +1,5 @@
 package net.hamnaberg.json.pointer;
 
-import net.hamnaberg.json.JsonArray;
 import net.hamnaberg.json.JsonObject;
 import net.hamnaberg.json.JsonValue;
 
@@ -27,24 +26,22 @@ public final class JsonPointer {
 
         final Iterator<Ref> iterator = path.iterator();
         JsonValue current = value;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Ref ref = iterator.next();
             if (ref instanceof ArrayRef && current.isArray()) {
                 int idx = ((ArrayRef) ref).index;
-                List<JsonValue> list = value.asJsonArray().orElse(JsonArray.empty()).getValue();
+                List<JsonValue> list = current.asJsonArrayOrEmpty().getValue();
                 if (idx < list.size()) {
                     current = list.get(idx);
                 }
-            }
-            else if (ref instanceof PropertyRef && current.isObject()) {
+            } else if (ref instanceof PropertyRef && current.isObject()) {
                 String name = ((PropertyRef) ref).name;
-                JsonObject object = current.asJsonObject().orElse(JsonObject.empty());
+                JsonObject object = current.asJsonObjectOrEmpty();
                 Optional<JsonValue> maybeValue = object.get(name);
                 if (maybeValue.isPresent()) {
                     current = maybeValue.get();
                 }
-            }
-            else if (ref instanceof EndOfArray) {
+            } else if (ref instanceof EndOfArray) {
                 throw new IllegalStateException("List index is out-of-bounds");
             }
             if (!iterator.hasNext() && current != value) {

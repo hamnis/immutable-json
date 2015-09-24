@@ -5,6 +5,10 @@ import java.util.Objects;
 public final class JsonString implements JsonValue {
     public final String value;
 
+    public static JsonString of(String value) {
+        return new JsonString(value);
+    }
+
     public JsonString(String value) {
         this.value = Objects.requireNonNull(value, "String may not be null");
     }

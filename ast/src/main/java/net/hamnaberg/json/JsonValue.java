@@ -44,13 +44,22 @@ public interface JsonValue {
         return isArray() ? Optional.of((JsonArray)this) : Optional.empty();
     }
 
+    default JsonArray asJsonArrayOrEmpty() {
+        return isArray() ? (JsonArray)this : JsonArray.empty();
+    }
+
     default Optional<JsonObject> asJsonObject() {
         return isObject() ? Optional.of((JsonObject)this) : Optional.empty();
+    }
+    default JsonObject asJsonObjectOrEmpty() {
+        return isObject() ? (JsonObject)this : JsonObject.empty();
     }
 
     default Optional<JsonBoolean> asJsonBoolean() {
         return isBoolean() ? Optional.of((JsonBoolean)this) : Optional.empty();
     }
+
+    default Optional<Boolean> asBoolean() { return asJsonBoolean().map(JsonBoolean::isValue); }
 
     default Optional<JsonNull> asJsonNull() {
         return isNull() ? Optional.of(JsonNull.INSTANCE) : Optional.empty();
@@ -71,8 +80,6 @@ public interface JsonValue {
     default Optional<BigDecimal> asBigDecimal() {
         return asJsonNumber().map(JsonNumber::getValue);
     }
-
-    default Optional<Boolean> asBoolean() { return asJsonBoolean().map(JsonBoolean::isValue); }
 
     default <B> Optional<B> to(Function<JsonValue, Optional<B>> f) {
         return f.apply(this);

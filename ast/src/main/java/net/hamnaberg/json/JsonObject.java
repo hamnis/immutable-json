@@ -23,6 +23,10 @@ public final class JsonObject implements JsonValue, Iterable<Map.Entry<String, J
         return of(map.entrySet());
     }
 
+    public static JsonObject of(String key, JsonValue value) {
+        return of(Collections.singletonMap(key, value));
+    }
+
     @SafeVarargs
     public static JsonObject of(Map.Entry<String, JsonValue> first, Map.Entry<String, JsonValue>... rest) {
         return of(JsonArray.listOf(first, rest));

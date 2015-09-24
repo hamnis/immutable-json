@@ -1,9 +1,16 @@
 package net.hamnaberg.json;
 
-public final class JsonBoolean implements JsonValue {
+public enum JsonBoolean implements JsonValue {
+    TRUE(true),
+    FALSE(false);
+
     public boolean value;
 
-    public JsonBoolean(boolean value) {
+    public static JsonBoolean of(boolean value) {
+        return value ? TRUE : FALSE;
+    }
+
+    JsonBoolean(boolean value) {
         this.value = value;
     }
 
@@ -12,22 +19,7 @@ public final class JsonBoolean implements JsonValue {
         return Type.BOOLEAN;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        JsonBoolean that = (JsonBoolean) o;
-
-        return value == that.value;
-    }
-
     public boolean isValue() {
         return value;
-    }
-
-    @Override
-    public int hashCode() {
-        return (value ? 1 : 0);
     }
 }

@@ -48,6 +48,10 @@ public final class JsonArray implements JsonValue, Iterable<JsonValue> {
         this.value = Collections.unmodifiableList(Objects.requireNonNull(value, "List may not be null"));
     }
 
+    public Optional<JsonValue> get(int index) {
+        return index < value.size() ? Optional.of(value.get(index)) : Optional.empty();
+    }
+
     public List<JsonObject> getListAsObjects() {
         return getListAs(JsonValue::asJsonObject);
     }
@@ -99,5 +103,4 @@ public final class JsonArray implements JsonValue, Iterable<JsonValue> {
     public Stream<JsonValue> stream() {
         return value.stream();
     }
-
 }
