@@ -1,5 +1,6 @@
 package net.hamnaberg.json.io;
 
+import javaslang.control.Try;
 import net.hamnaberg.json.JsonValue;
 
 import java.io.*;
@@ -15,11 +16,7 @@ public abstract class JsonParser {
     }
 
     public Try<JsonValue> parse(Reader reader) {
-        try {
-            return new Success<>(parseImpl(reader));
-        } catch (Exception e) {
-            return new Failure<>(e);
-        }
+        return Try.of(() -> parseImpl(reader));
     }
 
     protected abstract JsonValue parseImpl(Reader reader) throws Exception;
