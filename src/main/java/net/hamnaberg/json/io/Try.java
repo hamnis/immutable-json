@@ -20,6 +20,7 @@ public abstract class Try<A> {
         return isSuccess() ? asSuccess().get() : defaultValue.get();
     }
 
+    @SuppressWarnings("unchecked")
     public <B> Try<B> map(Function<A, B> f) {
         return isSuccess() ? new Success<>(f.apply(asSuccess().get())) : (Try<B>) asFailure();
     }
