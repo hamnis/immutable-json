@@ -1,10 +1,13 @@
 package net.hamnaberg.json;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class JsonArray implements JsonValue {
+public final class JsonArray implements JsonValue, Iterable<JsonValue> {
     public final List<JsonValue> value;
 
     public static JsonArray empty() {
@@ -25,6 +28,25 @@ public final class JsonArray implements JsonValue {
 
     public JsonArray(List<JsonValue> value) {
         this.value = Collections.unmodifiableList(Objects.requireNonNull(value, "List may not be null"));
+    }
+
+    public List<JsonObject> getListAsObjects() {
+        return getListAs(JsonValue::asJsonObject);
+    }
+
+    public List<String> getListAsStrings() {
+        return getListAs(JsonValue::asString);
+    }
+
+    public List<BigDecimal> getListAsBigDecimals() {
+        return getListAs(JsonValue::asBigDecimal);
+    }
+
+    public <A> List<A> getListAs(Function<JsonValue, Optional<A>> f) {
+        return stream().flatMap(j -> {
+            Optional<A> obj = f.apply(j);
+            return obj.isPresent() ? Stream.of(obj.get()) : Stream.empty();
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -50,4 +72,14 @@ public final class JsonArray implements JsonValue {
     public int hashCode() {
         return value.hashCode();
     }
+
+    @Override
+    public Iterator<JsonValue> iterator() {
+        return value.iterator();
+    }
+
+    public Stream<JsonValue> stream() {
+        return value.stream();
+    }
+
 }
