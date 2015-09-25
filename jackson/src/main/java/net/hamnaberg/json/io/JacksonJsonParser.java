@@ -14,41 +14,41 @@ import java.util.stream.StreamSupport;
 
 public class JacksonJsonParser extends JsonParser {
     @Override
-    protected JsonValue parseImpl(Reader reader) throws Exception {
+    protected Json.JValue parseImpl(Reader reader) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode tree = mapper.readTree(reader);
         return convert(tree);
     }
 
-    private JsonValue convert(JsonNode tree) {
+    private Json.JValue convert(JsonNode tree) {
         if (tree.isObject()) {
             return convertObject(tree);
         } else if (tree.isArray()) {
             return convertArray(tree);
         } else if (tree.isTextual()) {
-            return JsonString.of(tree.asText());
+            return Json.jString(tree.asText());
         } else if (tree.isNumber()) {
-            return JsonNumber.of(tree.decimalValue());
+            return Json.jNumber(tree.decimalValue());
         } else if (tree.isBoolean()) {
-            return JsonBoolean.of(tree.booleanValue());
+            return Json.jBoolean(tree.booleanValue());
         }
-        return JsonNull.INSTANCE;
+        return Json.jNull();
     }
 
-    private JsonArray convertArray(JsonNode tree) {
+    private Json.JArray convertArray(JsonNode tree) {
         Stream<JsonNode> stream = iteratorToFiniteStream(tree.elements());
-        return new JsonArray(stream.map(this::convert).collect(Collectors.toList()));
+        return Json.jArray(stream.map(this::convert).collect(Collectors.toList()));
     }
 
-    private JsonObject convertObject(JsonNode tree) {
+    private Json.JObject convertObject(JsonNode tree) {
         Stream<Map.Entry<String, JsonNode>> stream = iteratorToFiniteStream(tree.fields());
-        return JsonObject.of(
+        return Json.jObject(
                 stream.map(entry -> entry(entry.getKey(), convert(entry.getValue()))).collect(Collectors.toList())
         );
 
     }
 
-    static Map.Entry<String, JsonValue> entry(String name, JsonValue value) {
+    static Map.Entry<String, Json.JValue> entry(String name, Json.JValue value) {
         return new AbstractMap.SimpleImmutableEntry<>(name, value);
     }
 

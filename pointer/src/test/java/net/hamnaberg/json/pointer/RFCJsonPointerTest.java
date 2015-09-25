@@ -10,35 +10,35 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class RFCJsonPointerTest {
-    private static Map.Entry<String, JsonValue> entry(String name, JsonValue value) {
+    private static Map.Entry<String, Json.JValue> entry(String name, Json.JValue value) {
         return new AbstractMap.SimpleImmutableEntry<>(name, value);
     }
 
-    private JsonObject json = JsonObject.of(
-            entry("foo", JsonArray.of(new JsonString("bar"), new JsonString("baz"))),
-            entry("", JsonNumber.of(0)),
-            entry("a/b", JsonNumber.of(1)),
-            entry("c%d", JsonNumber.of(2)),
-            entry("e^f", JsonNumber.of(3)),
-            entry("g|h", JsonNumber.of(4)),
-            entry("i\\j", JsonNumber.of(5)),
-            entry("k\"l", JsonNumber.of(6)),
-            entry(" ", JsonNumber.of(7)),
-            entry("m~n", JsonNumber.of(8))
+    private Json.JObject json = Json.jObject(
+            entry("foo", Json.jArray(Json.jString("bar"), Json.jString("baz"))),
+            entry("", Json.jNumber(0)),
+            entry("a/b", Json.jNumber(1)),
+            entry("c%d", Json.jNumber(2)),
+            entry("e^f", Json.jNumber(3)),
+            entry("g|h", Json.jNumber(4)),
+            entry("i\\j", Json.jNumber(5)),
+            entry("k\"l", Json.jNumber(6)),
+            entry(" ", Json.jNumber(7)),
+            entry("m~n", Json.jNumber(8))
     );
 
     @Test
     public void emptyStringselectWholeDocument() {
-        Optional<JsonValue> select = JsonPointer.compile("").select(json);
+        Optional<Json.JValue> select = JsonPointer.compile("").select(json);
         assertTrue(select.isPresent());
         assertSame(json, select.get());
     }
 
     @Test
     public void slashFooFindsArray() {
-        Optional<JsonValue> select = JsonPointer.compile("/foo").select(json);
+        Optional<Json.JValue> select = JsonPointer.compile("/foo").select(json);
         assertTrue(select.isPresent());
-        assertEquals(JsonArray.of(new JsonString("bar"), new JsonString("baz")), select.get());
+        assertEquals(Json.jArray(Json.jString("bar"), Json.jString("baz")), select.get());
     }
 
     @Test
@@ -55,8 +55,8 @@ public class RFCJsonPointerTest {
     }
 
     private void find(String pattern, int value) {
-        Optional<JsonValue> select = JsonPointer.compile(pattern).select(json);
+        Optional<Json.JValue> select = JsonPointer.compile(pattern).select(json);
         assertTrue(select.isPresent());
-        assertEquals(JsonNumber.of(value), select.get());
+        assertEquals(Json.jNumber(value), select.get());
     }
 }

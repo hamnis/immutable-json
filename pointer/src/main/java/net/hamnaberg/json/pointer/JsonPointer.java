@@ -1,7 +1,6 @@
 package net.hamnaberg.json.pointer;
 
-import net.hamnaberg.json.JsonObject;
-import net.hamnaberg.json.JsonValue;
+import net.hamnaberg.json.Json;
 
 import java.util.*;
 
@@ -19,25 +18,25 @@ public final class JsonPointer {
         this.path = path;
     }
 
-    public Optional<JsonValue> select(JsonValue value) {
+    public Optional<Json.JValue> select(Json.JValue value) {
         if (path.isEmpty()) {
             return Optional.of(value);
         }
 
         final Iterator<Ref> iterator = path.iterator();
-        JsonValue current = value;
+        Json.JValue current = value;
         while (iterator.hasNext()) {
             Ref ref = iterator.next();
-            if (ref instanceof ArrayRef && current.isArray()) {
+            if (ref instanceof ArrayRef && current instanceof Json.JArray) {
                 int idx = ((ArrayRef) ref).index;
-                List<JsonValue> list = current.asJsonArrayOrEmpty().getValue();
+                List<Json.JValue> list = current.asJsonArrayOrEmpty().getValue();
                 if (idx < list.size()) {
                     current = list.get(idx);
                 }
-            } else if (ref instanceof PropertyRef && current.isObject()) {
+            } else if (ref instanceof PropertyRef && current instanceof Json.JObject) {
                 String name = ((PropertyRef) ref).name;
-                JsonObject object = current.asJsonObjectOrEmpty();
-                Optional<JsonValue> maybeValue = object.get(name);
+                Json.JObject object = current.asJsonObjectOrEmpty();
+                Optional<Json.JValue> maybeValue = object.get(name);
                 if (maybeValue.isPresent()) {
                     current = maybeValue.get();
                 }

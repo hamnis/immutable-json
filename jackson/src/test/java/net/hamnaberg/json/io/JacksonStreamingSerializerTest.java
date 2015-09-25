@@ -1,7 +1,8 @@
 package net.hamnaberg.json.io;
 
+import javaslang.control.Either;
 import javaslang.control.Try;
-import net.hamnaberg.json.JsonValue;
+import net.hamnaberg.json.Json;
 import org.junit.Test;
 
 import java.io.*;
@@ -14,8 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class JacksonStreamingSerializerTest {
     @Test
     public void outputSameAsInput() throws Exception {
-        Try<JsonValue> parse = new JacksonStreamingParser().parse(getClass().getResourceAsStream("/items.json"));
-        parse.forEach(jv -> {
+        Either<Exception, Json.JValue> parse = new JacksonStreamingParser().parse(getClass().getResourceAsStream("/items.json"));
+        parse.right().forEach(jv -> {
             Consumer<OutputStream> consumer = new JacksonStreamingSerializer().toJson(jv);
             ByteArrayOutputStream bs = new ByteArrayOutputStream();
             consumer.accept(bs);

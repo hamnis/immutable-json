@@ -1,8 +1,8 @@
 package net.hamnaberg.json.io;
 
-import net.hamnaberg.json.JsonValue;
+import net.hamnaberg.json.Json;
 
 @FunctionalInterface
 public interface JsonSerializer<A> {
-    A toJson(JsonValue value);
+    A toJson(Json.JValue value);
 }

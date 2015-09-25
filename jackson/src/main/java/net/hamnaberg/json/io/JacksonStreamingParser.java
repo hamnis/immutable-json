@@ -11,7 +11,7 @@ import java.util.List;
 
 public class JacksonStreamingParser extends JsonParser {
     @Override
-    protected JsonValue parseImpl(Reader reader) throws Exception {
+    protected Json.JValue parseImpl(Reader reader) throws Exception {
         JsonFactory factory = new JsonFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(reader);
         JsonToken token;
@@ -29,8 +29,8 @@ public class JacksonStreamingParser extends JsonParser {
         throw new IllegalStateException("Nothing parsed...");
     }
 
-    private JsonObject handleObject(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
-        LinkedHashMap<String, JsonValue> map = new LinkedHashMap<>();
+    private Json.JObject handleObject(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
+        LinkedHashMap<String, Json.JValue> map = new LinkedHashMap<>();
         String fieldName;
         while ((fieldName = parser.nextFieldName()) != null) {
             JsonToken token = parser.nextValue();
@@ -44,12 +44,12 @@ public class JacksonStreamingParser extends JsonParser {
                 map.put(fieldName, handleObject(parser));
             }
         }
-        return JsonObject.of(map);
+        return Json.jObject(map);
     }
 
-    private JsonValue handleArray(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
+    private Json.JValue handleArray(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
         JsonToken token;
-        List<JsonValue> values = new ArrayList<>();
+        List<Json.JValue> values = new ArrayList<>();
         while ((token = parser.nextToken()) != JsonToken.END_ARRAY) {
             if (token.isScalarValue()) {
                 values.add(handleScalarValue(parser));
@@ -61,22 +61,22 @@ public class JacksonStreamingParser extends JsonParser {
                 values.add(handleObject(parser));
             }
         }
-        return new JsonArray(values);
+        return Json.jArray(values);
     }
 
-    private JsonValue handleScalarValue(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
+    private Json.JValue handleScalarValue(com.fasterxml.jackson.core.JsonParser parser) throws Exception {
         JsonToken token = parser.getCurrentToken();
         if (token == JsonToken.VALUE_STRING) {
-            return JsonString.of(parser.getValueAsString());
+            return Json.jString(parser.getValueAsString());
         }
         else if (token.isNumeric()) {
-            return JsonNumber.of(parser.getDecimalValue());
+            return Json.jNumber(parser.getDecimalValue());
         }
         else if (token.isBoolean()) {
-            return JsonBoolean.of(parser.getBooleanValue());
+            return Json.jBoolean(parser.getBooleanValue());
         }
         else {
-            return JsonNull.INSTANCE;
+            return Json.jNull();
         }
     }
 
