@@ -32,6 +32,7 @@
     <module>core</module>
     <module>pointer</module>
     <module>jackson</module>
+    <module>javax-json</module>
   </modules>
 
   <scm>
@@ -93,6 +94,13 @@
         <groupId>${project.groupId}</groupId>
         <artifactId>json-core</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>json-core</artifactId>
+        <version>${project.version}</version>
+        <classifier>tests</classifier>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
