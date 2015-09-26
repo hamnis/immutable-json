@@ -1,5 +1,6 @@
 package net.hamnaberg.json.pointer;
 
+import javaslang.control.Option;
 import net.hamnaberg.json.*;
 import org.junit.Test;
 
@@ -29,15 +30,15 @@ public class RFCJsonPointerTest {
 
     @Test
     public void emptyStringselectWholeDocument() {
-        Optional<Json.JValue> select = JsonPointer.compile("").select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile("").select(json);
+        assertTrue(select.isDefined());
         assertSame(json, select.get());
     }
 
     @Test
     public void slashFooFindsArray() {
-        Optional<Json.JValue> select = JsonPointer.compile("/foo").select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile("/foo").select(json);
+        assertTrue(select.isDefined());
         assertEquals(Json.jArray(Json.jString("bar"), Json.jString("baz")), select.get());
     }
 
@@ -55,8 +56,8 @@ public class RFCJsonPointerTest {
     }
 
     private void find(String pattern, int value) {
-        Optional<Json.JValue> select = JsonPointer.compile(pattern).select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile(pattern).select(json);
+        assertTrue(select.isDefined());
         assertEquals(Json.jNumber(value), select.get());
     }
 }

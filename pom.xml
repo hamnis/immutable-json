@@ -59,6 +59,7 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
+
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -84,6 +85,11 @@
         <artifactId>junit</artifactId>
         <version>4.11</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.javaslang</groupId>
+        <artifactId>javaslang</artifactId>
+        <version>1.2.2</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>

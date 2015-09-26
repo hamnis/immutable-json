@@ -2,12 +2,12 @@ package net.hamnaberg.json.io;
 
 import javaslang.control.Either;
 import javaslang.control.Left;
+import javaslang.control.Option;
 import javaslang.control.Right;
 import net.hamnaberg.json.Json;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 public abstract class JsonParser {
     public Either<Exception, Json.JValue> parse(InputStream is) {
@@ -26,16 +26,16 @@ public abstract class JsonParser {
         }
     }
 
-    public Optional<Json.JValue> parseOpt(InputStream is) {
-        return parse(is).right().toJavaOptional();
+    public Option<Json.JValue> parseOpt(InputStream is) {
+        return parse(is).right().toOption();
     }
 
-    public Optional<Json.JValue> parseOpt(String string) {
-        return parse(string).right().toJavaOptional();
+    public Option<Json.JValue> parseOpt(String string) {
+        return parse(string).right().toOption();
     }
 
-    public Optional<Json.JValue> parseOpt(Reader reader) {
-        return parse(reader).right().toJavaOptional();
+    public Option<Json.JValue> parseOpt(Reader reader) {
+        return parse(reader).right().toOption();
     }
 
     protected abstract Json.JValue parseImpl(Reader reader) throws Exception;
