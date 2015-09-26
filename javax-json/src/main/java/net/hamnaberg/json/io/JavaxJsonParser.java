@@ -41,7 +41,7 @@ public class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
             case VALUE_NULL:
                 return Json.jNull();
             default:
-                throw new IllegalArgumentException("Not a scala value");
+                throw new IllegalArgumentException("Not a scalar value " + event);
         }
     }
 
@@ -78,18 +78,17 @@ public class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
     private Json.JObject handleObject(JsonParser parser) {
         Map<String, Json.JValue> map = new LinkedHashMap<>();
         JsonParser.Event event;
+        String name = null;
         while((event = parser.next()) != JsonParser.Event.END_OBJECT) {
-            JsonParser.Event next = parser.next();
-            if (next == JsonParser.Event.KEY_NAME) {
-                String name = parser.getString();
-                next = parser.next();
-                if (isScalar(next)) {
+            if (event == JsonParser.Event.KEY_NAME) {
+                name = parser.getString();
+            }
+            if (name != null) {
+                if (isScalar(event)) {
                     map.put(name, handleScalarValue(event, parser));
-                }
-                else if (next == JsonParser.Event.START_OBJECT) {
+                } else if (event == JsonParser.Event.START_OBJECT) {
                     map.put(name, handleObject(parser));
-                }
-                else if (next == JsonParser.Event.START_ARRAY) {
+                } else if (event == JsonParser.Event.START_ARRAY) {
                     map.put(name, handleArray(parser));
                 }
             }
