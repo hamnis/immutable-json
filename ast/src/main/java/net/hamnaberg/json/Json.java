@@ -407,6 +407,10 @@ public abstract class Json {
             });
         }
 
+        public int size() {
+            return value.length();
+        }
+
         public JArray append(JValue toAdd) {
             return new JArray(value.append(toAdd));
         }
@@ -419,6 +423,9 @@ public abstract class Json {
             return new JArray(value.insert(index, toAdd));
         }
 
+        public JArray remove(int index) {
+            return get(index).map(v -> jArray(value.remove(v))).orElse(this);
+        }
     }
 
     public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
