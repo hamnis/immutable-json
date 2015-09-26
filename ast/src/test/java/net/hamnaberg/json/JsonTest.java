@@ -5,12 +5,12 @@ import javaslang.control.Option;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class JsonTest {
     @Test
@@ -86,5 +86,29 @@ public class JsonTest {
         assertEquals(6, remove.size());
         assertEquals(3, notEmpty2.insert(1, Json.jArray(List.range(1, 10).map(Json::jNumber))).size());
         assertEquals(11L, Stream.concat(notEmpty2.stream(), Json.jArray(List.range(1, 10).map(Json::jNumber)).stream()).count());
+    }
+
+    @Test
+    public void jObject() throws Exception {
+        Json.JObject single = Json.jObject("k", Json.jNumber(23));
+        assertEquals(single, Json.jObject(new HashMap<String, Json.JValue>() {{
+            put("k", Json.jNumber(23));
+        }}));
+        assertEquals(1, single.size());
+        assertEquals(1, single.values().size());
+        assertEquals(Collections.singletonList(Json.jNumber(23)), new ArrayList<>(single.values()));
+        assertTrue(Json.jEmptyObject().isEmpty());
+        assertFalse(Json.jEmptyObject().containsKey("Hello"));
+        assertTrue(single.containsKey("k"));
+        assertTrue(single.containsValue(Json.jNumber(23)));
+        assertEquals(single.mapToList(this::entry), List.of(entry("k", Json.jNumber(23))));
+        assertEquals(single.put("v", Json.jEmptyArray()), Json.jObject(new HashMap<String, Json.JValue>() {{
+            put("k", Json.jNumber(23));
+            put("v", Json.jEmptyArray());
+        }}));
+    }
+
+    public <K, V> Map.Entry<K, V> entry(K k, V v) {
+        return new AbstractMap.SimpleImmutableEntry<>(k, v);
     }
 }
