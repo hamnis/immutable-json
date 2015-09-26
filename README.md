@@ -18,7 +18,8 @@
  [![Build Status](https://travis-ci.org/hamnis/immutable-json.png)](https://travis-ci.org/hamnis/immutable-json)
  [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
 
- ## Where can we find this
+
+## Where can we find this
 
  Using maven, you download it from Maven Central using these coordinates:
 
