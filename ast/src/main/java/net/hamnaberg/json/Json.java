@@ -94,6 +94,14 @@ public abstract class Json {
 
         public abstract int hashCode();
 
+        /**
+         * This is NOT the json representation. For that you
+         * will need to use JsonSerializer in the core module.
+         *
+         * @return as String describing the data structure.
+         */
+        public abstract String toString();
+
         public final <X> X fold(Function<JString, X> fString,
                                    Function<JBoolean, X> fBoolean,
                                    Function<JNumber, X> fNumber,
@@ -218,6 +226,13 @@ public abstract class Json {
         }
 
 
+        @Override
+        public String toString() {
+            return "JString{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
+
         public String getValue() {
             return value;
         }
@@ -246,6 +261,13 @@ public abstract class Json {
             return (value ? 1 : 0);
         }
 
+        @Override
+        public String toString() {
+            return "JBoolean{" +
+                    "value=" + value +
+                    '}';
+        }
+
         public boolean isValue() {
             return value;
         }
@@ -268,6 +290,10 @@ public abstract class Json {
             return 31;
         }
 
+        @Override
+        public String toString() {
+            return "JNull";
+        }
     }
 
     public static final class JNumber extends JValue {
@@ -293,6 +319,12 @@ public abstract class Json {
             return value.hashCode();
         }
 
+        @Override
+        public String toString() {
+            return "JNumber{" +
+                    "value=" + value +
+                    '}';
+        }
 
         public long asLong() { return value.longValue(); }
 
@@ -326,6 +358,13 @@ public abstract class Json {
         @Override
         public int hashCode() {
             return value.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "JArray{" +
+                    "value=" + value +
+                    '}';
         }
 
         public Seq<JValue> getValue() {
@@ -379,6 +418,7 @@ public abstract class Json {
         public JArray insert(int index, JValue toAdd) {
             return new JArray(value.insert(index, toAdd));
         }
+
     }
 
     public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
@@ -402,6 +442,13 @@ public abstract class Json {
         @Override
         public int hashCode() {
             return value.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "JObject{" +
+                    "value=" + value +
+                    '}';
         }
 
         public Map<String, JValue> getValue() {
