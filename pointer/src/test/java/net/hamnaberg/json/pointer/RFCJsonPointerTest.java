@@ -52,7 +52,7 @@ public class RFCJsonPointerTest {
         find("/i\\j", 5);
         find("/k\"l", 6);
         find("/ ",    7);
-        find("m~n",   8);
+        find("/m~0n", 8);
     }
 
     private void find(String pattern, int value) {
