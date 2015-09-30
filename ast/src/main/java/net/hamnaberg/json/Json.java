@@ -486,11 +486,11 @@ public abstract class Json {
             return value.isEmpty();
         }
 
-        public boolean containsKey(Object key) {
+        public boolean containsKey(String key) {
             return value.containsKey(key);
         }
 
-        public boolean containsValue(Object value) {
+        public boolean containsValue(String value) {
             return this.value.containsValue(value);
         }
 
@@ -514,7 +514,7 @@ public abstract class Json {
             return values().stream().map(f).collect(List.collector());
         }
 
-        public JValue getOrDefault(Object key, JValue defaultValue) {
+        public JValue getOrDefault(String key, JValue defaultValue) {
             return value.getOrDefault(key, defaultValue);
         }
 
