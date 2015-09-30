@@ -490,7 +490,7 @@ public abstract class Json {
             return value.containsKey(key);
         }
 
-        public boolean containsValue(String value) {
+        public boolean containsValue(JValue value) {
             return this.value.containsValue(value);
         }
 
