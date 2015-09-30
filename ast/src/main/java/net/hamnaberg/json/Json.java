@@ -466,6 +466,22 @@ public abstract class Json {
             return Option.of(value.get(name));
         }
 
+        public <A> Option<A> getAs(String name, Function<JValue, Option<A>> f) {
+            return get(name).flatMap(f);
+        }
+
+        public Option<String> getAsString(String name) {
+            return getAs(name, JValue::asString);
+        }
+
+        public Option<BigDecimal> getAsBigDecimal(String name) {
+            return getAs(name, JValue::asBigDecimal);
+        }
+
+        public Option<Boolean> getAsBoolean(String name) {
+            return getAs(name, JValue::asBoolean);
+        }
+
         public boolean isEmpty() {
             return value.isEmpty();
         }
