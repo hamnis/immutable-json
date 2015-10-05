@@ -15,3 +15,5 @@ nbproject
 private
 profiles.xml
 target
+*.releaseBackup
+release.properties
