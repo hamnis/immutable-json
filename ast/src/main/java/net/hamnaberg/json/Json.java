@@ -102,63 +102,19 @@ public abstract class Json {
          */
         public abstract String toString();
 
-        public final <X> X fold(Function<JString, X> fString,
+        public abstract <X> X fold(Function<JString, X> fString,
                                    Function<JBoolean, X> fBoolean,
                                    Function<JNumber, X> fNumber,
                                    Function<JObject, X> fObject,
                                    Function<JArray, X> fArray,
-                                   Supplier<X> fNull) {
-            if (this instanceof JString) {
-                return fString.apply((JString) this);
-            }
-            else if (this instanceof JBoolean) {
-                return fBoolean.apply((JBoolean)this);
-            }
-            else if (this instanceof JNumber) {
-                return fNumber.apply((JNumber) this);
-            }
-            else if (this instanceof JObject) {
-                return fObject.apply((JObject) this);
-            }
-            else if (this instanceof JArray) {
-                return fArray.apply((JArray) this);
-            }
-            else if (this instanceof JNull) {
-                return fNull.get();
-            }
-            else {
-                throw new RuntimeException("Not a valid AST node");
-            }
-        }
+                                   Supplier<X> fNull);
 
-        public final void foldUnit(Consumer<JString> fString,
+        public abstract void foldUnit(Consumer<JString> fString,
                                Consumer<JBoolean> fBoolean,
                                Consumer<JNumber> fNumber,
                                Consumer<JObject> fObject,
                                Consumer<JArray> fArray,
-                               Runnable fNull) {
-            if (this instanceof JString) {
-                fString.accept((JString) this);
-            }
-            else if (this instanceof JBoolean) {
-                fBoolean.accept((JBoolean)this);
-            }
-            else if (this instanceof JNumber) {
-                fNumber.accept((JNumber) this);
-            }
-            else if (this instanceof JObject) {
-                fObject.accept((JObject) this);
-            }
-            else if (this instanceof JArray) {
-                fArray.accept((JArray) this);
-            }
-            else if (this instanceof JNull) {
-                fNull.run();
-            }
-            else {
-                throw new RuntimeException("Not a valid AST node");
-            }
-        }
+                               Runnable fNull);
 
         public final Option<JArray> asJsonArray() {
             return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Option::of, Option::none);
@@ -233,6 +189,16 @@ public abstract class Json {
                     '}';
         }
 
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fString.apply(this);
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fString.accept(this);
+        }
+
         public String getValue() {
             return value;
         }
@@ -268,6 +234,16 @@ public abstract class Json {
                     '}';
         }
 
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fBoolean.apply(this);
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fBoolean.accept(this);
+        }
+
         public boolean isValue() {
             return value;
         }
@@ -293,6 +269,16 @@ public abstract class Json {
         @Override
         public String toString() {
             return "JNull";
+        }
+
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fNull.get();
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fNull.run();
         }
     }
 
@@ -324,6 +310,16 @@ public abstract class Json {
             return "JNumber{" +
                     "value=" + value +
                     '}';
+        }
+
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fNumber.apply(this);
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fNumber.accept(this);
         }
 
         public long asLong() { return value.longValue(); }
@@ -365,6 +361,16 @@ public abstract class Json {
             return "JArray{" +
                     "value=" + value +
                     '}';
+        }
+
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fArray.apply(this);
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fArray.accept(this);
         }
 
         public Seq<JValue> getValue() {
@@ -456,6 +462,16 @@ public abstract class Json {
             return "JObject{" +
                     "value=" + value +
                     '}';
+        }
+
+        @Override
+        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return fObject.apply(this);
+        }
+
+        @Override
+        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            fObject.accept(this);
         }
 
         public Map<String, JValue> getValue() {
