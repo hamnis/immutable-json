@@ -498,6 +498,22 @@ public abstract class Json {
             return getAs(name, JValue::asBoolean);
         }
 
+        public Option<Json.JArray> getAsArray(String name) {
+            return getAs(name, JValue::asJsonArray);
+        }
+
+        public Json.JArray getAsArrayOrEmpty(String name) {
+            return getAsArray(name).orElse(Json.jEmptyArray());
+        }
+
+        public Option<Json.JObject> getAsObject(String name) {
+            return getAs(name, JValue::asJsonObject);
+        }
+
+        public Json.JObject getAsObjectOrEmpty(String name) {
+            return getAsObject(name).orElse(Json.jEmptyObject());
+        }
+
         public boolean isEmpty() {
             return value.isEmpty();
         }
