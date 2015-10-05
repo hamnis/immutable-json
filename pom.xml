@@ -156,6 +156,7 @@
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <preparationGoals>clean install</preparationGoals>
           <goals>deploy</goals>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
         </configuration>
       </plugin>
       <plugin>
