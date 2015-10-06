@@ -421,8 +421,53 @@ public abstract class Json {
             return new JArray(value.append(toAdd));
         }
 
+        public JArray append(String toAdd) {
+            return append(Json.jString(toAdd));
+        }
+        public JArray append(BigDecimal toAdd) {
+            return append(Json.jNumber(toAdd));
+        }
+        public JArray append(Number toAdd) {
+            return append(Json.jNumber(toAdd));
+        }
+        public JArray append(int toAdd) {
+            return append(Json.jNumber(toAdd));
+        }
+        public JArray append(long toAdd) {
+            return append(Json.jNumber(toAdd));
+        }
+        public JArray append(double toAdd) {
+            return append(Json.jNumber(toAdd));
+        }
+        public JArray append(boolean toAdd) {
+            return append(Json.jBoolean(toAdd));
+        }
+
         public JArray prepend(JValue toAdd) {
             return new JArray(value.prepend(toAdd));
+        }
+
+        public JArray prepend(String toAdd) {
+            return prepend(Json.jString(toAdd));
+        }
+        public JArray prepend(BigDecimal toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+        public JArray prepend(Number toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+        public JArray prepend(int toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+        public JArray prepend(long toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+        public JArray prepend(double toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(boolean toAdd) {
+            return prepend(Json.jBoolean(toAdd));
         }
 
         public JArray insert(int index, JValue toAdd) {
@@ -571,6 +616,34 @@ public abstract class Json {
             Map<String, JValue> map = copyMap();
             map.put(name, value);
             return new JObject(map);
+        }
+
+        public JObject put(String name, String value) {
+            return put(name, Json.jString(value));
+        }
+
+        public JObject put(String name, BigDecimal value) {
+            return put(name, Json.jNumber(value));
+        }
+
+        public JObject put(String name, Number value) {
+            return put(name, Json.jNumber(value));
+        }
+
+        public JObject put(String name, int value) {
+            return put(name, Json.jNumber(value));
+        }
+
+        public JObject put(String name, long value) {
+            return put(name, Json.jNumber(value));
+        }
+
+        public JObject put(String name, double value) {
+            return put(name, Json.jNumber(value));
+        }
+
+        public JObject put(String name, boolean value) {
+            return put(name, Json.jBoolean(value));
         }
 
         private Map<String, JValue> copyMap() {
