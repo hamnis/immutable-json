@@ -1,13 +1,13 @@
 package net.hamnaberg.json.io;
 
 import javaslang.control.Either;
-import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.function.Consumer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -17,11 +17,7 @@ public class JacksonStreamingSerializerTest {
     public void outputSameAsInput() throws Exception {
         Either<Exception, Json.JValue> parse = new JacksonStreamingParser().parse(getClass().getResourceAsStream("/items.json"));
         parse.right().forEach(jv -> {
-            Consumer<OutputStream> consumer = new JacksonStreamingSerializer().toJson(jv);
-            ByteArrayOutputStream bs = new ByteArrayOutputStream();
-            consumer.accept(bs);
-            byte[] bytes = bs.toByteArray();
-            String s = new String(bytes, StandardCharsets.UTF_8);
+            String s = new JacksonStreamingSerializer().writeToString(jv);
             String expected = toString(getClass().getResourceAsStream("/items.json"));
             assertEquals(expected.replace(": ", ":"), s);
         });

@@ -1,20 +1,19 @@
 package net.hamnaberg.json.io;
 
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class JacksonStreamingSerializer implements JsonSerializer<Consumer<OutputStream>> {
+public class JacksonStreamingSerializer implements JsonSerializer {
     private final JsonFactory factory = new JsonFactory();
 
-    @Override
-    public Consumer<OutputStream> toJson(Json.JValue value) {
+    public Consumer<OutputStream> toConsumerStream(Json.JValue value) {
         return os -> {
             try {
                 write(value, os);
@@ -26,9 +25,13 @@ public class JacksonStreamingSerializer implements JsonSerializer<Consumer<Outpu
         };
     }
 
-    private void write(Json.JValue value, OutputStream os) throws Throwable {
-        try (JsonGenerator generator = factory.createGenerator(os, JsonEncoding.UTF8)) {
+    public void write(Json.JValue value, Writer writer) {
+        try (JsonGenerator generator = factory.createGenerator(writer)) {
             write(value, generator);
+        } catch(RuntimeException | Error e) {
+            throw e;
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
         }
     }
 
@@ -64,7 +67,6 @@ public class JacksonStreamingSerializer implements JsonSerializer<Consumer<Outpu
             } catch(RuntimeException | Error e) {
                 throw e;
             } catch (Throwable t) {
-                t.printStackTrace();
                 throw new RuntimeException(t);
             }
         };
@@ -77,7 +79,6 @@ public class JacksonStreamingSerializer implements JsonSerializer<Consumer<Outpu
             } catch(RuntimeException | Error e) {
                 throw e;
             } catch (Throwable t) {
-                t.printStackTrace();
                 throw new RuntimeException(t);
             }
         };
