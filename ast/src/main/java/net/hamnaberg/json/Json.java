@@ -531,7 +531,7 @@ public abstract class Json {
         }
 
         public Optional<JValue> get(String name) {
-            return Optional.of(value.get(name));
+            return Optional.ofNullable(value.get(name));
         }
 
         public <A> Optional<A> getAs(String name, Function<JValue, Optional<A>> f) {
