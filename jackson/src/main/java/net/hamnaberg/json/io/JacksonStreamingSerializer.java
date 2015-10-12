@@ -2,7 +2,6 @@ package net.hamnaberg.json.io;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 
 import java.io.OutputStream;
@@ -60,7 +59,7 @@ public class JacksonStreamingSerializer implements JsonSerializer {
         );
     }
 
-    public static <A> Consumer<A> liftChecked(Try.CheckedConsumer<A> f) {
+    public static <A> Consumer<A> liftChecked(CheckedConsumer<A> f) {
         return (a) -> {
             try {
                 f.accept(a);
@@ -72,7 +71,7 @@ public class JacksonStreamingSerializer implements JsonSerializer {
         };
     }
 
-    public static Runnable liftChecked(Try.CheckedRunnable f) {
+    public static Runnable liftChecked(CheckedRunnable f) {
         return () -> {
             try {
                 f.run();
@@ -82,5 +81,14 @@ public class JacksonStreamingSerializer implements JsonSerializer {
                 throw new RuntimeException(t);
             }
         };
+    }
+
+
+    private interface CheckedConsumer<A> {
+        void accept(A a) throws Exception;
+    }
+
+    private interface CheckedRunnable {
+        void run() throws Exception;
     }
 }

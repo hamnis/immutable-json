@@ -30,9 +30,5 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.javaslang</groupId>
-      <artifactId>javaslang</artifactId>
-    </dependency>
   </dependencies>
 </project>

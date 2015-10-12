@@ -1,6 +1,5 @@
 package net.hamnaberg.json.io;
 
-import javaslang.control.Either;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
@@ -15,12 +14,11 @@ import static org.junit.Assert.assertEquals;
 public class JacksonStreamingSerializerTest {
     @Test
     public void outputSameAsInput() throws Exception {
-        Either<Exception, Json.JValue> parse = new JacksonStreamingParser().parse(getClass().getResourceAsStream("/items.json"));
-        parse.right().forEach(jv -> {
-            String s = new JacksonStreamingSerializer().writeToString(jv);
-            String expected = toString(getClass().getResourceAsStream("/items.json"));
-            assertEquals(expected.replace(": ", ":"), s);
-        });
+        Json.JValue parse = new JacksonStreamingParser().parse(getClass().getResourceAsStream("/items.json"));
+        String s = new JacksonStreamingSerializer().writeToString(parse);
+        String expected = toString(getClass().getResourceAsStream("/items.json"));
+        assertEquals(expected.replace(": ", ":"), s);
+
     }
 
     String toString(InputStream is) {

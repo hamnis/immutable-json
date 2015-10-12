@@ -37,10 +37,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.javaslang</groupId>
-      <artifactId>javaslang</artifactId>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

@@ -1,9 +1,8 @@
 package net.hamnaberg.json.pointer;
 
 
-import javaslang.collection.List;
-
 import java.util.ArrayList;
+import java.util.List;
 
 class JsonPointerParser {
     List<Ref> parse(String s) {
@@ -12,7 +11,7 @@ class JsonPointerParser {
     }
 
     List<Ref> parse(List<String> parts) {
-        ArrayList<Ref> path = new ArrayList<>(parts.length());
+        ArrayList<Ref> path = new ArrayList<>(parts.size());
         for (String p : parts) {
             if (p.equals("-")) {
                 path.add(EndOfArray.INSTANCE);
@@ -24,7 +23,7 @@ class JsonPointerParser {
                 path.add(new PropertyRef(p));
             }
         }
-        return List.ofAll(path);
+        return path;
     }
 
     private List<String> clean(String[] split) {
@@ -32,7 +31,7 @@ class JsonPointerParser {
         for (String s : split) {
             list.add(unescape(s));
         }
-        return List.ofAll(list);
+        return list;
     }
 
     private String unescape(String str) {
