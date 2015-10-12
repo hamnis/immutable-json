@@ -6,11 +6,10 @@
  If you want to program in functional style in Java, you want
  your data types to be immutable and efficient.
 
- Unfortunately there are no default immutable collections
- in Java, which is why we are depending on [Javaslang](http://javaslang.com).
+ Unfortunately there are no default immutable collections in Java.
+ Since this is the case we need to copy the collections every time we do transformations.
 
- I would really like to avoid having this dependency, so when [JEP 269](http://openjdk.java.net/jeps/269)
- is part of the JDK, then we should consider dropping it.
+ This will improve when [JEP 269](http://openjdk.java.net/jeps/269) is part of the JDK.
 
 ## Status
 
@@ -26,8 +25,26 @@
  ```xml
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json</artifactId>
-   <version>CURRENTLY_UNRELASED</version>
+   <artifactId>json-ast</artifactId>
+   <version>2.0.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-pointer</artifactId>
+   <version>2.0.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-jackson</artifactId>
+   <version>2.0.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-javax</artifactId>
+   <version>2.0.0</version>
  </dependency>
  ```
 
@@ -35,11 +52,29 @@
 
 
  ```xml
-    <dependency>
-      <groupId>net.hamnaberg.json</groupId>
-      <artifactId>immutable-json</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-ast</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-pointer</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-jackson</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>json-javax</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
   ```
 
 ## License
