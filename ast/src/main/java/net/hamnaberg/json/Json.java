@@ -542,8 +542,24 @@ public abstract class Json {
             return getAs(name, JValue::asString);
         }
 
+        public Optional<JNumber> getAsNumber(String name) {
+            return getAs(name, JValue::asJsonNumber);
+        }
+
         public Optional<BigDecimal> getAsBigDecimal(String name) {
-            return getAs(name, JValue::asBigDecimal);
+            return getAsNumber(name).map(JNumber::getValue);
+        }
+
+        public Optional<Integer> getAsInteger(String name) {
+            return getAsNumber(name).map(JNumber::asInt);
+        }
+
+        public Optional<Double> getAsDouble(String name) {
+            return getAsNumber(name).map(JNumber::asDouble);
+        }
+
+        public Optional<Long> getAsLong(String name) {
+            return getAsNumber(name).map(JNumber::asLong);
         }
 
         public Optional<Boolean> getAsBoolean(String name) {
