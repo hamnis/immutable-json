@@ -30,6 +30,7 @@
   <modules>
     <module>ast</module>
     <module>core</module>
+    <module>codec</module>
     <module>pointer</module>
     <module>jackson</module>
     <module>javax-json</module>
