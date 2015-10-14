@@ -1,6 +1,8 @@
 package net.hamnaberg.json;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Codecs {
@@ -86,6 +88,37 @@ public class Codecs {
             @Override
             public Optional<A> fromJson(Json.JValue value) {
                 return Optional.empty();
+            }
+        };
+    }
+
+    public static <A> JsonCodec<List<A>> listCodec(JsonCodec<A> codec) {
+        return new JsonCodec<List<A>>() {
+            @Override
+            public Optional<List<A>> fromJson(Json.JValue value) {
+                return value.asJsonArray().map(j -> j.mapOpt(codec::fromJson));
+            }
+
+            @Override
+            public Optional<Json.JValue> toJson(List<A> value) {
+                return Optional.of(Json.jArray(value.stream().flatMap(a -> {
+                    Optional<Json.JValue> jv = codec.toJson(a);
+                    return jv.isPresent() ? Stream.of(jv.get()) : Stream.empty();
+                }).collect(Collectors.toList())));
+            }
+        };
+    }
+
+    public static <A> JsonCodec<Optional<A>> optionalCodec(JsonCodec<A> codec) {
+        return new JsonCodec<Optional<A>>() {
+            @Override
+            public Optional<Optional<A>> fromJson(Json.JValue value) {
+                return Optional.of(codec.fromJson(value));
+            }
+
+            @Override
+            public Optional<Json.JValue> toJson(Optional<A> value) {
+                return value.flatMap(v -> codec.toJson(v));
             }
         };
     }
