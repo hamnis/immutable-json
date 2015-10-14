@@ -3,6 +3,8 @@ package net.hamnaberg.json;
 import javaslang.Tuple2;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.function.Function;
@@ -71,5 +73,19 @@ public class PersonCodecTest {
         Optional<Json.JValue> jsonOpt = codec.toJson(person);
         assertTrue(jsonOpt.isPresent());
         assertEquals(value, jsonOpt.get());
+    }
+
+    @Test
+    public void xmapLocalDateTime() {
+        LocalDateTime expected = LocalDateTime.of(1981, 1, 27, 0, 0, 0);
+        Json.JString date = Json.jString(expected.format(DateTimeFormatter.ISO_DATE_TIME));
+
+        JsonCodec<LocalDateTime> codec = Codecs.StringCodec.xmap(LocalDateTime::parse, ldt -> ldt.format(DateTimeFormatter.ISO_DATE_TIME));
+
+        Optional<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
+        assertTrue(localDateTimeOpt.isPresent());
+
+        assertEquals(expected, localDateTimeOpt.get());
+        assertEquals(date, codec.toJson(expected).get());
     }
 }
