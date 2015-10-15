@@ -641,7 +641,7 @@ public abstract class Json {
 
         public JObject put(String name, JValue value) {
             Map<String, JValue> map = new LinkedHashMap<>(this.value);
-            map.put(name, value);
+            map.put(name, Objects.requireNonNull(value, "You may not use a null value"));
             return new JObject(map);
         }
 
@@ -673,5 +673,14 @@ public abstract class Json {
             return put(name, Json.jBoolean(value));
         }
 
+        public JObject remove(String name) {
+            if (this.containsKey(name)) {
+                Map<String, JValue> map = new LinkedHashMap<>(this.value);
+                if (map.remove(name) != null) {
+                    return new JObject(map);
+                }
+            }
+            return this;
+        }
     }
 }
