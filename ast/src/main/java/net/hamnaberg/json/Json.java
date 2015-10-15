@@ -86,6 +86,10 @@ public abstract class Json {
         return new JObject(map);
     }
 
+    public static Map.Entry<String, JValue> entry(String name, JValue value) {
+        return new AbstractMap.SimpleImmutableEntry<>(name ,value);
+    }
+
     private static <A, B> Function<A, Optional<B>> emptyOption() {
         return (ignore) -> Optional.empty();
     }
