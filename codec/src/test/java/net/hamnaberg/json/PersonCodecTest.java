@@ -74,13 +74,13 @@ public class PersonCodecTest {
         INSTANCE;
 
         @Override
-        public Function<Tuple3<String, Integer, Address>, Person> reverseGet() {
-            return t -> new Person(t._1, t._2, t._3);
+        public Person reverseGet(Tuple3<String, Integer, Address> t) {
+            return new Person(t._1, t._2, t._3);
         }
 
         @Override
-        public Function<Person, Tuple3<String, Integer, Address>> get() {
-            return t -> new Tuple3<>(t.name, t.age, t.address);
+        public Tuple3<String, Integer, Address> get(Person t) {
+            return new Tuple3<>(t.name, t.age, t.address);
         }
     }
 
@@ -88,13 +88,13 @@ public class PersonCodecTest {
         INSTANCE;
 
         @Override
-        public Function<Tuple2<String, String>, Address> reverseGet() {
-            return t -> new Address(t._1, t._2);
+        public Address reverseGet(Tuple2<String, String>t) {
+            return new Address(t._1, t._2);
         }
 
         @Override
-        public Function<Address, Tuple2<String, String>> get() {
-            return t -> new Tuple2<>(t.street, t.city);
+        public Tuple2<String, String> get(Address t) {
+            return new Tuple2<>(t.street, t.city);
         }
     }
 

@@ -30,7 +30,7 @@ for((_, index) <- zipped) {
         val lower = Character.toLowerCase(a)
         s"o${lower}.flatMap(${lower} -> "
       }
-      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Optional.of(iso.reverseGet().apply(new javaslang.Tuple$arity<>(", ",", ")))")
+      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Optional.of(iso.reverseGet(new javaslang.Tuple$arity<>(", ",", ")))")
       fromJsonflatMap.mkString("", "",  finalFromJsonMap + (")" * arity) + ";")
     }
 
@@ -41,7 +41,7 @@ for((_, index) <- zipped) {
         |    return ($namedArgs) -> new JsonCodec<TT>() {
         |        @Override
         |        public Optional<Json.JValue> toJson(TT value) {
-        |            javaslang.Tuple$arity<$genericsArgs> tuple = iso.get().apply(value);
+        |            javaslang.Tuple$arity<$genericsArgs> tuple = iso.get(value);
         |            return $toJson
         |        }
         |

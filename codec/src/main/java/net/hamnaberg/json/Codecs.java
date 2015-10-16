@@ -128,7 +128,7 @@ public class Codecs {
         return (n1) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple1<A> tuple = iso.get().apply(value);
+                javaslang.Tuple1<A> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> Optional.of(Json.jObject(Json.entry(n1, j1))));
             }
 
@@ -136,7 +136,7 @@ public class Codecs {
             public Optional<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
                 Optional<A> oa = object.getAs(n1, c1::fromJson);
-                return oa.flatMap(a -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple1<>(a))));
+                return oa.flatMap(a -> Optional.of(iso.reverseGet(new javaslang.Tuple1<>(a))));
             }
         };
     }
@@ -146,7 +146,7 @@ public class Codecs {
         return (n1, n2) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple2<A, B> tuple = iso.get().apply(value);
+                javaslang.Tuple2<A, B> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2)))));
             }
 
@@ -155,7 +155,7 @@ public class Codecs {
                 Json.JObject object = value.asJsonObjectOrEmpty();
                 Optional<A> oa = object.getAs(n1, c1::fromJson);
                 Optional<B> ob = object.getAs(n2, c2::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple2<>(a, b)))));
+                return oa.flatMap(a -> ob.flatMap(b -> Optional.of(iso.reverseGet(new javaslang.Tuple2<>(a, b)))));
             }
         };
     }
@@ -165,7 +165,7 @@ public class Codecs {
         return (n1, n2, n3) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple3<A, B, C> tuple = iso.get().apply(value);
+                javaslang.Tuple3<A, B, C> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3))))));
             }
 
@@ -175,7 +175,7 @@ public class Codecs {
                 Optional<A> oa = object.getAs(n1, c1::fromJson);
                 Optional<B> ob = object.getAs(n2, c2::fromJson);
                 Optional<C> oc = object.getAs(n3, c3::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple3<>(a, b, c))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> Optional.of(iso.reverseGet(new javaslang.Tuple3<>(a, b, c))))));
             }
         };
     }
@@ -185,7 +185,7 @@ public class Codecs {
         return (n1, n2, n3, n4) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple4<A, B, C, D> tuple = iso.get().apply(value);
+                javaslang.Tuple4<A, B, C, D> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4)))))));
             }
 
@@ -196,7 +196,7 @@ public class Codecs {
                 Optional<B> ob = object.getAs(n2, c2::fromJson);
                 Optional<C> oc = object.getAs(n3, c3::fromJson);
                 Optional<D> od = object.getAs(n4, c4::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple4<>(a, b, c, d)))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> Optional.of(iso.reverseGet(new javaslang.Tuple4<>(a, b, c, d)))))));
             }
         };
     }
@@ -206,7 +206,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple5<A, B, C, D, E> tuple = iso.get().apply(value);
+                javaslang.Tuple5<A, B, C, D, E> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5))))))));
             }
 
@@ -218,7 +218,7 @@ public class Codecs {
                 Optional<C> oc = object.getAs(n3, c3::fromJson);
                 Optional<D> od = object.getAs(n4, c4::fromJson);
                 Optional<E> oe = object.getAs(n5, c5::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple5<>(a, b, c, d, e))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> Optional.of(iso.reverseGet(new javaslang.Tuple5<>(a, b, c, d, e))))))));
             }
         };
     }
@@ -228,7 +228,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple6<A, B, C, D, E, F> tuple = iso.get().apply(value);
+                javaslang.Tuple6<A, B, C, D, E, F> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6)))))))));
             }
 
@@ -241,7 +241,7 @@ public class Codecs {
                 Optional<D> od = object.getAs(n4, c4::fromJson);
                 Optional<E> oe = object.getAs(n5, c5::fromJson);
                 Optional<F> of = object.getAs(n6, c6::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple6<>(a, b, c, d, e, f)))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> Optional.of(iso.reverseGet(new javaslang.Tuple6<>(a, b, c, d, e, f)))))))));
             }
         };
     }
@@ -251,7 +251,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple7<A, B, C, D, E, F, G> tuple = iso.get().apply(value);
+                javaslang.Tuple7<A, B, C, D, E, F, G> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7))))))))));
             }
 
@@ -265,7 +265,7 @@ public class Codecs {
                 Optional<E> oe = object.getAs(n5, c5::fromJson);
                 Optional<F> of = object.getAs(n6, c6::fromJson);
                 Optional<G> og = object.getAs(n7, c7::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple7<>(a, b, c, d, e, f, g))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> Optional.of(iso.reverseGet(new javaslang.Tuple7<>(a, b, c, d, e, f, g))))))))));
             }
         };
     }
@@ -275,7 +275,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple8<A, B, C, D, E, F, G, H> tuple = iso.get().apply(value);
+                javaslang.Tuple8<A, B, C, D, E, F, G, H> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8)))))))))));
             }
 
@@ -290,7 +290,7 @@ public class Codecs {
                 Optional<F> of = object.getAs(n6, c6::fromJson);
                 Optional<G> og = object.getAs(n7, c7::fromJson);
                 Optional<H> oh = object.getAs(n8, c8::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple8<>(a, b, c, d, e, f, g, h)))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> Optional.of(iso.reverseGet(new javaslang.Tuple8<>(a, b, c, d, e, f, g, h)))))))))));
             }
         };
     }
@@ -300,7 +300,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple9<A, B, C, D, E, F, G, H, I> tuple = iso.get().apply(value);
+                javaslang.Tuple9<A, B, C, D, E, F, G, H, I> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9))))))))))));
             }
 
@@ -316,7 +316,7 @@ public class Codecs {
                 Optional<G> og = object.getAs(n7, c7::fromJson);
                 Optional<H> oh = object.getAs(n8, c8::fromJson);
                 Optional<I> oi = object.getAs(n9, c9::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple9<>(a, b, c, d, e, f, g, h, i))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> Optional.of(iso.reverseGet(new javaslang.Tuple9<>(a, b, c, d, e, f, g, h, i))))))))))));
             }
         };
     }
@@ -326,7 +326,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple10<A, B, C, D, E, F, G, H, I, J> tuple = iso.get().apply(value);
+                javaslang.Tuple10<A, B, C, D, E, F, G, H, I, J> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10)))))))))))));
             }
 
@@ -343,7 +343,7 @@ public class Codecs {
                 Optional<H> oh = object.getAs(n8, c8::fromJson);
                 Optional<I> oi = object.getAs(n9, c9::fromJson);
                 Optional<J> oj = object.getAs(n10, c10::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple10<>(a, b, c, d, e, f, g, h, i, j)))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> Optional.of(iso.reverseGet(new javaslang.Tuple10<>(a, b, c, d, e, f, g, h, i, j)))))))))))));
             }
         };
     }
@@ -353,7 +353,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple11<A, B, C, D, E, F, G, H, I, J, K> tuple = iso.get().apply(value);
+                javaslang.Tuple11<A, B, C, D, E, F, G, H, I, J, K> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11))))))))))))));
             }
 
@@ -371,7 +371,7 @@ public class Codecs {
                 Optional<I> oi = object.getAs(n9, c9::fromJson);
                 Optional<J> oj = object.getAs(n10, c10::fromJson);
                 Optional<K> ok = object.getAs(n11, c11::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple11<>(a, b, c, d, e, f, g, h, i, j, k))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> Optional.of(iso.reverseGet(new javaslang.Tuple11<>(a, b, c, d, e, f, g, h, i, j, k))))))))))))));
             }
         };
     }
@@ -381,7 +381,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple12<A, B, C, D, E, F, G, H, I, J, K, L> tuple = iso.get().apply(value);
+                javaslang.Tuple12<A, B, C, D, E, F, G, H, I, J, K, L> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12)))))))))))))));
             }
 
@@ -400,7 +400,7 @@ public class Codecs {
                 Optional<J> oj = object.getAs(n10, c10::fromJson);
                 Optional<K> ok = object.getAs(n11, c11::fromJson);
                 Optional<L> ol = object.getAs(n12, c12::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple12<>(a, b, c, d, e, f, g, h, i, j, k, l)))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> Optional.of(iso.reverseGet(new javaslang.Tuple12<>(a, b, c, d, e, f, g, h, i, j, k, l)))))))))))))));
             }
         };
     }
@@ -410,7 +410,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple13<A, B, C, D, E, F, G, H, I, J, K, L, M> tuple = iso.get().apply(value);
+                javaslang.Tuple13<A, B, C, D, E, F, G, H, I, J, K, L, M> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13))))))))))))))));
             }
 
@@ -430,7 +430,7 @@ public class Codecs {
                 Optional<K> ok = object.getAs(n11, c11::fromJson);
                 Optional<L> ol = object.getAs(n12, c12::fromJson);
                 Optional<M> om = object.getAs(n13, c13::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple13<>(a, b, c, d, e, f, g, h, i, j, k, l, m))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> Optional.of(iso.reverseGet(new javaslang.Tuple13<>(a, b, c, d, e, f, g, h, i, j, k, l, m))))))))))))))));
             }
         };
     }
@@ -440,7 +440,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple14<A, B, C, D, E, F, G, H, I, J, K, L, M, N> tuple = iso.get().apply(value);
+                javaslang.Tuple14<A, B, C, D, E, F, G, H, I, J, K, L, M, N> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14)))))))))))))))));
             }
 
@@ -461,7 +461,7 @@ public class Codecs {
                 Optional<L> ol = object.getAs(n12, c12::fromJson);
                 Optional<M> om = object.getAs(n13, c13::fromJson);
                 Optional<N> on = object.getAs(n14, c14::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple14<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n)))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> Optional.of(iso.reverseGet(new javaslang.Tuple14<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n)))))))))))))))));
             }
         };
     }
@@ -471,7 +471,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple15<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O> tuple = iso.get().apply(value);
+                javaslang.Tuple15<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15))))))))))))))))));
             }
 
@@ -493,7 +493,7 @@ public class Codecs {
                 Optional<M> om = object.getAs(n13, c13::fromJson);
                 Optional<N> on = object.getAs(n14, c14::fromJson);
                 Optional<O> oo = object.getAs(n15, c15::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple15<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> Optional.of(iso.reverseGet(new javaslang.Tuple15<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o))))))))))))))))));
             }
         };
     }
@@ -503,7 +503,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple16<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P> tuple = iso.get().apply(value);
+                javaslang.Tuple16<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16)))))))))))))))))));
             }
 
@@ -526,7 +526,7 @@ public class Codecs {
                 Optional<N> on = object.getAs(n14, c14::fromJson);
                 Optional<O> oo = object.getAs(n15, c15::fromJson);
                 Optional<P> op = object.getAs(n16, c16::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple16<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> Optional.of(iso.reverseGet(new javaslang.Tuple16<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)))))))))))))))))));
             }
         };
     }
@@ -536,7 +536,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple17<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q> tuple = iso.get().apply(value);
+                javaslang.Tuple17<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17))))))))))))))))))));
             }
 
@@ -560,7 +560,7 @@ public class Codecs {
                 Optional<O> oo = object.getAs(n15, c15::fromJson);
                 Optional<P> op = object.getAs(n16, c16::fromJson);
                 Optional<Q> oq = object.getAs(n17, c17::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple17<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> Optional.of(iso.reverseGet(new javaslang.Tuple17<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q))))))))))))))))))));
             }
         };
     }
@@ -570,7 +570,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple18<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R> tuple = iso.get().apply(value);
+                javaslang.Tuple18<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17), Json.entry(n18, j18)))))))))))))))))))));
             }
 
@@ -595,7 +595,7 @@ public class Codecs {
                 Optional<P> op = object.getAs(n16, c16::fromJson);
                 Optional<Q> oq = object.getAs(n17, c17::fromJson);
                 Optional<R> or = object.getAs(n18, c18::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple18<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r)))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> Optional.of(iso.reverseGet(new javaslang.Tuple18<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r)))))))))))))))))))));
             }
         };
     }
@@ -605,7 +605,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple19<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S> tuple = iso.get().apply(value);
+                javaslang.Tuple19<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> c19.toJson(tuple._19).flatMap(j19 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17), Json.entry(n18, j18), Json.entry(n19, j19))))))))))))))))))))));
             }
 
@@ -631,7 +631,7 @@ public class Codecs {
                 Optional<Q> oq = object.getAs(n17, c17::fromJson);
                 Optional<R> or = object.getAs(n18, c18::fromJson);
                 Optional<S> os = object.getAs(n19, c19::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple19<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s))))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> Optional.of(iso.reverseGet(new javaslang.Tuple19<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s))))))))))))))))))))));
             }
         };
     }
@@ -641,7 +641,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple20<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T> tuple = iso.get().apply(value);
+                javaslang.Tuple20<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> c19.toJson(tuple._19).flatMap(j19 -> c20.toJson(tuple._20).flatMap(j20 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17), Json.entry(n18, j18), Json.entry(n19, j19), Json.entry(n20, j20)))))))))))))))))))))));
             }
 
@@ -668,7 +668,7 @@ public class Codecs {
                 Optional<R> or = object.getAs(n18, c18::fromJson);
                 Optional<S> os = object.getAs(n19, c19::fromJson);
                 Optional<T> ot = object.getAs(n20, c20::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple20<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t)))))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> Optional.of(iso.reverseGet(new javaslang.Tuple20<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t)))))))))))))))))))))));
             }
         };
     }
@@ -678,7 +678,7 @@ public class Codecs {
         return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20, n21) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple21<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U> tuple = iso.get().apply(value);
+                javaslang.Tuple21<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U> tuple = iso.get(value);
                 return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> c19.toJson(tuple._19).flatMap(j19 -> c20.toJson(tuple._20).flatMap(j20 -> c21.toJson(tuple._21).flatMap(j21 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17), Json.entry(n18, j18), Json.entry(n19, j19), Json.entry(n20, j20), Json.entry(n21, j21))))))))))))))))))))))));
             }
 
@@ -706,17 +706,18 @@ public class Codecs {
                 Optional<S> os = object.getAs(n19, c19::fromJson);
                 Optional<T> ot = object.getAs(n20, c20::fromJson);
                 Optional<U> ou = object.getAs(n21, c21::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> ou.flatMap(u -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple21<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u))))))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> ou.flatMap(u -> Optional.of(iso.reverseGet(new javaslang.Tuple21<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u))))))))))))))))))))))));
             }
         };
     }
 
-    public static <TT, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V> javaslang.Function22<String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String,String, JsonCodec<TT>> codec22(Iso<TT, javaslang.Tuple22<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V>> iso, JsonCodec<A> c1, JsonCodec<B> c2, JsonCodec<C> c3, JsonCodec<D> c4, JsonCodec<E> c5, JsonCodec<F> c6, JsonCodec<G> c7, JsonCodec<H> c8, JsonCodec<I> c9, JsonCodec<J> c10, JsonCodec<K> c11, JsonCodec<L> c12, JsonCodec<M> c13, JsonCodec<N> c14, JsonCodec<O> c15, JsonCodec<P> c16, JsonCodec<Q> c17, JsonCodec<R> c18, JsonCodec<S> c19, JsonCodec<T> c20, JsonCodec<U> c21, JsonCodec<V> c22) {
-        return (n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22) -> new JsonCodec<TT>() {
+
+    public static <TT, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V> javaslang.Function22<String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, JsonCodec<TT>> codec22(Iso<TT, javaslang.Tuple22<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V>> iso, JsonCodec<A> c1, JsonCodec<B> c2, JsonCodec<C> c3, JsonCodec<D> c4, JsonCodec<E> c5, JsonCodec<F> c6, JsonCodec<G> c7, JsonCodec<H> c8, JsonCodec<I> c9, JsonCodec<J> c10, JsonCodec<K> c11, JsonCodec<L> c12, JsonCodec<M> c13, JsonCodec<N> c14, JsonCodec<O> c15, JsonCodec<P> c16, JsonCodec<Q> c17, JsonCodec<R> c18, JsonCodec<S> c19, JsonCodec<T> c20, JsonCodec<U> c21, JsonCodec<V> c22) {
+        return (n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, n20, n21, n22) -> new JsonCodec<TT>() {
             @Override
             public Optional<Json.JValue> toJson(TT value) {
-                javaslang.Tuple22<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V> tuple = iso.get().apply(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> c19.toJson(tuple._19).flatMap(j19 -> c20.toJson(tuple._20).flatMap(j20 -> c21.toJson(tuple._21).flatMap(j21 -> c22.toJson(tuple._22).flatMap(j22 -> Optional.of(Json.jObject(Json.entry(n1, j1),Json.entry(n2, j2),Json.entry(n3, j3),Json.entry(n4, j4),Json.entry(n5, j5),Json.entry(n6, j6),Json.entry(n7, j7),Json.entry(n8, j8),Json.entry(n9, j9),Json.entry(n10, j10),Json.entry(n11, j11),Json.entry(n12, j12),Json.entry(n13, j13),Json.entry(n14, j14),Json.entry(n15, j15),Json.entry(n16, j16),Json.entry(n17, j17),Json.entry(n18, j18),Json.entry(n19, j19),Json.entry(n20, j20),Json.entry(n21, j21),Json.entry(n22, j22)))))))))))))))))))))))));
+                javaslang.Tuple22<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V> tuple = iso.get(value);
+                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> c9.toJson(tuple._9).flatMap(j9 -> c10.toJson(tuple._10).flatMap(j10 -> c11.toJson(tuple._11).flatMap(j11 -> c12.toJson(tuple._12).flatMap(j12 -> c13.toJson(tuple._13).flatMap(j13 -> c14.toJson(tuple._14).flatMap(j14 -> c15.toJson(tuple._15).flatMap(j15 -> c16.toJson(tuple._16).flatMap(j16 -> c17.toJson(tuple._17).flatMap(j17 -> c18.toJson(tuple._18).flatMap(j18 -> c19.toJson(tuple._19).flatMap(j19 -> c20.toJson(tuple._20).flatMap(j20 -> c21.toJson(tuple._21).flatMap(j21 -> c22.toJson(tuple._22).flatMap(j22 -> Optional.of(Json.jObject(Json.entry(n1, j1), Json.entry(n2, j2), Json.entry(n3, j3), Json.entry(n4, j4), Json.entry(n5, j5), Json.entry(n6, j6), Json.entry(n7, j7), Json.entry(n8, j8), Json.entry(n9, j9), Json.entry(n10, j10), Json.entry(n11, j11), Json.entry(n12, j12), Json.entry(n13, j13), Json.entry(n14, j14), Json.entry(n15, j15), Json.entry(n16, j16), Json.entry(n17, j17), Json.entry(n18, j18), Json.entry(n19, j19), Json.entry(n20, j20), Json.entry(n21, j21), Json.entry(n22, j22)))))))))))))))))))))))));
             }
 
             @Override
@@ -744,7 +745,7 @@ public class Codecs {
                 Optional<T> ot = object.getAs(n20, c20::fromJson);
                 Optional<U> ou = object.getAs(n21, c21::fromJson);
                 Optional<V> ov = object.getAs(n22, c22::fromJson);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> ou.flatMap(u -> ov.flatMap(v -> Optional.of(iso.reverseGet().apply(new javaslang.Tuple22<>(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)))))))))))))))))))))))));
+                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> oi.flatMap(i -> oj.flatMap(j -> ok.flatMap(k -> ol.flatMap(l -> om.flatMap(m -> on.flatMap(n -> oo.flatMap(o -> op.flatMap(p -> oq.flatMap(q -> or.flatMap(r -> os.flatMap(s -> ot.flatMap(t -> ou.flatMap(u -> ov.flatMap(v -> Optional.of(iso.reverseGet(new javaslang.Tuple22<>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v)))))))))))))))))))))))));
             }
         };
     }
