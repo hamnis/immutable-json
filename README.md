@@ -25,25 +25,31 @@
  ```xml
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-ast</artifactId>
+   <artifactId>immutable-json-ast</artifactId>
    <version>2.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-pointer</artifactId>
+   <artifactId>immutable-json-pointer</artifactId>
    <version>2.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-jackson</artifactId>
+   <artifactId>immutable-json-jackson</artifactId>
    <version>2.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-javax</artifactId>
+   <artifactId>immutable-json-javax</artifactId>
+   <version>2.0.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-codec</artifactId>
    <version>2.0.0</version>
  </dependency>
  ```
@@ -54,25 +60,31 @@
  ```xml
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-ast</artifactId>
+   <artifactId>immutable-json-ast</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-pointer</artifactId>
+   <artifactId>immutable-json-pointer</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-jackson</artifactId>
+   <artifactId>immutable-json-jackson</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
-   <artifactId>json-javax</artifactId>
+   <artifactId>immutable-json-javax</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-codec</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
   ```
