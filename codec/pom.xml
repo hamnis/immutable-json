@@ -23,7 +23,7 @@
     <version>2.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: AST</name>
-  <artifactId>json-codec</artifactId>
+  <artifactId>immutable-json-codec</artifactId>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -32,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>json-ast</artifactId>
+      <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
       <groupId>com.javaslang</groupId>

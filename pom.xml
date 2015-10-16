@@ -89,24 +89,24 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>json-ast</artifactId>
+        <artifactId>immutable-json-ast</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>json-core</artifactId>
+        <artifactId>immutable-json-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>json-core</artifactId>
+        <artifactId>immutable-json-core</artifactId>
         <version>${project.version}</version>
         <classifier>tests</classifier>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>json-pointer</artifactId>
+        <artifactId>immutable-json-pointer</artifactId>
         <version>${project.version}</version>
       </dependency>
 

@@ -23,34 +23,29 @@
     <version>2.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: javax.json</name>
-  <artifactId>json-javax</artifactId>
+  <artifactId>immutable-json-javax</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>json-core</artifactId>
+      <artifactId>immutable-json-core</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>json-core</artifactId>
+      <artifactId>immutable-json-core</artifactId>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>json-pointer</artifactId>
+      <artifactId>immutable-json-pointer</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
       <version>1.0.4</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.json</groupId>
-      <artifactId>javax.json-api</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
