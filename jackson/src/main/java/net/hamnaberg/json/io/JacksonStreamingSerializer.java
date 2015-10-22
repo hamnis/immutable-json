@@ -2,15 +2,26 @@ package net.hamnaberg.json.io;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.PrettyPrinter;
 import net.hamnaberg.json.Json;
 
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public class JacksonStreamingSerializer implements JsonSerializer {
+public final class JacksonStreamingSerializer implements JsonSerializer {
     private final JsonFactory factory = new JsonFactory();
+    private final Optional<PrettyPrinter> printer;
+
+    public JacksonStreamingSerializer(Optional<PrettyPrinter> printer) {
+        this.printer = printer;
+    }
+
+    public JacksonStreamingSerializer() {
+        this(Optional.empty());
+    }
 
     public Consumer<OutputStream> toConsumerStream(Json.JValue value) {
         return os -> {
@@ -26,6 +37,7 @@ public class JacksonStreamingSerializer implements JsonSerializer {
 
     public void write(Json.JValue value, Writer writer) {
         try (JsonGenerator generator = factory.createGenerator(writer)) {
+            printer.ifPresent(generator::setPrettyPrinter);
             write(value, generator);
         } catch(RuntimeException | Error e) {
             throw e;

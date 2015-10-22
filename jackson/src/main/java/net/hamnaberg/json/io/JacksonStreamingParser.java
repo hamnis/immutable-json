@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class JacksonStreamingParser extends JsonParser {
+public final class JacksonStreamingParser extends JsonParser {
+    private final JsonFactory factory = new JsonFactory();
+
     @Override
     protected Json.JValue parseImpl(Reader reader) throws Exception {
-        JsonFactory factory = new JsonFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(reader);
         JsonToken token;
         while ((token = parser.nextToken()) != null ) {
