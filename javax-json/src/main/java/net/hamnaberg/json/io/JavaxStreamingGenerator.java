@@ -7,16 +7,25 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import javax.json.stream.JsonGenerator;
-import java.io.OutputStream;
+import javax.json.stream.JsonGeneratorFactory;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public final class JavaxStreamingGenerator implements JsonSerializer {
+    private final JsonGeneratorFactory factory;
+
+    public JavaxStreamingGenerator(Map<String, ?> config) {
+        factory = javax.json.Json.createGeneratorFactory(config);
+    }
+
+    public JavaxStreamingGenerator() {
+        this(Collections.emptyMap());
+    }
 
     @Override
     public void write(Json.JValue value, Writer writer) {
-        try (JsonGenerator generator = javax.json.Json.createGenerator(writer)) {
+        try (JsonGenerator generator = factory.createGenerator(writer)) {
             generator.write(convert(value));
         }
     }
