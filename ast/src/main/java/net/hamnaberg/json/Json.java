@@ -488,6 +488,12 @@ public abstract class Json {
             values.remove(index);
             return new JArray(values);
         }
+
+        public JArray concat(JArray other) {
+            ArrayList<JValue> values = new ArrayList<>(value);
+            values.addAll(other.value);
+            return new JArray(values);
+        }
     }
 
     public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
@@ -544,6 +550,9 @@ public abstract class Json {
 
         public Optional<String> getAsString(String name) {
             return getAs(name, JValue::asString);
+        }
+        public String getAsStringOrEmpty(String name) {
+            return getAsString(name).orElse("");
         }
 
         public Optional<JNumber> getAsNumber(String name) {
@@ -671,6 +680,12 @@ public abstract class Json {
 
         public JObject put(String name, boolean value) {
             return put(name, Json.jBoolean(value));
+        }
+
+        public JObject concat(JObject other) {
+            Map<String, JValue> map = new LinkedHashMap<>(this.value);
+            map.putAll(other.value);
+            return new JObject(map);
         }
 
         public JObject remove(String name) {
