@@ -102,6 +102,50 @@ public class JsonTest {
         }}));
     }
 
+    @Test
+    public void jObjectConcat() {
+        Json.JObject single = Json.jObject("k", Json.jNumber(23));
+        Json.JObject single2 = Json.jObject("k2", Json.jEmptyArray());
+        Json.JObject concat = single.concat(single2);
+
+        assertEquals(2, concat.entrySet().size());
+    }
+
+    @Test
+    public void deepMerge() {
+        Json.JValue merged = Json.jString("Hello").deepmerge(Json.jString("Bye"));
+        assertEquals("Bye", merged.asString().orElse(null));
+
+        Json.JObject entry = Json.jObject(new HashMap<String, Json.JValue>() {{
+            put("k1", Json.jString("k1"));
+            put("k2", Json.jString("k2"));
+            put("k3", Json.jBoolean(false));
+        }});
+
+        assertEquals(entry, Json.jEmptyObject().deepmerge(entry));
+        assertEquals(entry, entry.deepmerge(Json.jEmptyObject()));
+        Json.JObject withObject = entry.put("k4", Json.jObject(
+                "inner1", Json.jNumber(23)
+        ));
+        Json.JObject withObject2 = entry.put("k4", Json.jObject(
+                "inner2", Json.jNumber(40)
+        ));
+
+        Json.JObject concat = withObject.concat(withObject2);
+
+        Json.JObject withObject3 = entry.put("k4", Json.jObject(
+                Json.entry("inner1", Json.jNumber(23)),
+                Json.entry("inner2", Json.jNumber(40))
+        ));
+
+        assertTrue(concat.getAsObjectOrEmpty("k4").containsKey("inner2"));
+        assertFalse(concat.getAsObjectOrEmpty("k4").containsKey("inner1"));
+        assertEquals(withObject, entry.deepmerge(withObject));
+        assertEquals(withObject2, entry.deepmerge(withObject2));
+        assertEquals(withObject3, withObject.deepmerge(withObject2));
+        assertEquals(withObject3, withObject2.deepmerge(withObject));
+    }
+
     public <K, V> Map.Entry<K, V> entry(K k, V v) {
         return new AbstractMap.SimpleImmutableEntry<>(k, v);
     }

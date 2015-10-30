@@ -164,6 +164,36 @@ public abstract class Json {
         public final Optional<BigDecimal> asBigDecimal() {
             return asJsonNumber().map(j -> j.value);
         }
+
+
+        /**
+         * Perform a deep merge of this JSON value with another JSON value.
+         * <p>
+         * Objects are merged by key, values from the argument JSON take
+         * precedence over values from this JSON. Nested objects are
+         * recursed.
+         * <p>
+         * Null, Array, Boolean, String and Number are treated as values,
+         * and values from the argument JSON completely replace values
+         * from this JSON.
+         */
+        public final JValue deepmerge(JValue value) {
+            Optional<JObject> first = asJsonObject();
+            Optional<JObject> second = value.asJsonObject();
+
+            if (first.isPresent() && second.isPresent()) {
+                return second.get().stream().reduce(first.get(), (obj, kv) -> {
+                    Optional<JValue> v1 = obj.get(kv.getKey());
+                    if (v1.isPresent()) {
+                        return obj.put(kv.getKey(), v1.get().deepmerge(kv.getValue()));
+                    } else {
+                        return obj.put(kv.getKey(), kv.getValue());
+                    }
+                }, JObject::concat);
+            } else {
+                return value;
+            }
+        }
     }
 
     public static final class JString extends JValue {
