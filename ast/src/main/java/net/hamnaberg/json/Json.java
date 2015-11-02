@@ -10,13 +10,20 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public abstract class Json {
-    private Json(){}
+    private Json() {
+    }
 
-    public static JString jString(String value) { return new JString(value); }
+    public static JString jString(String value) {
+        return new JString(value);
+    }
 
-    public static JBoolean jBoolean(boolean value) { return new JBoolean(value); }
+    public static JBoolean jBoolean(boolean value) {
+        return new JBoolean(value);
+    }
 
-    public static JNumber jNumber(BigDecimal value) { return new JNumber(value); }
+    public static JNumber jNumber(BigDecimal value) {
+        return new JNumber(value);
+    }
 
     public static JNumber jNumber(int n) {
         return new JNumber(new BigDecimal(n));
@@ -37,7 +44,9 @@ public abstract class Json {
         return new JNumber(new BigDecimal(n.toString()));
     }
 
-    public static JNull jNull() { return JNull.INSTANCE; }
+    public static JNull jNull() {
+        return JNull.INSTANCE;
+    }
 
     public static JArray jEmptyArray() {
         return new JArray(Collections.emptyList());
@@ -87,7 +96,7 @@ public abstract class Json {
     }
 
     public static Map.Entry<String, JValue> entry(String name, JValue value) {
-        return new AbstractMap.SimpleImmutableEntry<>(name ,value);
+        return new AbstractMap.SimpleImmutableEntry<>(name, value);
     }
 
     private static <A, B> Function<A, Optional<B>> emptyOption() {
@@ -117,11 +126,11 @@ public abstract class Json {
                                    Supplier<X> fNull);
 
         public abstract void foldUnit(Consumer<JString> fString,
-                               Consumer<JBoolean> fBoolean,
-                               Consumer<JNumber> fNumber,
-                               Consumer<JObject> fObject,
-                               Consumer<JArray> fArray,
-                               Runnable fNull);
+                                      Consumer<JBoolean> fBoolean,
+                                      Consumer<JNumber> fNumber,
+                                      Consumer<JObject> fObject,
+                                      Consumer<JArray> fArray,
+                                      Runnable fNull);
 
         public final Optional<JArray> asJsonArray() {
             return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::of, Optional::empty);
@@ -143,7 +152,9 @@ public abstract class Json {
             return fold(Json.emptyOption(), Optional::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::empty);
         }
 
-        public final Optional<Boolean> asBoolean() { return asJsonBoolean().map(j -> j.value); }
+        public final Optional<Boolean> asBoolean() {
+            return asJsonBoolean().map(j -> j.value);
+        }
 
         public final Optional<JNull> asJsonNull() {
             return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), () -> Optional.of(jNull()));
@@ -359,11 +370,17 @@ public abstract class Json {
             fNumber.accept(this);
         }
 
-        public long asLong() { return value.longValue(); }
+        public long asLong() {
+            return value.longValue();
+        }
 
-        public int asInt() { return value.intValue(); }
+        public int asInt() {
+            return value.intValue();
+        }
 
-        public double asDouble() { return value.doubleValue(); }
+        public double asDouble() {
+            return value.doubleValue();
+        }
 
         public BigDecimal getValue() {
             return value;
@@ -482,21 +499,27 @@ public abstract class Json {
         public JArray append(String toAdd) {
             return append(Json.jString(toAdd));
         }
+
         public JArray append(BigDecimal toAdd) {
             return append(Json.jNumber(toAdd));
         }
+
         public JArray append(Number toAdd) {
             return append(Json.jNumber(toAdd));
         }
+
         public JArray append(int toAdd) {
             return append(Json.jNumber(toAdd));
         }
+
         public JArray append(long toAdd) {
             return append(Json.jNumber(toAdd));
         }
+
         public JArray append(double toAdd) {
             return append(Json.jNumber(toAdd));
         }
+
         public JArray append(boolean toAdd) {
             return append(Json.jBoolean(toAdd));
         }
@@ -581,6 +604,7 @@ public abstract class Json {
         public Optional<String> getAsString(String name) {
             return getAs(name, JValue::asString);
         }
+
         public String getAsStringOrEmpty(String name) {
             return getAsString(name).orElse("");
         }
