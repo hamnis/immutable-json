@@ -22,22 +22,27 @@
     <artifactId>immutable-json</artifactId>
     <version>2.2.0-SNAPSHOT</version>
   </parent>
-  <name>Immutable JSON :: Codec</name>
-  <artifactId>immutable-json-codec</artifactId>
+  <name>Immutable JSON :: Patch</name>
+  <artifactId>immutable-json-patch</artifactId>
   <packaging>jar</packaging>
+
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>immutable-json-pointer</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.javaslang</groupId>
-      <artifactId>javaslang</artifactId>
-      <version>1.2.2</version>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>immutable-json-jackson</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
 </project>

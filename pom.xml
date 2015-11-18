@@ -32,6 +32,7 @@
     <module>core</module>
     <module>codec</module>
     <module>pointer</module>
+    <module>patch</module>
     <module>jackson</module>
     <module>javax-json</module>
   </modules>
@@ -107,6 +108,16 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>immutable-json-pointer</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>immutable-json-jackson</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>immutable-json-javax</artifactId>
         <version>${project.version}</version>
       </dependency>
 
