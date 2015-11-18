@@ -33,6 +33,12 @@ public class JsonPointerTest {
     }
 
     @Test
+    public void validateEscapedValuesToString() throws Exception {
+        assertEquals("/a~1b", JsonPointer.compile("/a~1b").toString());
+        assertEquals("/m~0n", JsonPointer.compile("/m~0n").toString());
+    }
+
+    @Test
     public void addHref() throws Exception {
         JsonPointer p = JsonPointer.compile("/collection/links/0/href");
         Json.JValue value = p.add(json, Json.jString("http://example.com"));

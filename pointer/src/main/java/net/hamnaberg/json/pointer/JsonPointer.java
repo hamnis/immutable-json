@@ -27,9 +27,13 @@ public final class JsonPointer {
         if (path.isEmpty()) return "";
         return path.stream().map(ref -> ref.fold(
                 r -> String.valueOf(r.index),
-                r -> r.name,
+                r -> escape(r.name),
                 () -> "-"
         )).collect(Collectors.joining("/", "/", ""));
+    }
+
+    private String escape(String str) {
+        return str.replace("~", "~0").replace("/", "~1");
     }
 
     public Optional<Json.JValue> select(Json.JValue value) {
