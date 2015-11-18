@@ -39,6 +39,10 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
 
     private final List<Operation> operations;
 
+    public JsonPatch() {
+        this(Collections.emptyList());
+    }
+
     private JsonPatch(List<Operation> operations) {
         this.operations = operations;
     }
