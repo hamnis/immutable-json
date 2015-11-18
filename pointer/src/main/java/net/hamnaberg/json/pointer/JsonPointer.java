@@ -47,22 +47,22 @@ public final class JsonPointer {
         Json.JValue current = value;
         while (iterator.hasNext()) {
             Ref ref = iterator.next();
-            if (ref instanceof ArrayRef && current instanceof Json.JArray) {
-                int idx = ((ArrayRef) ref).index;
-                List<Json.JValue> list = current.asJsonArrayOrEmpty().getValue();
-                if (idx < list.size()) {
-                    current = list.get(idx);
-                }
-            } else if (ref instanceof PropertyRef && current instanceof Json.JObject) {
-                String name = ((PropertyRef) ref).name;
-                Json.JObject object = current.asJsonObjectOrEmpty();
-                Optional<Json.JValue> maybeValue = object.get(name);
-                if (maybeValue.isPresent()) {
-                    current = maybeValue.get();
-                }
-            } else if (ref instanceof EndOfArray) {
-                throw new IllegalStateException("List index is out-of-bounds");
-            }
+            final Json.JValue c = current;
+            current = ref.fold(
+                    arrayRef -> foldToJson(
+                            c,
+                            obj -> obj.get(String.valueOf(arrayRef.index)).orElse(obj),
+                            arr -> arr.get(arrayRef.index).orElse(arr)
+                    ),
+                    propertyRef -> foldToJson(
+                            c,
+                            obj -> obj.get(String.valueOf(propertyRef.name)).orElse(obj),
+                            arr -> arr
+                    ),
+                    () -> {
+                        throw new IllegalStateException("List index is out-of-bounds");
+                    }
+            );
             if (!iterator.hasNext() && current != value) {
                 return Optional.of(current);
             }
