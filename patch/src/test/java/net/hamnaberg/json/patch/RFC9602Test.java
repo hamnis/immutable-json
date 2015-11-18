@@ -1,5 +1,6 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.patch;
 
+import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JacksonStreamingParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +17,10 @@ public class RFC9602Test {
 
     private final String name;
     private final Json.JValue document;
-    private final JsonPatch patch;
+    private final Json.JArray patch;
     private final Optional<Json.JValue> expected;
 
-    @Parameterized.Parameters(name = "{index} - spec({0})")
+    @Parameterized.Parameters(name = "spec - {0}")
     public static Collection<Object[]> data() throws Exception {
         InputStream stream = RFC9602Test.class.getResourceAsStream("/spec_tests.json");
         return buildTestSpec(stream);
@@ -34,13 +35,12 @@ public class RFC9602Test {
             Optional<Json.JValue> expected = object.get("expected");
             String comment = object.getAsStringOrEmpty("comment");
             Json.JArray patchArray = object.getAsArrayOrEmpty("patch");
-            JsonPatch patch = JsonPatch.fromArray(patchArray);
-            return new Object[]{ comment, document, patch, expected};
+            return new Object[]{ comment, document, patchArray, expected};
         });
     }
 
 
-    public RFC9602Test(String name, Json.JValue document, JsonPatch patch, Optional<Json.JValue> expected) {
+    public RFC9602Test(String name, Json.JValue document, Json.JArray patch, Optional<Json.JValue> expected) {
         this.name = name;
         this.document = document;
         this.patch = patch;
@@ -51,12 +51,13 @@ public class RFC9602Test {
     @Test
     public void runTest() {
         try {
+            JsonPatch patch = JsonPatch.fromArray(this.patch);
             Json.JValue applied = patch.apply(document);
             assertNotNull("Document was null", applied);
             if (expected.isPresent()) {
                 assertEquals(expected.get(), applied);
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             if (expected.isPresent()) {
                 fail(e.getMessage());
             }

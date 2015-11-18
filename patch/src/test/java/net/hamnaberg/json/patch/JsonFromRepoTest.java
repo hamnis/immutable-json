@@ -1,6 +1,6 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.patch;
 
-import net.hamnaberg.json.io.JacksonStreamingParser;
+import net.hamnaberg.json.Json;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +17,7 @@ public class JsonFromRepoTest {
 
     private final String name;
     private final Json.JValue document;
-    private final JsonPatch patch;
+    private final Json.JArray patch;
     private final Optional<Json.JValue> expected;
 
     @Parameterized.Parameters(name = "{0}")
@@ -27,7 +27,7 @@ public class JsonFromRepoTest {
     }
 
 
-    public JsonFromRepoTest(String name, Json.JValue document, JsonPatch patch, Optional<Json.JValue> expected) {
+    public JsonFromRepoTest(String name, Json.JValue document, Json.JArray patch, Optional<Json.JValue> expected) {
         this.name = name;
         this.document = document;
         this.patch = patch;
@@ -38,12 +38,13 @@ public class JsonFromRepoTest {
     @Test
     public void runTest() {
         try {
+            JsonPatch patch = JsonPatch.fromArray(this.patch);
             Json.JValue applied = patch.apply(document);
             assertNotNull("Document was null", applied);
             if (expected.isPresent()) {
                 assertEquals(expected.get(), applied);
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             if (expected.isPresent()) {
                 fail(e.getMessage());
             }
