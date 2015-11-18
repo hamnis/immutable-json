@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class JsonPointer {
-    //This type is wrong, the correct type is Optional<List<Ref>>
     private final List<Ref> path;
 
     public static JsonPointer compile(String pattern) {

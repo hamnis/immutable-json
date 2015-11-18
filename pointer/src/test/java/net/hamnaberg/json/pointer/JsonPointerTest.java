@@ -24,6 +24,15 @@ public class JsonPointerTest {
     }
 
     @Test
+    public void validateToString() throws Exception {
+        String pattern = "/collection/links/0/rel";
+        JsonPointer p = JsonPointer.compile(pattern);
+        assertEquals(pattern, p.toString());
+        assertEquals("/", JsonPointer.compile("/").toString());
+        assertEquals("", JsonPointer.compile("").toString());
+    }
+
+    @Test
     public void addHref() throws Exception {
         JsonPointer p = JsonPointer.compile("/collection/links/0/href");
         Json.JValue value = p.add(json, Json.jString("http://example.com"));
