@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class JsonPointer {
@@ -112,35 +114,48 @@ public final class JsonPointer {
         return select(json).map(value::equals).orElse(false);
     }
 
+    private Json.JValue foldToJson(Json.JValue value, Function<Json.JObject, Json.JValue> fObject, Function<Json.JArray, Json.JValue> fArray) {
+        return value.fold(
+                j -> j,
+                j -> j,
+                j -> j,
+                fObject,
+                fArray,
+                Json::jNull
+        );
+    }
+
     private Json.JValue updateImpl(Iterator<Ref> path, Ref ref, Json.JValue context, Optional<Json.JValue> updateValue) {
-        if (ref instanceof ArrayRef && context instanceof Json.JArray) {
-            int index = ((ArrayRef) ref).index;
-            Json.JArray array = context.asJsonArrayOrEmpty();
-            if (!path.hasNext()) {
-                if (updateValue.isPresent()) {
-                    array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
-                    return array.replace(index, updateValue.get());
+        return ref.fold(
+                arrayRef -> foldToJson(
+                        context,
+                        obj -> replaceObject(path, context, updateValue, String.valueOf(arrayRef.index)),
+                        arr -> {
+                            int index = arrayRef.index;
+                            Json.JArray array = context.asJsonArrayOrEmpty();
+                            if (!path.hasNext()) {
+                                if (updateValue.isPresent()) {
+                                    array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
+                                    return array.replace(index, updateValue.get());
+                                }
+                                else {
+                                    return array.remove(index);
+                                }
+                            } else {
+                                Json.JValue value = array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
+                                return array.replace(index, updateImpl(path, path.next(), value, updateValue));
+                            }
+                        }
+                ),
+                propertyRef -> foldToJson(
+                        context,
+                        obj -> replaceObject(path, context, updateValue, propertyRef.name),
+                        j -> j
+                ),
+                () -> {
+                    throw new IllegalStateException("List index is out-of-bounds");
                 }
-                else {
-                    return array.remove(index);
-                }
-            } else {
-                Json.JValue value = array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
-                return array.replace(index, updateImpl(path, path.next(), value, updateValue));
-            }
-        }
-        else if (ref instanceof PropertyRef && context instanceof Json.JObject) {
-            String name = ((PropertyRef) ref).name;
-            return replaceObject(path, context, updateValue, name);
-        }
-        else if (ref instanceof ArrayRef && context instanceof Json.JObject) {
-            String name = String.valueOf(((ArrayRef) ref).index);
-            return replaceObject(path, context, updateValue, name);
-        }
-        else if (ref instanceof EndOfArray) {
-            throw new IllegalStateException("List index is out-of-bounds");
-        }
-        return context;
+        );
     }
 
     private Json.JValue replaceObject(Iterator<Ref> path, Json.JValue context, Optional<Json.JValue> updateValue, String name) {
@@ -159,37 +174,45 @@ public final class JsonPointer {
     }
 
     private Json.JValue addImpl(Iterator<Ref> path, Ref ref, Json.JValue context, Json.JValue valueToInsert) {
-        if (ref instanceof ArrayRef && context instanceof Json.JArray) {
-            int index = ((ArrayRef) ref).index;
-            Json.JArray array = context.asJsonArrayOrEmpty();
-            if (!path.hasNext()) {
-                if (array.size() >= index) {
-                    return array.insert(index, valueToInsert);
-                }
-                else {
-                   throw new IllegalStateException(String.format("List index %s is out-of-bounds", index));
-                }
-            } else {
-                Json.JValue value = array.get(index).orElseThrow(() -> new IllegalStateException(String.format("List index %s is out-of-bounds", index)));
-                return array.replace(index, addImpl(path, path.next(), value, valueToInsert));
-            }
-        }
-        else if (ref instanceof PropertyRef && context instanceof Json.JObject) {
-            String name = ((PropertyRef) ref).name;
-            return addObject(path, context, valueToInsert, name);
-        }
-        else if (ref instanceof ArrayRef && context instanceof Json.JObject) {
-            String name = String.valueOf(((ArrayRef) ref).index);
-            return addObject(path, context, valueToInsert, name);
-        }
-        else if (ref instanceof EndOfArray && context instanceof Json.JArray) {
-            Json.JArray array = context.asJsonArrayOrEmpty();
-            if (path.hasNext()) {
-                throw new IllegalStateException("Nonsense to have more values after a end-of-array");
-            }
-            return array.append(valueToInsert);
-        }
-        return context;
+        return ref.fold(
+                arrayRef -> foldToJson(
+                        context,
+                        obj -> {
+                            String name = String.valueOf(arrayRef.index);
+                            return addObject(path, obj, valueToInsert, name);
+                        },
+                        arr -> {
+                            int index = arrayRef.index;
+                            if (!path.hasNext()) {
+                                if (arr.size() >= index) {
+                                    return arr.insert(index, valueToInsert);
+                                }
+                                else {
+                                    throw new IllegalStateException(String.format("List index %s is out-of-bounds", index));
+                                }
+                            } else {
+                                Json.JValue value = arr.get(index).orElseThrow(() -> new IllegalStateException(String.format("List index %s is out-of-bounds", index)));
+                                return arr.replace(index, addImpl(path, path.next(), value, valueToInsert));
+                            }
+                        }
+                ),
+                propertyRef -> foldToJson(
+                        context,
+                        obj -> addObject(path, obj, valueToInsert, propertyRef.name),
+                        a -> a
+                ),
+                () ->
+                    foldToJson(
+                            context,
+                            j -> j,
+                            arr -> {
+                                if (path.hasNext()) {
+                                    throw new IllegalStateException("Nonsense to have more values after a end-of-array");
+                                }
+                                return arr.append(valueToInsert);
+                            }
+                    )
+        );
     }
 
     private Json.JValue addObject(Iterator<Ref> path, Json.JValue context, Json.JValue valueToInsert, String name) {
