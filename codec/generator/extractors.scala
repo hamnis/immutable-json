@@ -1,6 +1,6 @@
 #!/usr/bin/env scala
 
-val arities = ('A' to 'D').toList
+val arities = ('A' to 'W').toList
 
 val zipped = arities.zipWithIndex
 
@@ -27,13 +27,12 @@ for((_, index) <- zipped) {
 
     val template =
       s"""
-         |public static <TT, ${genericsArgs}> Function<Json.JObject, Optional<TT>> extract$arity($typeArgs, javaslang.Function$arity<$genericsArgs, TT> func) {
+         |public static <TT, ${genericsArgs}> Extractor<TT> extract$arity($typeArgs, javaslang.Function$arity<$genericsArgs, TT> func) {
          |    return (object) -> {
          |      $fromJsonOpt
          |      return $fromJson
          |    };
          |}
-         |
       """.stripMargin
     println(template)
   }
