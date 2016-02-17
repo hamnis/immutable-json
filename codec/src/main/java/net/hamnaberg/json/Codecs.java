@@ -5,7 +5,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Codecs {
+public abstract class Codecs {
+    private Codecs(){}
     public static final JsonCodec<String> StringCodec = new JsonCodec<String>() {
         @Override
         public Optional<Json.JValue> toJson(String value) {
