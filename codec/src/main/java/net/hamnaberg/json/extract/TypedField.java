@@ -44,6 +44,10 @@ public abstract class TypedField<A> {
         return new TLongField(name);
     }
 
+    public static TBooleanField TBoolean(String name) {
+        return new TBooleanField(name);
+    }
+
     public static TJArrayField TJArray(String name) {
         return new TJArrayField(name);
     }
@@ -73,6 +77,12 @@ public abstract class TypedField<A> {
     public static class TLongField extends TypedField<Long> {
         public TLongField(String name) {
             super(name, Codecs.longCodec);
+        }
+    }
+
+    private static class TBooleanField extends TypedField<Boolean> {
+        public TBooleanField(String name) {
+            super(name, Codecs.booleanCodec);
         }
     }
 
