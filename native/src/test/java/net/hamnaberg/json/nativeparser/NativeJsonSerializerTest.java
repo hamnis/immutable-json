@@ -15,14 +15,14 @@ public class NativeJsonSerializerTest {
         JsonNode node = mapper.readTree(getClass().getResourceAsStream("/items.json"));
         String expected = mapper.writeValueAsString(node);
         Json.JValue parse = new NativeJsonParser().parse(expected);
-        String s = new NativeJsonSerializer().writeToString(parse);
+        String s = NativeJsonSerializer.nospaces().writeToString(parse);
         assertEquals(expected, s);
     }
 
     @Test
     public void canParseSerialized() throws Exception {
         Json.JValue parsed = new NativeJsonParser().parse(getClass().getResourceAsStream("/items.json"));
-        String s = new NativeJsonSerializer().writeToString(parsed);
+        String s = NativeJsonSerializer.nospaces().writeToString(parsed);
         Json.JValue parsedSerialized = new NativeJsonParser().parse(s);
         assertEquals(parsed, parsedSerialized);
         assertNotSame(parsed, parsedSerialized);
