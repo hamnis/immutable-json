@@ -52,10 +52,53 @@
       <groupId>org.javafp</groupId>
       <artifactId>parsecj</artifactId>
       <version>0.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openjdk.jmh</groupId>
+          <artifactId>jmh-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>org.javafp:*</include>
+                  <include>${project.groupId}:${project.artifactId}</include>
+                </includes>
+                <excludes>
+                  <exclude>${project.groupId}:immutable-json-core</exclude>
+                  <exclude>${project.groupId}:immutable-json-ast</exclude>
+                </excludes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.javafp</pattern>
+                  <shadedPattern>net.hamnaberg.json.internal.org.javafp</shadedPattern>
+                </relocation>
+              </relocations>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <createSourcesJar>true</createSourcesJar>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
