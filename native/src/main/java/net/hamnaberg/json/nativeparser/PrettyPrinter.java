@@ -60,7 +60,7 @@ class PrettyPrinter {
 
     void writeValue(Json.JValue value) {
         value.foldUnit(
-                js -> sb.append(toString(js.value)),
+                js -> sb.append(escape(js.value)),
                 jb -> sb.append(jb.value),
                 jn -> sb.append(jn.value.toString()),
                 this::writeObject,
@@ -78,7 +78,7 @@ class PrettyPrinter {
             if (index > 0) {
                 sb.append(",");
             }
-            doIndent(level);
+            doIndent();
             writeProperty(entry.getKey(), entry.getValue());
             index++;
         }
@@ -87,7 +87,7 @@ class PrettyPrinter {
     }
 
     private void writeProperty(String name, Json.JValue value) {
-        sb.append(toString(name)).append(":");
+        sb.append(escape(name)).append(":");
         if (spaceafterColon) {
             sb.append(" ");
         }
@@ -96,7 +96,7 @@ class PrettyPrinter {
 
     private void writeEndObject() {
         this.level--;
-        doIndent(this.level);
+        doIndent();
         sb.append("}");
     }
 
@@ -114,7 +114,7 @@ class PrettyPrinter {
             if (i > 0) {
                 sb.append(",");
             }
-            doIndent(level);
+            doIndent();
             writeValue(v);
         }
 
@@ -123,16 +123,15 @@ class PrettyPrinter {
 
     private void writeEndArray() {
         level--;
-        doIndent(level);
+        doIndent();
         sb.append("]");
     }
 
-    @Override
     public String toString() {
         return sb.toString();
     }
 
-    private String toString(String js) {
+    private String escape(String js) {
         StringBuilder sb = new StringBuilder();
         sb.append('\"');
 
@@ -178,11 +177,12 @@ class PrettyPrinter {
         return sb.toString();
     }
 
-    private void doIndent(int level) {
+    private void doIndent() {
         if (charsPerLevel > 0) {
             sb.append("\n");
         }
-        if (level > 0) {
+        if (this.level > 0) {
+            int level = this.level;
             level *= charsPerLevel;
             while (level > indents.length) {
                 sb.append(indents, 0, indents.length);
