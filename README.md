@@ -26,31 +26,31 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
  </dependency>
  ```
 
