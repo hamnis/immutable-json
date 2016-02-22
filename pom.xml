@@ -33,6 +33,7 @@
     <module>codec</module>
     <module>pointer</module>
     <module>patch</module>
+    <module>native</module>
     <module>jackson</module>
     <module>javax-json</module>
   </modules>

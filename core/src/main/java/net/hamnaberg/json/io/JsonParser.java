@@ -8,15 +8,15 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class JsonParser {
-    public Json.JValue parse(InputStream is) {
+    public final Json.JValue parse(InputStream is) {
         return parse(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
     }
 
-    public Json.JValue parse(String string) {
+    public final Json.JValue parse(String string) {
         return parse(new StringReader(string));
     }
 
-    public Json.JValue parse(Reader reader) {
+    public final Json.JValue parse(Reader reader) {
         try (Reader r = reader) {
             return parseImpl(r);
         } catch (Exception e) {

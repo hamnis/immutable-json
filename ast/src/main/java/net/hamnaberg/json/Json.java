@@ -205,6 +205,10 @@ public abstract class Json {
                 return value;
             }
         }
+
+        public final JValue asJValue() {
+            return this;
+        }
     }
 
     public static final class JString extends JValue {
