@@ -14,7 +14,7 @@ public abstract class TypedField<A> {
     public final String name;
     public final DecodeJson<A> decoder;
 
-    public TypedField(String name, DecodeJson<A> decoder) {
+    private TypedField(String name, DecodeJson<A> decoder) {
         this.name = name;
         this.decoder = decoder;
     }
@@ -25,27 +25,27 @@ public abstract class TypedField<A> {
     }
 
     public <B> TypedField<B> map(Function<A, B> f) {
-        return new TypedField<B>(name, decoder.map(f)) {};
+        return typedFieldOf(name, decoder.map(f));
     }
 
-    public static TStringField TString(String name) {
-        return new TStringField(name);
+    public static TypedField<String> TString(String name) {
+        return typedFieldOf(name, Codecs.StringCodec);
     }
 
-    public static TIntegerField TInt(String name) {
-        return new TIntegerField(name);
+    public static TypedField<Integer> TInt(String name) {
+        return typedFieldOf(name, Codecs.intCodec);
     }
 
-    public static TDoubleField TDouble(String name) {
-        return new TDoubleField(name);
+    public static TypedField<Double> TDouble(String name) {
+        return typedFieldOf(name, Codecs.doubleCodec);
     }
 
-    public static TLongField TLong(String name) {
-        return new TLongField(name);
+    public static TypedField<Long> TLong(String name) {
+        return typedFieldOf(name, Codecs.longCodec);
     }
 
-    public static TBooleanField TBoolean(String name) {
-        return new TBooleanField(name);
+    public static TypedField<Boolean> TBoolean(String name) {
+        return typedFieldOf(name, Codecs.booleanCodec);
     }
 
     public static TJArrayField TJArray(String name) {
@@ -56,34 +56,8 @@ public abstract class TypedField<A> {
         return new TJObjectField(name);
     }
 
-    public static class TStringField extends TypedField<String> {
-        public TStringField(String name) {
-            super(name, Codecs.StringCodec);
-        }
-    }
-
-    public static class TIntegerField extends TypedField<Integer> {
-        public TIntegerField(String name) {
-            super(name, Codecs.intCodec);
-        }
-    }
-
-    public static class TDoubleField extends TypedField<Double> {
-        public TDoubleField(String name) {
-            super(name, Codecs.doubleCodec);
-        }
-    }
-
-    public static class TLongField extends TypedField<Long> {
-        public TLongField(String name) {
-            super(name, Codecs.longCodec);
-        }
-    }
-
-    private static class TBooleanField extends TypedField<Boolean> {
-        public TBooleanField(String name) {
-            super(name, Codecs.booleanCodec);
-        }
+    public static <B> TypedField<B> typedFieldOf(String name, DecodeJson<B> decoder) {
+        return new TypedField<B>(name, decoder) {};
     }
 
     public static class TJArrayField extends TypedField<Json.JArray> {
@@ -92,17 +66,21 @@ public abstract class TypedField<A> {
         }
 
         public <B> TypedField<List<B>> mapToList(Function<Json.JValue, B> f) {
-            return new TypedField<List<B>>(name, decoder.map(ja -> ja.mapToList(f))) {};
+            return typedFieldOf(name, decoder.map(ja -> ja.mapToList(f)));
         }
         public <B> TypedField<List<B>> mapToOptionalList(Function<Json.JValue, Optional<B>> f) {
             Function<Optional<B>, List<B>> toList = opt -> opt.isPresent() ? Collections.singletonList(opt.get()) : Collections.emptyList();
-            return new TypedField<List<B>>(name, decoder.map(ja -> ja.flatMapToList(f.andThen(toList)))) {};
+            return typedFieldOf(name, decoder.map(ja -> ja.flatMapToList(f.andThen(toList))));
         }
     }
 
     public static class TJObjectField extends TypedField<Json.JObject> {
         public TJObjectField(String name) {
             super(name, Json.JValue::asJsonObject);
+        }
+
+        public <B> TypedField<B> extractTo(Extractor<B> mapper) {
+            return typedFieldOf(name, json -> mapper.apply(json.asJsonObjectOrEmpty()));
         }
     }
 }
