@@ -26,6 +26,7 @@ package net.hamnaberg.json.nativeparser;
 import org.javafp.data.*;
 import org.javafp.parsecj.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.javafp.parsecj.Combinators.*;
@@ -51,7 +52,13 @@ class Grammar {
 
     private static final Parser<Character, JValue> jbool = tok(jtrue.or(jfalse).bind(b -> retn(jBoolean(b).asJValue()))).label("boolean");
 
-    private static final Parser<Character, JValue> jnumber = tok(dble.bind(d -> retn(jNumber(d).asJValue()))).label("number");
+    public static final Parser<Character, BigDecimal> bigdecimal =
+            bind(
+                    regex("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?"),
+                    s -> retn(new BigDecimal(s))
+            ).label("bigdecimal");
+
+    private static final Parser<Character, JValue> jnumber = tok(bigdecimal.bind(d -> retn(jNumber(d).asJValue()))).label("number");
 
     private static final Parser<Character, Byte> hexDigit =
             satisfy((Character c) -> Character.digit(c, 16) != -1)
