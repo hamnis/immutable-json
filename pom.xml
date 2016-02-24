@@ -118,6 +118,11 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>immutable-json-native</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>immutable-json-javax</artifactId>
         <version>${project.version}</version>
       </dependency>
