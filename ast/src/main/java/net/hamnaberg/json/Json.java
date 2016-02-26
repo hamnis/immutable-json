@@ -72,6 +72,34 @@ public abstract class Json {
         return new JObject(Collections.singletonMap(name, value));
     }
 
+    public static JObject jObject(String name, String value) {
+        return jObject(name, jString(value));
+    }
+
+    public static JObject jObject(String name, int value) {
+        return jObject(name, jNumber(value));
+    }
+
+    public static JObject jObject(String name, double value) {
+        return jObject(name, jNumber(value));
+    }
+
+    public static JObject jObject(String name, long value) {
+        return jObject(name, jNumber(value));
+    }
+
+    public static JObject jObject(String name, BigDecimal value) {
+        return jObject(name, jNumber(value));
+    }
+
+    public static JObject jObject(String name, Number value) {
+        return jObject(name, jNumber(value));
+    }
+
+    public static JObject jObject(String name, boolean value) {
+        return jObject(name, jBoolean(value));
+    }
+
     @SafeVarargs
     public static JObject jObject(Map.Entry<String, JValue> first, Map.Entry<String, JValue>... list) {
         LinkedHashMap<String, JValue> map = new LinkedHashMap<>(list.length + 1);
@@ -97,6 +125,34 @@ public abstract class Json {
 
     public static Map.Entry<String, JValue> entry(String name, JValue value) {
         return new AbstractMap.SimpleImmutableEntry<>(name, value);
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, String value) {
+        return entry(name, jString(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, int value) {
+        return entry(name, jNumber(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, double value) {
+        return entry(name, jNumber(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, long value) {
+        return entry(name, jNumber(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, BigDecimal value) {
+        return entry(name, jNumber(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, Number value) {
+        return entry(name, jNumber(value));
+    }
+
+    public static Map.Entry<String, JValue> entry(String name, boolean value) {
+        return entry(name, jBoolean(value));
     }
 
     private static <A, B> Function<A, Optional<B>> emptyOption() {
