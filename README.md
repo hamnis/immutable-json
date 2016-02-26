@@ -1,5 +1,7 @@
 # Immutable Json library for java
 
+[![Join the chat at https://gitter.im/hamnis/immutable-json](https://badges.gitter.im/hamnis/immutable-json.svg)](https://gitter.im/hamnis/immutable-json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
  This project attempts to build and AST ( Abstract Syntactic Tree )
  for Json and provide a useful way to work with that tree.
 
