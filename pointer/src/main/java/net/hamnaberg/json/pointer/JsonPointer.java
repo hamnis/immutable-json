@@ -57,7 +57,7 @@ public final class JsonPointer {
                     propertyRef -> foldToJson(
                             c,
                             obj -> obj.get(String.valueOf(propertyRef.name)).orElse(obj),
-                            arr -> arr
+                            Json.JValue::asJValue
                     ),
                     () -> {
                         throw new IllegalStateException("List index is out-of-bounds");
@@ -116,9 +116,9 @@ public final class JsonPointer {
 
     private Json.JValue foldToJson(Json.JValue value, Function<Json.JObject, Json.JValue> fObject, Function<Json.JArray, Json.JValue> fArray) {
         return value.fold(
-                j -> j,
-                j -> j,
-                j -> j,
+                Json.JValue::asJValue,
+                Json.JValue::asJValue,
+                Json.JValue::asJValue,
                 fObject,
                 fArray,
                 Json::jNull
@@ -150,7 +150,7 @@ public final class JsonPointer {
                 propertyRef -> foldToJson(
                         context,
                         obj -> replaceObject(path, context, updateValue, propertyRef.name),
-                        j -> j
+                        Json.JValue::asJValue
                 ),
                 () -> {
                     throw new IllegalStateException("List index is out-of-bounds");
@@ -199,7 +199,7 @@ public final class JsonPointer {
                 propertyRef -> foldToJson(
                         context,
                         obj -> addObject(path, obj, valueToInsert, propertyRef.name),
-                        a -> a
+                        Json.JValue::asJValue
                 ),
                 () ->
                     foldToJson(
