@@ -4,6 +4,8 @@ import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
 
+import java.util.Optional;
+
 
 public abstract class Codecs {
     private Codecs(){}
@@ -123,6 +125,10 @@ public abstract class Codecs {
                 return value.flatMap(codec::toJson);
             }
         };
+    }
+
+    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> codec) {
+        return OptionCodec(codec).xmap(Option::toJavaOptional, Option::ofOptional);
     }
 
 
