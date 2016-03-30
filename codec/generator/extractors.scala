@@ -1,6 +1,6 @@
 #!/usr/bin/env scala
 
-val arities = ('A' to 'W').toList
+val arities = ('A' to 'I').toList
 
 val zipped = arities.zipWithIndex
 
@@ -13,7 +13,7 @@ for((_, index) <- zipped) {
 
     val typeArgs = zippedCurrent.map{case (a,i) => s"TypedField<$a> f${i}"}.mkString(", ")
     val fromJsonOpt = zippedCurrent.map{case (a, i) =>
-      s"Optional<$a> o${Character.toLowerCase(a)} = object.getAs(f${i}.name, f${i}.decoder::fromJson);"
+      s"Option<$a> o${Character.toLowerCase(a)} = object.getAs(f${i}.name, f${i}.decoder::fromJson);"
     }.mkString("\n      ")
 
     val fromJson = {
@@ -21,13 +21,13 @@ for((_, index) <- zipped) {
         val lower = Character.toLowerCase(a)
         s"o${lower}.flatMap(${lower} -> "
       }
-      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Optional.of(func.apply(", ", ", "))")
+      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Option.of(func.apply(", ", ", "))")
       fromJsonflatMap.mkString("", "",  finalFromJsonMap + (")" * arity) + ";")
     }
 
     val template =
       s"""
-         |public static <TT, ${genericsArgs}> Extractor<TT> extract$arity($typeArgs, javaslang.Function$arity<$genericsArgs, TT> func) {
+         |public static <TT, ${genericsArgs}> Extractor<TT> extract$arity($typeArgs, Function$arity<$genericsArgs, TT> func) {
          |    return (object) -> {
          |      $fromJsonOpt
          |      return $fromJson

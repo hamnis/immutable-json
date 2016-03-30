@@ -2,12 +2,12 @@ package net.hamnaberg.json;
 
 import javaslang.Tuple2;
 import javaslang.Tuple3;
+import javaslang.control.Option;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -114,11 +114,11 @@ public class PersonCodecTest {
 
 
         Person person = new Person("Erlend Hamnaberg", 34, new Address("Ensjøveien", "Oslo"));
-        Optional<Person> personOpt = personCodec.fromJson(value);
-        assertTrue(personOpt.isPresent());
+        Option<Person> personOpt = personCodec.fromJson(value);
+        assertTrue(personOpt.isDefined());
         assertEquals(person, personOpt.get());
-        Optional<Json.JValue> jsonOpt = personCodec.toJson(person);
-        assertTrue(jsonOpt.isPresent());
+        Option<Json.JValue> jsonOpt = personCodec.toJson(person);
+        assertTrue(jsonOpt.isDefined());
         assertEquals(value, jsonOpt.get());
     }
 
@@ -129,8 +129,8 @@ public class PersonCodecTest {
 
         JsonCodec<LocalDateTime> codec = Codecs.StringCodec.xmap(LocalDateTime::parse, ldt -> ldt.format(DateTimeFormatter.ISO_DATE_TIME));
 
-        Optional<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
-        assertTrue(localDateTimeOpt.isPresent());
+        Option<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
+        assertTrue(localDateTimeOpt.isDefined());
 
         assertEquals(expected, localDateTimeOpt.get());
         assertEquals(date, codec.toJson(expected).get());

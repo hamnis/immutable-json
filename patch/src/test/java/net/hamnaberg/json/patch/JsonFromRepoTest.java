@@ -1,5 +1,6 @@
 package net.hamnaberg.json.patch;
 
+import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,7 @@ public class JsonFromRepoTest {
     private final String name;
     private final Json.JValue document;
     private final Json.JArray patch;
-    private final Optional<Json.JValue> expected;
+    private final Option<Json.JValue> expected;
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> data() throws Exception {
@@ -27,7 +28,7 @@ public class JsonFromRepoTest {
     }
 
 
-    public JsonFromRepoTest(String name, Json.JValue document, Json.JArray patch, Optional<Json.JValue> expected) {
+    public JsonFromRepoTest(String name, Json.JValue document, Json.JArray patch, Option<Json.JValue> expected) {
         this.name = name;
         this.document = document;
         this.patch = patch;
@@ -41,11 +42,11 @@ public class JsonFromRepoTest {
             JsonPatch patch = JsonPatch.fromArray(this.patch);
             Json.JValue applied = patch.apply(document);
             assertNotNull("Document was null", applied);
-            if (expected.isPresent()) {
+            if (expected.isDefined()) {
                 assertEquals(expected.get(), applied);
             }
         } catch (IllegalArgumentException | IllegalStateException e) {
-            if (expected.isPresent()) {
+            if (expected.isDefined()) {
                 fail(e.getMessage());
             }
         }

@@ -35,9 +35,8 @@
       <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.javaslang</groupId>
+      <groupId>io.javaslang</groupId>
       <artifactId>javaslang</artifactId>
-      <version>1.2.2</version>
     </dependency>
   </dependencies>
 </project>

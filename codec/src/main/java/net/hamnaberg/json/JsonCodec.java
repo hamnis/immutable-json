@@ -1,8 +1,8 @@
 package net.hamnaberg.json;
 
+import javaslang.control.Option;
 import javaslang.control.Try;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
@@ -10,12 +10,12 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         JsonCodec<A> that = this;
         return new JsonCodec<B>() {
             @Override
-            public Optional<B> fromJson(Json.JValue value) {
+            public Option<B> fromJson(Json.JValue value) {
                 return that.fromJson(value).map(f);
             }
 
             @Override
-            public Optional<Json.JValue> toJson(B value) {
+            public Option<Json.JValue> toJson(B value) {
                 return that.toJson(g.apply(value));
             }
         };
@@ -25,12 +25,12 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         JsonCodec<A> that = this;
         return new JsonCodec<B>() {
             @Override
-            public Optional<B> fromJson(Json.JValue value) {
-                return that.fromJson(value).map(f).flatMap(Try::toJavaOptional);
+            public Option<B> fromJson(Json.JValue value) {
+                return that.fromJson(value).map(f).flatMap(Try::toOption);
             }
 
             @Override
-            public Optional<Json.JValue> toJson(B value) {
+            public Option<Json.JValue> toJson(B value) {
                 return that.toJson(g.apply(value));
             }
         };

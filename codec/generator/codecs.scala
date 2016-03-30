@@ -1,6 +1,6 @@
 #!/usr/bin/env scala
 
-val arities = ('A' to 'W').toList
+val arities = ('A' to 'I').toList
 
 val zipped = arities.zipWithIndex
 
@@ -14,14 +14,14 @@ for((_, index) <- zipped) {
     val namedArgs = (1 to arity).map(i => "n" + i).mkString(",")
     val typeArgs = zippedCurrent.map{case (a,i) => s"JsonCodec<$a> c${i}"}.mkString(", ")
     val fromJsonOpt = zippedCurrent.map{case (a, i) =>
-      s"Optional<$a> o${Character.toLowerCase(a)} = object.getAs(n${i}, c${i}::fromJson);"
+      s"Option<$a> o${Character.toLowerCase(a)} = object.getAs(n${i}, c${i}::fromJson);"
     }.mkString("\n            ")
 
     val toJson = {
       val flatMapped = zippedCurrent.map{case (_, i) =>
         s"c$i.toJson(tuple._$i).flatMap(j$i -> "
       }
-      val finaltoJsonMap = zippedCurrent.map{ case (_, i) => s"Json.entry(n$i, j$i)" }.mkString("Optional.of(Json.jObject(", ",","))")
+      val finaltoJsonMap = zippedCurrent.map{ case (_, i) => s"Json.entry(n$i, j$i)" }.mkString("Option.of(Json.jObject(", ",","))")
       flatMapped.mkString("", "",  finaltoJsonMap + (")" * arity) + ";")
     }
 
@@ -30,23 +30,23 @@ for((_, index) <- zipped) {
         val lower = Character.toLowerCase(a)
         s"o${lower}.flatMap(${lower} -> "
       }
-      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Optional.of(iso.reverseGet(new javaslang.Tuple$arity<>(", ",", ")))")
+      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Option.of(iso.reverseGet(new Tuple$arity<>(", ",", ")))")
       fromJsonflatMap.mkString("", "",  finalFromJsonMap + (")" * arity) + ";")
     }
 
 
     val template =
       s"""
-        |public static <TT, ${genericsArgs}> javaslang.Function$arity<${stringArgs}, JsonCodec<TT>> codec$arity(Iso<TT, javaslang.Tuple$arity<$genericsArgs>> iso, $typeArgs) {
+        |public static <TT, ${genericsArgs}> Function$arity<${stringArgs}, JsonCodec<TT>> codec$arity(Iso<TT, Tuple$arity<$genericsArgs>> iso, $typeArgs) {
         |    return ($namedArgs) -> new JsonCodec<TT>() {
         |        @Override
-        |        public Optional<Json.JValue> toJson(TT value) {
-        |            javaslang.Tuple$arity<$genericsArgs> tuple = iso.get(value);
+        |        public Option<Json.JValue> toJson(TT value) {
+        |            Tuple$arity<$genericsArgs> tuple = iso.get(value);
         |            return $toJson
         |        }
         |
         |        @Override
-        |        public Optional<TT> fromJson(Json.JValue value) {
+        |        public Option<TT> fromJson(Json.JValue value) {
         |            Json.JObject object = value.asJsonObjectOrEmpty();
         |            $fromJsonOpt
         |            return $fromJson

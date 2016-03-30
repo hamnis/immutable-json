@@ -1,5 +1,6 @@
 package net.hamnaberg.json.patch;
 
+import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JacksonStreamingParser;
 import org.junit.Test;
@@ -8,7 +9,6 @@ import org.junit.runners.Parameterized;
 
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Optional;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -18,7 +18,7 @@ public class RFC9602Test {
     private final String name;
     private final Json.JValue document;
     private final Json.JArray patch;
-    private final Optional<Json.JValue> expected;
+    private final Option<Json.JValue> expected;
 
     @Parameterized.Parameters(name = "spec - {0}")
     public static Collection<Object[]> data() throws Exception {
@@ -32,15 +32,15 @@ public class RFC9602Test {
         return tests.mapToList(j -> {
             Json.JObject object = j.asJsonObjectOrEmpty();
             Json.JValue document = object.get("doc").get();
-            Optional<Json.JValue> expected = object.get("expected");
+            Option<Json.JValue> expected = object.get("expected");
             String comment = object.getAsStringOrEmpty("comment");
             Json.JArray patchArray = object.getAsArrayOrEmpty("patch");
             return new Object[]{ comment, document, patchArray, expected};
-        });
+        }).toJavaList();
     }
 
 
-    public RFC9602Test(String name, Json.JValue document, Json.JArray patch, Optional<Json.JValue> expected) {
+    public RFC9602Test(String name, Json.JValue document, Json.JArray patch, Option<Json.JValue> expected) {
         this.name = name;
         this.document = document;
         this.patch = patch;
@@ -54,11 +54,11 @@ public class RFC9602Test {
             JsonPatch patch = JsonPatch.fromArray(this.patch);
             Json.JValue applied = patch.apply(document);
             assertNotNull("Document was null", applied);
-            if (expected.isPresent()) {
+            if (expected.isDefined()) {
                 assertEquals(expected.get(), applied);
             }
         } catch (IllegalArgumentException | IllegalStateException e) {
-            if (expected.isPresent()) {
+            if (expected.isDefined()) {
                 fail(e.getMessage());
             }
         }

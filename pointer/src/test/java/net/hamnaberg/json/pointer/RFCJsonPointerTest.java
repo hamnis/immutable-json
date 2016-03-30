@@ -1,5 +1,6 @@
 package net.hamnaberg.json.pointer;
 
+import javaslang.control.Option;
 import net.hamnaberg.json.*;
 import org.junit.Test;
 
@@ -10,34 +11,32 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class RFCJsonPointerTest {
-    private static Map.Entry<String, Json.JValue> entry(String name, Json.JValue value) {
-        return new AbstractMap.SimpleImmutableEntry<>(name, value);
-    }
+
 
     private Json.JObject json = Json.jObject(
-            entry("foo", Json.jArray(Json.jString("bar"), Json.jString("baz"))),
-            entry("", Json.jNumber(0)),
-            entry("a/b", Json.jNumber(1)),
-            entry("c%d", Json.jNumber(2)),
-            entry("e^f", Json.jNumber(3)),
-            entry("g|h", Json.jNumber(4)),
-            entry("i\\j", Json.jNumber(5)),
-            entry("k\"l", Json.jNumber(6)),
-            entry(" ", Json.jNumber(7)),
-            entry("m~n", Json.jNumber(8))
+            Json.tuple("foo", Json.jArray(Json.jString("bar"), Json.jString("baz"))),
+            Json.tuple("", Json.jNumber(0)),
+            Json.tuple("a/b", Json.jNumber(1)),
+            Json.tuple("c%d", Json.jNumber(2)),
+            Json.tuple("e^f", Json.jNumber(3)),
+            Json.tuple("g|h", Json.jNumber(4)),
+            Json.tuple("i\\j", Json.jNumber(5)),
+            Json.tuple("k\"l", Json.jNumber(6)),
+            Json.tuple(" ", Json.jNumber(7)),
+            Json.tuple("m~n", Json.jNumber(8))
     );
 
     @Test
     public void emptyStringselectWholeDocument() {
-        Optional<Json.JValue> select = JsonPointer.compile("").select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile("").select(json);
+        assertTrue(select.isDefined());
         assertSame(json, select.get());
     }
 
     @Test
     public void slashFooFindsArray() {
-        Optional<Json.JValue> select = JsonPointer.compile("/foo").select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile("/foo").select(json);
+        assertTrue(select.isDefined());
         assertEquals(Json.jArray(Json.jString("bar"), Json.jString("baz")), select.get());
     }
 
@@ -55,8 +54,8 @@ public class RFCJsonPointerTest {
     }
 
     private void find(String pattern, int value) {
-        Optional<Json.JValue> select = JsonPointer.compile(pattern).select(json);
-        assertTrue(select.isPresent());
+        Option<Json.JValue> select = JsonPointer.compile(pattern).select(json);
+        assertTrue(select.isDefined());
         assertEquals(Json.jNumber(value), select.get());
     }
 }
