@@ -31,6 +31,7 @@
     <module>ast</module>
     <module>core</module>
     <module>codec</module>
+    <module>reflection</module>
     <module>pointer</module>
     <module>patch</module>
     <module>native</module>
@@ -109,6 +110,11 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>immutable-json-pointer</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>immutable-json-codec</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
