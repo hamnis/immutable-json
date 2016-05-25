@@ -114,9 +114,9 @@ public class PersonCodecTest {
 
 
         Person person = new Person("Erlend Hamnaberg", 34, new Address("Ensjøveien", "Oslo"));
-        Option<Person> personOpt = personCodec.fromJson(value);
-        assertTrue(personOpt.isDefined());
-        assertEquals(person, personOpt.get());
+        DecodeResult<Person> personOpt = personCodec.fromJson(value);
+        assertTrue(personOpt.isOk());
+        assertEquals(person, personOpt.unsafeGet());
         Option<Json.JValue> jsonOpt = personCodec.toJson(person);
         assertTrue(jsonOpt.isDefined());
         assertEquals(value, jsonOpt.get());
@@ -129,10 +129,10 @@ public class PersonCodecTest {
 
         JsonCodec<LocalDateTime> codec = Codecs.StringCodec.xmap(LocalDateTime::parse, ldt -> ldt.format(DateTimeFormatter.ISO_DATE_TIME));
 
-        Option<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
-        assertTrue(localDateTimeOpt.isDefined());
+        DecodeResult<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
+        assertTrue(localDateTimeOpt.isOk());
 
-        assertEquals(expected, localDateTimeOpt.get());
+        assertEquals(expected, localDateTimeOpt.unsafeGet());
         assertEquals(date, codec.toJson(expected).get());
     }
 }

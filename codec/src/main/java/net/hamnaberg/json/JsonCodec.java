@@ -10,7 +10,7 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         JsonCodec<A> that = this;
         return new JsonCodec<B>() {
             @Override
-            public Option<B> fromJson(Json.JValue value) {
+            public DecodeResult<B> fromJson(Json.JValue value) {
                 return that.fromJson(value).map(f);
             }
 
@@ -25,8 +25,8 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         JsonCodec<A> that = this;
         return new JsonCodec<B>() {
             @Override
-            public Option<B> fromJson(Json.JValue value) {
-                return that.fromJson(value).map(f).flatMap(Try::toOption);
+            public DecodeResult<B> fromJson(Json.JValue value) {
+                return that.fromJson(value).map(f).flatMap(meh -> meh.map(DecodeResult::ok).getOrElseGet(t -> DecodeResult.fail(t.getMessage())));
             }
 
             @Override

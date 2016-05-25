@@ -5,6 +5,7 @@ import javaslang.collection.List;
 import javaslang.control.Option;
 import net.hamnaberg.json.Codecs;
 import net.hamnaberg.json.DecodeJson;
+import net.hamnaberg.json.DecodeResult;
 import net.hamnaberg.json.Json;
 
 import java.util.function.Function;
@@ -61,7 +62,7 @@ public abstract class TypedField<A> {
 
     public static class TJArrayField extends TypedField<Json.JArray> {
         public TJArrayField(String name) {
-            super(name, Json.JValue::asJsonArray);
+            super(name, v -> DecodeResult.fromOption(v.asJsonArray()));
         }
 
         public <B> TypedField<List<B>> mapToList(Function<Json.JValue, B> f) {
@@ -74,7 +75,7 @@ public abstract class TypedField<A> {
 
     public static class TJObjectField extends TypedField<Json.JObject> {
         public TJObjectField(String name) {
-            super(name, Json.JValue::asJsonObject);
+            super(name, v -> DecodeResult.fromOption(v.asJsonObject()));
         }
 
         public <B> TypedField<B> extractTo(Extractor<B> mapper) {

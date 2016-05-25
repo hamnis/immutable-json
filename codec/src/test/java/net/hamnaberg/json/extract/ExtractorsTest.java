@@ -1,7 +1,7 @@
 package net.hamnaberg.json.extract;
 
 import javaslang.collection.List;
-import javaslang.control.Option;
+import net.hamnaberg.json.DecodeResult;
 import org.junit.Test;
 
 
@@ -39,8 +39,8 @@ public class ExtractorsTest {
                 interests,
                 Person::new
         );
-        Option<Person> personOpt = extractor.apply(json);
-        assertTrue(personOpt.isDefined());
+        DecodeResult<Person> personOpt = extractor.apply(json);
+        assertTrue(personOpt.isOk());
         personOpt.forEach(person -> {
             assertEquals("Erlend", person.name);
             assertEquals(35, person.age);
