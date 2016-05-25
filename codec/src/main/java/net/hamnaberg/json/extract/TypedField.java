@@ -1,13 +1,12 @@
 package net.hamnaberg.json.extract;
 
+import javaslang.Value;
+import javaslang.collection.List;
+import javaslang.control.Option;
 import net.hamnaberg.json.Codecs;
 import net.hamnaberg.json.DecodeJson;
-import net.hamnaberg.json.EncodeJson;
 import net.hamnaberg.json.Json;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class TypedField<A> {
@@ -68,9 +67,8 @@ public abstract class TypedField<A> {
         public <B> TypedField<List<B>> mapToList(Function<Json.JValue, B> f) {
             return typedFieldOf(name, decoder.map(ja -> ja.mapToList(f)));
         }
-        public <B> TypedField<List<B>> mapToOptionalList(Function<Json.JValue, Optional<B>> f) {
-            Function<Optional<B>, List<B>> toList = opt -> opt.isPresent() ? Collections.singletonList(opt.get()) : Collections.emptyList();
-            return typedFieldOf(name, decoder.map(ja -> ja.flatMapToList(f.andThen(toList))));
+        public <B> TypedField<List<B>> mapToOptionalList(Function<Json.JValue, Option<B>> f) {
+            return typedFieldOf(name, decoder.map(ja -> ja.flatMapToList(f.andThen(Value::toList))));
         }
     }
 

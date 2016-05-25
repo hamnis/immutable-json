@@ -1,13 +1,14 @@
 package net.hamnaberg.json;
 
-import java.util.Optional;
+import javaslang.control.Option;
+
 import java.util.function.Function;
 
 public interface DecodeJson<A> {
-    Optional<A> fromJson(Json.JValue value);
+    Option<A> fromJson(Json.JValue value);
 
     default A fromJsonUnsafe(Json.JValue value) {
-        return fromJson(value).orElse(null);
+        return fromJson(value).getOrElse((A)null);
     }
 
     default <B> DecodeJson<B> map(Function<A, B> f) {
@@ -16,7 +17,7 @@ public interface DecodeJson<A> {
 
     default <B> DecodeJson<B> flatMap(Function<A, DecodeJson<B>> f) {
         return value -> {
-            Optional<A> opt = this.fromJson(value);
+            Option<A> opt = this.fromJson(value);
             return opt.flatMap(a -> f.apply(a).fromJson(value));
         };
     }

@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>2.3.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: Codec</name>
   <artifactId>immutable-json-codec</artifactId>
@@ -35,9 +35,8 @@
       <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.javaslang</groupId>
+      <groupId>io.javaslang</groupId>
       <artifactId>javaslang</artifactId>
-      <version>1.2.2</version>
     </dependency>
   </dependencies>
 </project>

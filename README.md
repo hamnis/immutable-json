@@ -6,7 +6,7 @@
  If you want to program in functional style in Java, you want
  your data types to be immutable and efficient.
 
- Unfortunately there are no default immutable collections in Java.
+ Unfortunately there are no default immutable collections in Java, so we try to use javaslang where appropriate.
  Since this is the case we need to copy the collections every time we do transformations.
 
  This will improve when [JEP 269](http://openjdk.java.net/jeps/269) is part of the JDK.

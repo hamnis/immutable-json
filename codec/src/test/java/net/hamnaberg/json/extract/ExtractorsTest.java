@@ -1,10 +1,9 @@
 package net.hamnaberg.json.extract;
 
+import javaslang.collection.List;
+import javaslang.control.Option;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static net.hamnaberg.json.Json.*;
 import static net.hamnaberg.json.extract.TypedField.*;
@@ -13,14 +12,14 @@ import static org.junit.Assert.*;
 public class ExtractorsTest {
 
     JObject json = jObject(
-            entry("name", jString("Erlend")),
-            entry("age", jNumber(35)),
-            entry("address", jObject(
-               entry("street", jString("Ensjøveien 30 A")),
-               entry("city", jString("Oslo")),
-               entry("country", jString("Norway"))
+            tuple("name", jString("Erlend")),
+            tuple("age", jNumber(35)),
+            tuple("address", jObject(
+                tuple("street", jString("Ensjøveien 30 A")),
+                tuple("city", jString("Oslo")),
+                tuple("country", jString("Norway"))
             )),
-            entry("interests", jArray(jString("Programming"), jString("Books"), jString("podcasts")))
+            tuple("interests", jArray(jString("Programming"), jString("Books"), jString("podcasts")))
     );
 
     @Test
@@ -40,13 +39,13 @@ public class ExtractorsTest {
                 interests,
                 Person::new
         );
-        Optional<Person> personOpt = extractor.apply(json);
-        assertTrue(personOpt.isPresent());
-        personOpt.ifPresent(person -> {
+        Option<Person> personOpt = extractor.apply(json);
+        assertTrue(personOpt.isDefined());
+        personOpt.forEach(person -> {
             assertEquals("Erlend", person.name);
             assertEquals(35, person.age);
             assertEquals("Ensjøveien 30 A", person.address.street);
-            assertEquals(Arrays.asList("Programming", "Books", "podcasts"), person.interests);
+            assertEquals(List.of("Programming", "Books", "podcasts"), person.interests);
         });
     }
 

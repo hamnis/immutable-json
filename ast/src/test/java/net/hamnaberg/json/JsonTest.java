@@ -1,9 +1,13 @@
 package net.hamnaberg.json;
 
+import javaslang.collection.LinkedHashMap;
+import javaslang.collection.List;
+import javaslang.control.Option;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -66,10 +70,10 @@ public class JsonTest {
         assertEquals(Json.jBoolean(true), allTheThings.headOption().get());
         Json.JArray empty = Json.jEmptyArray();
         Json.JArray notEmpty = empty.append(Json.jString("Hello"));
-        assertEquals(Optional.empty(), empty.headOption());
+        assertEquals(Option.none(), empty.headOption());
         assertEquals(0, empty.size());
         assertEquals(1, notEmpty.size());
-        assertEquals(Optional.of(Json.jString("Hello")), notEmpty.headOption());
+        assertEquals(Option.of(Json.jString("Hello")), notEmpty.headOption());
         assertEquals(1, notEmpty.getListAsStrings().size());
         assertEquals(0, notEmpty.getListAsObjects().size());
         assertEquals(0, notEmpty.getListAsBigDecimals().size());
@@ -78,28 +82,26 @@ public class JsonTest {
         Json.JArray remove = allTheThings.remove(2);
         assertEquals(7, allTheThings.size());
         assertEquals(6, remove.size());
-        assertEquals(2, notEmpty.insert(1, Json.jArray(jsonRrange(1, 10))).size());
-        assertEquals(11L, Stream.concat(notEmpty.stream(), Json.jArray(jsonRrange(1, 10)).stream()).count());
+        assertEquals(2, notEmpty.insert(1, Json.jArray(jsonRange(1, 10))).size());
+        assertEquals(11L, Stream.concat(notEmpty.stream(), Json.jArray(jsonRange(1, 10)).stream()).count());
     }
 
     @Test
     public void jObject() throws Exception {
         Json.JObject single = Json.jObject("k", Json.jNumber(23));
-        assertEquals(single, Json.jObject(new HashMap<String, Json.JValue>() {{
-            put("k", Json.jNumber(23));
-        }}));
+        assertEquals(single, Json.jObject(LinkedHashMap.of("k", Json.jNumber(23))));
         assertEquals(1, single.size());
         assertEquals(1, single.values().size());
-        assertEquals(Collections.singletonList(Json.jNumber(23)), new ArrayList<>(single.values()));
+        assertEquals(List.of(Json.jNumber(23)), List.ofAll(single.values()));
         assertTrue(Json.jEmptyObject().isEmpty());
         assertFalse(Json.jEmptyObject().containsKey("Hello"));
         assertTrue(single.containsKey("k"));
         assertTrue(single.containsValue(Json.jNumber(23)));
-        assertEquals(single.mapToList(this::entry), Collections.singletonList(entry("k", Json.jNumber(23))));
-        assertEquals(single.put("v", Json.jEmptyArray()), Json.jObject(new HashMap<String, Json.JValue>() {{
-            put("k", Json.jNumber(23));
-            put("v", Json.jEmptyArray());
-        }}));
+        assertEquals(single.mapToList(Json::entry), List.of(Json.entry("k", Json.jNumber(23))));
+        assertEquals(single.put("v", Json.jEmptyArray()), Json.jObject(
+                Json.entry("k", Json.jNumber(23)),
+                Json.entry("v", Json.jEmptyArray())
+        ));
     }
 
     @Test
@@ -114,13 +116,12 @@ public class JsonTest {
     @Test
     public void deepMerge() {
         Json.JValue merged = Json.jString("Hello").deepmerge(Json.jString("Bye"));
-        assertEquals("Bye", merged.asString().orElse(null));
+        assertEquals("Bye", merged.asString().getOrElse((String)null));
 
-        Json.JObject entry = Json.jObject(new HashMap<String, Json.JValue>() {{
-            put("k1", Json.jString("k1"));
-            put("k2", Json.jString("k2"));
-            put("k3", Json.jBoolean(false));
-        }});
+        Json.JObject entry = Json.jObject(
+                Json.tuple("k1", Json.jString("k1")),
+                Json.tuple("k2", Json.jString("k2")),
+                Json.tuple("k3", false));
 
         assertEquals(entry, Json.jEmptyObject().deepmerge(entry));
         assertEquals(entry, entry.deepmerge(Json.jEmptyObject()));
@@ -132,12 +133,10 @@ public class JsonTest {
         ));
 
         Json.JObject concat = withObject.concat(withObject2);
-
         Json.JObject withObject3 = entry.put("k4", Json.jObject(
-                Json.entry("inner1", Json.jNumber(23)),
-                Json.entry("inner2", Json.jNumber(40))
+                Json.tuple("inner1", Json.jNumber(23)),
+                Json.tuple("inner2", Json.jNumber(40))
         ));
-
         assertTrue(concat.getAsObjectOrEmpty("k4").containsKey("inner2"));
         assertFalse(concat.getAsObjectOrEmpty("k4").containsKey("inner1"));
         assertEquals(withObject, entry.deepmerge(withObject));
@@ -146,15 +145,11 @@ public class JsonTest {
         assertEquals(withObject3, withObject2.deepmerge(withObject));
     }
 
-    public <K, V> Map.Entry<K, V> entry(K k, V v) {
-        return new AbstractMap.SimpleImmutableEntry<>(k, v);
-    }
-
-    private List<Json.JValue> jsonRrange(int start, int end) {
+    private List<Json.JValue> jsonRange(int start, int end) {
         ArrayList<Json.JValue> list = new ArrayList<>();
         for (int i = start; i <= end; i++) {
             list.add(Json.jNumber(i));
         }
-        return list;
+        return List.ofAll(list);
     }
 }

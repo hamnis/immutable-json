@@ -1,10 +1,10 @@
 package net.hamnaberg.json.io;
 
+import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class JsonParser {
@@ -24,23 +24,23 @@ public abstract class JsonParser {
         }
     }
 
-    public Optional<Json.JValue> parseOpt(InputStream is) {
+    public Option<Json.JValue> parseOpt(InputStream is) {
         return parseOpt(is, this::parse);
     }
 
-    public Optional<Json.JValue> parseOpt(String string) {
+    public Option<Json.JValue> parseOpt(String string) {
         return parseOpt(string, this::parse);
     }
 
-    public Optional<Json.JValue> parseOpt(Reader reader) {
+    public Option<Json.JValue> parseOpt(Reader reader) {
         return parseOpt(reader, this::parse);
     }
 
-    private <A> Optional<Json.JValue> parseOpt(A input, Function<A, Json.JValue> f) {
+    private <A> Option<Json.JValue> parseOpt(A input, Function<A, Json.JValue> f) {
         try {
-            return Optional.of(f.apply(input));
+            return Option.of(f.apply(input));
         } catch (JsonParseException e) {
-            return Optional.empty();
+            return Option.none();
         }
 
     }
