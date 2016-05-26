@@ -112,7 +112,7 @@ public abstract class DecodeResult<A> {
 
         @Override
         public String toString() {
-            return String.format("Failure(value='%s')", message);
+            return String.format("Failure(message='%s')", message);
         }
     }
 
