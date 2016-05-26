@@ -86,6 +86,11 @@ public abstract class DecodeResult<A> {
         public A getValue() {
             return value;
         }
+
+        @Override
+        public String toString() {
+            return String.format("Ok(value='%s')", value);
+        }
     }
 
     public final static class Failure extends DecodeResult<Object> {
@@ -103,6 +108,11 @@ public abstract class DecodeResult<A> {
         @Override
         public void foldUnit(Consumer<Ok<Object>> okFunction, Consumer<Failure> failFunction) {
             failFunction.accept(this);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Failure(value='%s')", message);
         }
     }
 
