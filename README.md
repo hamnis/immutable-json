@@ -26,31 +26,43 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>2.1.0</version>
+   <version>2.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>2.1.0</version>
+   <version>2.2.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-patch</artifactId>
+   <version>2.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>2.1.0</version>
+   <version>2.2.0</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-native</artifactId>
+   <version>2.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>2.1.0</version>
+   <version>2.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>2.1.0</version>
+   <version>2.2.0</version>
  </dependency>
  ```
 
@@ -78,6 +90,12 @@
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-native</artifactId>
+   <version>3.0-SNAPSHOT</version>
+  </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
@@ -85,6 +103,12 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
+   <version>3.0-SNAPSHOT</version>
+ </dependency>
+
+ <dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-reflection-codec</artifactId>
    <version>3.0-SNAPSHOT</version>
  </dependency>
   ```
