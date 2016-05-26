@@ -1,6 +1,7 @@
 package net.hamnaberg.json.extract;
 
 import javaslang.collection.List;
+import javaslang.control.Option;
 import net.hamnaberg.json.DecodeResult;
 import org.junit.Test;
 
@@ -20,6 +21,11 @@ public class ExtractorsTest {
                 tuple("country", jString("Norway"))
             )),
             tuple("interests", jArray(jString("Programming"), jString("Books"), jString("podcasts")))
+    );
+
+    JObject json2 = jObject(
+            tuple("name", jString("Erlend")),
+            tuple("age", jNumber(35))
     );
 
     @Test
@@ -49,6 +55,38 @@ public class ExtractorsTest {
         });
     }
 
+    @Test
+    public void extractPerson2() {
+        Extractor<Address> addressExtractor = Extractors.extract3(
+                TString("street"),
+                TString("city"),
+                TString("country").map(Country::new),
+                Address::new
+        );
+
+        Extractor<Person2> extractor = Extractors.extract3(
+                TString("name"),
+                TInt("age"),
+                TOptional("address", addressExtractor.decoder()),
+                Person2::new
+        );
+        DecodeResult<Person2> personOpt = extractor.apply(json);
+        DecodeResult<Person2> person2Opt = extractor.apply(json2);
+        assertTrue(personOpt.isOk());
+        assertTrue(person2Opt.isOk());
+        personOpt.forEach(person -> {
+            assertEquals("Erlend", person.name);
+            assertEquals(35, person.age);
+            assertTrue(person.address.isDefined());
+            assertEquals("Ensjøveien 30 A", person.address.get().street);
+        });
+        person2Opt.forEach(person -> {
+            assertEquals("Erlend", person.name);
+            assertEquals(35, person.age);
+            assertTrue(person.address.isEmpty());
+        });
+    }
+
 
     public static class Person {
         public final String name;
@@ -71,6 +109,28 @@ public class ExtractorsTest {
                     ", age=" + age +
                     ", address=" + address +
                     ", interests=" + interests +
+                    '}';
+        }
+    }
+
+    public static class Person2 {
+        public final String name;
+        public final int age;
+        public final Option<Address> address;
+
+        public Person2(String name, int age, Option<Address> address) {
+            this.name = name;
+            this.age = age;
+            this.address = address;
+        }
+
+
+        @Override
+        public String toString() {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", age=" + age +
+                    ", address=" + address +
                     '}';
         }
     }
