@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public final class ReflectionCodec<A> implements JsonCodec<A> {
     private final Class<A> type;
-    private final Map<Class<?>, JsonCodec<?>> codecs;
+    private final Map<String, JsonCodec<?>> codecs;
     private final List<Param> fields;
     private final Constructor<A> ctor;
 
@@ -41,11 +41,11 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         this(type, Collections.emptyMap());
     }
 
-    public ReflectionCodec(Class<A> type, Map<Class<?>, JsonCodec<?>> codecs) {
+    public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs) {
         this(type, codecs, (p) -> true);
     }
 
-    public ReflectionCodec(Class<A> type, Map<Class<?>, JsonCodec<?>> codecs, Predicate<Param> predicate) {
+    public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate) {
         this.type = type;
         this.codecs = codecs;
         this.fields = getFields(type).stream().filter(predicate).collect(Collectors.toList());
@@ -70,10 +70,11 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         List<Object> arguments = new ArrayList<>();
 
         for (Param field : fields) {
-            Option<Json.JValue> v1 = object.get(field.getName());
-            Option<JsonCodec<Object>> codec = getCodec(field);
-            Option<Object> vopt = v1.flatMap(v -> codec.flatMap(c -> c.fromJson(v).toOption()));
-            vopt.forEach(arguments::add);
+            JsonCodec<Object> codec = getCodec(field).getOrElseThrow(() -> {
+                throw new NoSuchElementException("Missing codec for " + field.getName());
+            });
+            DecodeResult<Object> result = DecodeResult.decode(object, field.getName(), codec);
+            result.forEach(arguments::add);
         }
 
         try {
@@ -86,7 +87,7 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
     @SuppressWarnings("unchecked")
     private Option<JsonCodec<Object>> getCodec(Param field) {
         return Option.of(
-                (JsonCodec<Object>) codecs.getOrDefault(field.getType(), defaultCodecs.get(field.getType()))
+                (JsonCodec<Object>) codecs.getOrDefault(field.getName(), defaultCodecs.get(field.getType()))
         );
     }
 

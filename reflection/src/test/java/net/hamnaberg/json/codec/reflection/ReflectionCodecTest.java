@@ -1,6 +1,8 @@
 package net.hamnaberg.json.codec.reflection;
 
+import javaslang.collection.List;
 import javaslang.control.Option;
+import net.hamnaberg.json.Codecs;
 import net.hamnaberg.json.DecodeResult;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.JsonCodec;
@@ -8,6 +10,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +29,7 @@ public class ReflectionCodecTest {
         }});
 
         JsonCodec<Address> aCodec = new ReflectionCodec<>(Address.class);
-        JsonCodec<Person> personCodec = new ReflectionCodec<>(Person.class, Collections.singletonMap(Address.class, aCodec));
+        JsonCodec<Person> personCodec = new ReflectionCodec<>(Person.class, Collections.singletonMap("address", aCodec));
 
         Person person = new Person("Erlend Hamnaberg", 34, new Address("Ensjøveien", "Oslo"));
         DecodeResult<Person> personOpt = personCodec.fromJson(value);
@@ -35,6 +38,61 @@ public class ReflectionCodecTest {
         Option<Json.JValue> jsonOpt = personCodec.toJson(person);
         assertTrue(jsonOpt.isDefined());
         assertEquals(value, jsonOpt.get());
+    }
+
+    @Test
+    public void consultantReflectionWithArrays() {
+        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>() {{
+            put("name", Json.jString("Erlend Hamnaberg"));
+            put("workplaces", Json.jArray(List.of(
+                    Json.jObject(
+                            Json.entry("street", Json.jString("Ensjøveien")),
+                            Json.entry("city", Json.jString("Oslo"))
+                    ),
+                    Json.jObject(
+                            Json.entry("street", Json.jString("Money, Money, Money")),
+                            Json.entry("city", Json.jString("Oslo"))
+                    ))
+                    )
+            );
+        }});
+
+        JsonCodec<Address> aCodec = new ReflectionCodec<>(Address.class);
+        Map<String, JsonCodec<?>> codecs = Collections.singletonMap("workplaces", Codecs.listCodec(aCodec));
+        JsonCodec<Consultant> consultantCodec = new ReflectionCodec<>(Consultant.class, codecs);
+
+        Consultant consultant = new Consultant("Erlend Hamnaberg", List.of(new Address("Ensjøveien", "Oslo"), new Address("Money, Money, Money", "Oslo")));
+        DecodeResult<Consultant> consultantOpt = consultantCodec.fromJson(value);
+        assertTrue(consultantOpt.isOk());
+        assertEquals(consultant, consultantOpt.unsafeGet());
+        Option<Json.JValue> jsonOpt = consultantCodec.toJson(consultant);
+        assertTrue(jsonOpt.isDefined());
+        assertEquals(value, jsonOpt.get());
+    }
+
+    private static class Consultant {
+        public final String name;
+        public final List<Address> workplaces;
+
+        public Consultant(String name, List<Address> workplaces) {
+            this.name = name;
+            this.workplaces = workplaces;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Consultant person = (Consultant) o;
+
+            return name.equals(person.name) && workplaces.equals(person.workplaces);
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * name.hashCode() + workplaces.hashCode();
+        }
     }
 
     private static class Address {
