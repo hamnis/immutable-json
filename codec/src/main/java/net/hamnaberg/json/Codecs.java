@@ -4,6 +4,7 @@ import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -146,6 +147,11 @@ public abstract class Codecs {
             }
 
             @Override
+            public Option<List<A>> defaultValue() {
+                return Option.some(List.empty());
+            }
+
+            @Override
             public String toString() {
                 return "listCodec(" + codec.toString() + ")";
             }
@@ -153,7 +159,8 @@ public abstract class Codecs {
     }
 
     public static <A> JsonCodec<java.util.List<A>> javaListCodec(JsonCodec<A> codec) {
-        return listCodec(codec).xmap(List::toJavaList, List::ofAll);
+        JsonCodec<java.util.List<A>> listCodec = listCodec(codec).xmap(List::toJavaList, List::ofAll);
+        return makeCodec(listCodec.withDefaultValue(Collections.emptyList()), listCodec);
     }
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
