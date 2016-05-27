@@ -26,27 +26,39 @@ public interface DecodeJson<A> {
         };
     }
 
-    default DecodeJson<A> withDefaultValue(A value) {
-        return new DecodeJsonWithDefault<>(this, value);
+    default DecodeJson<A> withDefaultValue(A defaultValue) {
+        if (this instanceof DecodeJsonWithDefault) {
+            return new DecodeJsonWithDefault<>(((DecodeJsonWithDefault<A>)this).delegate, defaultValue);
+        }
+        return new DecodeJsonWithDefault<>(this, defaultValue);
     }
 
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {
-        private final DecodeJson<A> delegate;
-        private final A value;
+        final DecodeJson<A> delegate;
+        private final A defaultValue;
 
-        public DecodeJsonWithDefault(DecodeJson<A> delegate, A value) {
+        public DecodeJsonWithDefault(DecodeJson<A> delegate, A defaultValue) {
             this.delegate = delegate;
-            this.value = value;
+            this.defaultValue = defaultValue;
         }
 
         @Override
         public DecodeResult<A> fromJson(Json.JValue value) {
-            return delegate.fromJson(value);
+            DecodeResult<A> res = delegate.fromJson(value);
+            if (res.isFailure()) {
+                return DecodeResult.ok(defaultValue);
+            }
+            return res;
         }
 
         @Override
         public Option<A> defaultValue() {
-            return Option.some(value);
+            return Option.some(defaultValue);
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + String.format(" {delegate=%s, default=%s}", delegate, defaultValue);
         }
     }
 }

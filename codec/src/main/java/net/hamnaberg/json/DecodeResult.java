@@ -70,7 +70,7 @@ public abstract class DecodeResult<A> {
         return object.
                 get(name).
                 map(DecodeResult::ok).
-                getOrElse(DecodeResult.fail(String.format("%s not found in object", name)));
+                getOrElse(DecodeResult.fail(String.format("%s not found in %s", name, object)));
     }
 
     public static <A> DecodeResult<A> decode(Json.JObject object, String name, DecodeJson<A> decoder) {

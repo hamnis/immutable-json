@@ -4,6 +4,8 @@ import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import static net.hamnaberg.json.DecodeResult.decode;
 
@@ -20,6 +22,11 @@ public abstract class Codecs {
         public DecodeResult<String> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asString());
         }
+
+        @Override
+        public String toString() {
+            return "StringCodec";
+        }
     };
 
     public static final JsonCodec<Number> numberCodec = new JsonCodec<Number>() {
@@ -31,6 +38,11 @@ public abstract class Codecs {
         @Override
         public DecodeResult<Number> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
+        }
+
+        @Override
+        public String toString() {
+            return "NumberCodec";
         }
     };
 
@@ -44,6 +56,11 @@ public abstract class Codecs {
         public DecodeResult<Long> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
         }
+
+        @Override
+        public String toString() {
+            return "LongCodec";
+        }
     };
 
     public static final JsonCodec<Double> doubleCodec = new JsonCodec<Double>() {
@@ -55,6 +72,11 @@ public abstract class Codecs {
         @Override
         public DecodeResult<Double> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
+        }
+
+        @Override
+        public String toString() {
+            return "DoubleCodec";
         }
     };
 
@@ -68,6 +90,11 @@ public abstract class Codecs {
         public DecodeResult<Integer> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
         }
+
+        @Override
+        public String toString() {
+            return "IntCodec";
+        }
     };
 
     public static final JsonCodec<Boolean> booleanCodec = new JsonCodec<Boolean>() {
@@ -79,6 +106,11 @@ public abstract class Codecs {
         @Override
         public DecodeResult<Boolean> fromJson(Json.JValue value) {
             return DecodeResult.fromOption(value.asBoolean());
+        }
+
+        @Override
+        public String toString() {
+            return "BooleanCodec";
         }
     };
 
@@ -92,6 +124,11 @@ public abstract class Codecs {
             @Override
             public DecodeResult<A> fromJson(Json.JValue value) {
                 return DecodeResult.fail("No 'null' value found");
+            }
+
+            @Override
+            public String toString() {
+                return "NullCodec";
             }
         };
     }
@@ -107,6 +144,11 @@ public abstract class Codecs {
             public Option<Json.JValue> toJson(List<A> value) {
                 return Option.of(Json.jArray(value.flatMap(a -> codec.toJson(a).toList())));
             }
+
+            @Override
+            public String toString() {
+                return "listCodec(" + codec.toString() + ")";
+            }
         };
     }
 
@@ -115,26 +157,38 @@ public abstract class Codecs {
     }
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
-        return new JsonCodec<Option<A>>() {
-            @Override
-            public DecodeResult<Option<A>> fromJson(Json.JValue value) {
-                return DecodeResult.ok(codec.fromJson(value).toOption());
-            }
-
-            @Override
-            public Option<Json.JValue> toJson(Option<A> value) {
-                return value.flatMap(codec::toJson).orElse(Option.some(Json.jNull()));
-            }
-
-            @Override
-            public Option<Option<A>> defaultValue() {
-                return Option.some(Option.none());
-            }
-        };
+        DecodeJson<Option<A>> decoder = value -> DecodeResult.ok(codec.fromJson(value).toOption());
+        EncodeJson<Option<A>> encoder = value -> value.flatMap(codec::toJson).orElse(Option.some(Json.jNull()));
+        return makeCodec(decoder.withDefaultValue(Option.none()), encoder);
     }
 
-    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> codec) {
-        return OptionCodec(codec).xmap(Option::toJavaOptional, Option::ofOptional);
+    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> underlying) {
+        JsonCodec<Optional<A>> codec = OptionCodec(underlying).xmap(Option::toJavaOptional, Option::ofOptional);
+        return makeCodec(codec.withDefaultValue(Optional.empty()), codec);
+    }
+
+    public static <A> JsonCodec<A> makeCodec(DecodeJson<A> decoder, EncodeJson<A> encoder) {
+        return new JsonCodec<A>() {
+            @Override
+            public DecodeResult<A> fromJson(Json.JValue value) {
+                return decoder.fromJson(value);
+            }
+
+            @Override
+            public Option<Json.JValue> toJson(A value) {
+                return encoder.toJson(value);
+            }
+
+            @Override
+            public Option<A> defaultValue() {
+                return decoder.defaultValue();
+            }
+
+            @Override
+            public String toString() {
+                return "decoder " + decoder.toString() + " encoder " + encoder.toString();
+            }
+        };
     }
 
 
@@ -152,6 +206,14 @@ public abstract class Codecs {
 
                 DecodeResult<A> oa = decode(object, n1, c1);
                 return oa.flatMap(a -> DecodeResult.ok(iso.reverseGet(new Tuple1<>(a))));
+            }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+
+                return "codec1" + map.toString();
             }
         };
     }
@@ -174,6 +236,15 @@ public abstract class Codecs {
                 DecodeResult<B> ob = decode(object, n2, c2);
                 return oa.flatMap(a -> ob.flatMap(b -> DecodeResult.ok(iso.reverseGet(new Tuple2<>(a,b)))));
             }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+
+                return "codec2" + map.toString();
+            }
         };
     }
 
@@ -194,6 +265,16 @@ public abstract class Codecs {
                 DecodeResult<B> ob = decode(object, n2, c2);
                 DecodeResult<C> oc = decode(object, n3, c3);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> DecodeResult.ok(iso.reverseGet(new Tuple3<>(a,b,c))))));
+            }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+
+                return "codec3" + map.toString();
             }
         };
     }
@@ -216,6 +297,17 @@ public abstract class Codecs {
                 DecodeResult<C> oc = decode(object, n3, c3);
                 DecodeResult<D> od = decode(object, n4, c4);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> DecodeResult.ok(iso.reverseGet(new Tuple4<>(a,b,c,d)))))));
+            }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+                map.put(n4, c4.toString());
+
+                return "codec4" + map.toString();
             }
         };
     }
@@ -240,6 +332,18 @@ public abstract class Codecs {
                 DecodeResult<E> oe = decode(object, n5, c5);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> DecodeResult.ok(iso.reverseGet(new Tuple5<>(a,b,c,d,e))))))));
             }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+                map.put(n4, c4.toString());
+                map.put(n5, c5.toString());
+
+                return "codec5" + map.toString();
+            }
         };
     }
 
@@ -263,6 +367,19 @@ public abstract class Codecs {
                 DecodeResult<E> oe = decode(object, n5, c5);
                 DecodeResult<F> of = decode(object, n6, c6);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> DecodeResult.ok(iso.reverseGet(new Tuple6<>(a,b,c,d,e,f)))))))));
+            }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+                map.put(n4, c4.toString());
+                map.put(n5, c5.toString());
+                map.put(n6, c6.toString());
+
+                return "codec6" + map.toString();
             }
         };
     }
@@ -289,6 +406,20 @@ public abstract class Codecs {
                 DecodeResult<G> og = decode(object, n7, c7);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> DecodeResult.ok(iso.reverseGet(new Tuple7<>(a,b,c,d,e,f,g))))))))));
             }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+                map.put(n4, c4.toString());
+                map.put(n5, c5.toString());
+                map.put(n6, c6.toString());
+                map.put(n7, c7.toString());
+
+                return "codec7" + map.toString();
+            }
         };
     }
 
@@ -314,6 +445,21 @@ public abstract class Codecs {
                 DecodeResult<G> og = decode(object, n7, c7);
                 DecodeResult<H> oh = decode(object, n8, c8);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> DecodeResult.ok(iso.reverseGet(new Tuple8<>(a,b,c,d,e,f,g,h)))))))))));
+            }
+
+            @Override
+            public String toString() {
+                Map<String, String> map = new HashMap<>();
+                map.put(n1, c1.toString());
+                map.put(n2, c2.toString());
+                map.put(n3, c3.toString());
+                map.put(n4, c4.toString());
+                map.put(n5, c5.toString());
+                map.put(n6, c6.toString());
+                map.put(n7, c7.toString());
+                map.put(n8, c8.toString());
+
+                return "codec8" + map.toString();
             }
         };
     }
