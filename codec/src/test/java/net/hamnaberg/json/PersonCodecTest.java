@@ -69,6 +69,34 @@ public class PersonCodecTest {
         }
     }
 
+    private static class Person2 {
+        public final String name;
+        public final int age;
+        public final Option<Address> address;
+
+        public Person2(String name, int age, Option<Address> address) {
+            this.name = name;
+            this.age = age;
+            this.address = address;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Person2 person = (Person2) o;
+
+            if (age != person.age) return false;
+            return name.equals(person.name) && address.equals(person.address);
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * name.hashCode() + address.hashCode() + age;
+        }
+    }
+
     private enum PersonIso implements Iso<Person, Tuple3<String, Integer, Address>> {
         INSTANCE;
 
@@ -79,6 +107,20 @@ public class PersonCodecTest {
 
         @Override
         public Tuple3<String, Integer, Address> get(Person t) {
+            return new Tuple3<>(t.name, t.age, t.address);
+        }
+    }
+
+    private enum Person2Iso implements Iso<Person2, Tuple3<String, Integer, Option<Address>>> {
+        INSTANCE;
+
+        @Override
+        public Person2 reverseGet(Tuple3<String, Integer, Option<Address>> t) {
+            return new Person2(t._1, t._2, t._3);
+        }
+
+        @Override
+        public Tuple3<String, Integer, Option<Address>> get(Person2 t) {
             return new Tuple3<>(t.name, t.age, t.address);
         }
     }
@@ -120,6 +162,47 @@ public class PersonCodecTest {
         Option<Json.JValue> jsonOpt = personCodec.toJson(person);
         assertTrue(jsonOpt.isDefined());
         assertEquals(value, jsonOpt.get());
+    }
+
+    @Test
+    public void person2() {
+        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
+            put("name", Json.jString("Erlend Hamnaberg"));
+            put("age", Json.jNumber(34));
+            put("address", Json.jObject(
+                    Json.entry("street", Json.jString("Ensjøveien")),
+                    Json.entry("city", Json.jString("Oslo"))
+            ));
+        }});
+
+        Json.JValue optValue = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
+                put("name", Json.jString("Erlend Hamnaberg"));
+                put("age", Json.jNumber(34));
+        }});
+        Json.JValue optValueEqual = optValue.asJsonObjectOrEmpty().put("address", Json.jNull());
+
+        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec, Codecs.StringCodec).apply("street", "city");
+        JsonCodec<Person2> personCodec = Codecs.codec3(Person2Iso.INSTANCE, Codecs.StringCodec, Codecs.intCodec, Codecs.OptionCodec(aCodec)).apply("name", "age", "address");
+
+        Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
+        Person2 person2 = new Person2("Erlend Hamnaberg", 34, Option.none());
+
+        DecodeResult<Person2> personOpt = personCodec.fromJson(value);
+        assertTrue(personOpt.isOk());
+        assertEquals(person, personOpt.unsafeGet());
+
+        Option<Json.JValue> jsonOpt = personCodec.toJson(person);
+        assertTrue(jsonOpt.isDefined());
+        assertEquals(value, jsonOpt.get());
+
+        DecodeResult<Person2> person2Opt = personCodec.fromJson(optValue);
+        assertTrue(person2Opt.isOk());
+        assertEquals(person2, person2Opt.unsafeGet());
+
+        Option<Json.JValue> json2Opt = personCodec.toJson(person2);
+        assertTrue(json2Opt.isDefined());
+        assertEquals(optValueEqual, json2Opt.get());
+
     }
 
     @Test

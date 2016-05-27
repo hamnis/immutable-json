@@ -66,6 +66,24 @@ public abstract class DecodeResult<A> {
     }
 
 
+    private static DecodeResult<Json.JValue> getValue(Json.JObject object, String name) {
+        return object.
+                get(name).
+                map(DecodeResult::ok).
+                getOrElse(DecodeResult.fail(String.format("%s not found in object", name)));
+    }
+
+    public static <A> DecodeResult<A> decode(Json.JObject object, String name, DecodeJson<A> decoder) {
+        DecodeResult<A> result = getValue(object, name).flatMap(decoder::fromJson);
+        if (result.isFailure()) {
+            Option<A> defaultValue = decoder.defaultValue();
+            if (defaultValue.isDefined()) {
+                result = DecodeResult.ok(defaultValue.get());
+            }
+        }
+        return result;
+    }
+
     public final static class Ok<A> extends DecodeResult<A> {
         public final A value;
 

@@ -14,12 +14,10 @@ import java.util.function.Function;
 public abstract class TypedField<A> {
     public final String name;
     public final DecodeJson<A> decoder;
-    public final Option<A> defaultValue;
 
-    private TypedField(String name, DecodeJson<A> decoder, Option<A> defaultValue) {
+    private TypedField(String name, DecodeJson<A> decoder) {
         this.name = name;
         this.decoder = decoder;
-        this.defaultValue = defaultValue;
     }
 
     @Override
@@ -72,12 +70,12 @@ public abstract class TypedField<A> {
     }
 
     public static <B> TypedField<B> typedFieldOf(String name, DecodeJson<B> decoder, Option<B> defaultValue) {
-        return new TypedField<B>(name, decoder, defaultValue) {};
+        return new TypedField<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder)) {};
     }
 
     public static class TJArrayField extends TypedField<Json.JArray> {
         public TJArrayField(String name) {
-            super(name, v -> DecodeResult.fromOption(v.asJsonArray()), Option.none());
+            super(name, v -> DecodeResult.fromOption(v.asJsonArray()));
         }
 
         public <B> TypedField<List<B>> mapToList(Function<Json.JValue, B> f) {
@@ -90,7 +88,7 @@ public abstract class TypedField<A> {
 
     public static class TJObjectField extends TypedField<Json.JObject> {
         public TJObjectField(String name) {
-            super(name, v -> DecodeResult.fromOption(v.asJsonObject()), Option.none());
+            super(name, v -> DecodeResult.fromOption(v.asJsonObject()));
         }
 
         public <B> TypedField<B> extractTo(Extractor<B> mapper) {
