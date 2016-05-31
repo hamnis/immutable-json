@@ -26,7 +26,7 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return new JsonCodec<B>() {
             @Override
             public Optional<B> fromJson(Json.JValue value) {
-                return that.fromJson(value).map(f).flatMap(Try::toJavaOptional);
+                return that.fromJson(value).map(f).flatMap(t -> t.toOption().toJavaOptional());
             }
 
             @Override
