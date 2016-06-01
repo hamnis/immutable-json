@@ -3,6 +3,7 @@ package net.hamnaberg.json.extract;
 import javaslang.Value;
 import javaslang.collection.List;
 import javaslang.control.Option;
+import javaslang.control.Try;
 import net.hamnaberg.json.Codecs;
 import net.hamnaberg.json.DecodeJson;
 import net.hamnaberg.json.DecodeResult;
@@ -27,6 +28,19 @@ public abstract class TypedField<A> {
 
     public <B> TypedField<B> map(Function<A, B> f) {
         return typedFieldOf(name, decoder.map(f), Option.none());
+    }
+
+    public <B> TypedField<B> flatMap(Function<A, TypedField<B>> f) {
+        DecodeJson<B> bdecoder = json -> decoder.flatMap(a -> f.apply(a).decoder).fromJson(json);
+        return typedFieldOf(name, bdecoder, Option.none());
+    }
+
+    public <B> TypedField<B> narrow(Function<A, Try<B>> f) {
+        return typedFieldOf(name, json -> decoder.fromJson(json).flatMap(a -> DecodeResult.fromOption(f.apply(a).toOption())), Option.none());
+    }
+
+    public <B> TypedField<B> tryNarrow(Function<A, B> f) {
+        return narrow(a -> Try.of(() -> f.apply(a)));
     }
 
     public TypedField<A> withDefaultValue(A defaultValue) {
