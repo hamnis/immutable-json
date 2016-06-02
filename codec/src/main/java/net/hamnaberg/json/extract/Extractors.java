@@ -98,4 +98,31 @@ public abstract class Extractors {
             return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> DecodeResult.ok(func.apply(a, b, c, d, e, f, g, h))))))))));
         };
     }
+
+    public static <TT, UU> Extractor<Tuple2<TT, UU>> combine2(Extractor<TT> ex1, Extractor<UU> ex2) {
+        return object -> {
+            DecodeResult<TT> decodeTT = ex1.apply(object);
+            DecodeResult<UU> decodeUU = ex2.apply(object);
+            return decodeTT.flatMap(t1 -> decodeUU.map(t2 -> Tuple.of(t1, t2)));
+        };
+    }
+
+    public static <T1, T2, T3> Extractor<Tuple3<T1, T2, T3>> combine3(Extractor<T1> ex1, Extractor<T2> ex2, Extractor<T3> ex3) {
+        return object -> {
+            DecodeResult<T1> d1 = ex1.apply(object);
+            DecodeResult<T2> d2 = ex2.apply(object);
+            DecodeResult<T3> d3 = ex3.apply(object);
+            return d1.flatMap(t1 -> d2.flatMap(t2 -> d3.map( t3 -> Tuple.of(t1, t2, t3))));
+        };
+    }
+
+    public static <T1, T2, T3, T4> Extractor<Tuple4<T1, T2, T3, T4>> combine4(Extractor<T1> ex1, Extractor<T2> ex2, Extractor<T3> ex3, Extractor<T4> ex4) {
+        return object -> {
+            DecodeResult<T1> d1 = ex1.apply(object);
+            DecodeResult<T2> d2 = ex2.apply(object);
+            DecodeResult<T3> d3 = ex3.apply(object);
+            DecodeResult<T4> d4 = ex4.apply(object);
+            return d1.flatMap(t1 -> d2.flatMap(t2 -> d3.flatMap( t3 -> d4.map(t4 -> Tuple.of(t1, t2, t3, t4)))));
+        };
+    }
 }
