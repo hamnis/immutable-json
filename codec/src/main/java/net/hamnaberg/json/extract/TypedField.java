@@ -9,7 +9,6 @@ import net.hamnaberg.json.DecodeJson;
 import net.hamnaberg.json.DecodeResult;
 import net.hamnaberg.json.Json;
 
-import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public abstract class TypedField<A> {
