@@ -1,0 +1,121 @@
+[
+  {
+    "doc": {
+      "a": "b"
+    },
+    "patch": {
+      "a": "c"
+    },
+    "result": {
+      "a": "c"
+    }
+  },
+  {
+    "doc": {
+      "a": "b"
+    },
+    "patch": {
+      "b": "c"
+    },
+    "result": {
+      "a": "b",
+      "b": "c"
+    }
+  },
+  {
+    "doc": {
+      "a": "b"
+    },
+    "patch": {
+      "a": null
+    },
+    "result": {}
+  },
+  {
+    "doc": {
+      "a": "b",
+      "b": "c"
+    },
+    "patch": {
+      "a": null
+    },
+    "result": {
+      "b": "c"
+    }
+  },
+  {
+    "doc": {"a":["b"]},
+    "patch": {"a":"c"},
+    "result": {"a":"c"}
+  },
+  {
+    "doc":  {"a":"c"},
+    "patch": {"a":["b"]},
+    "result": {"a":["b"]}
+  },
+  {
+    "doc": { "a": {"b": "c"}},
+    "patch": {"a": {
+      "b": "d",
+      "c": null}
+    },
+    "result": {
+      "a": {
+        "b": "d"
+      }
+    }
+  },
+  {
+    "doc": {"a": [
+      {"b":"c"}
+    ]
+    },
+    "patch": {
+      "a": [1]
+    },
+    "result": {
+      "a": [1]
+    }
+  },
+  {
+    "doc": ["a","b"],
+    "patch": ["c","d"],
+    "result": ["c","d"]
+  },
+  {
+    "doc": {"a":"b"},
+    "patch": ["c"],
+    "result": ["c"]
+  },
+  {
+    "doc": { "a":"foo"},
+    "patch": null,
+    "result": null
+  },
+  {
+    "doc": { "a":"foo"},
+    "patch": "bar",
+    "result": "bar"
+  },
+  {
+    "doc": {"e": null},
+    "patch": {"a": 1},
+    "result": {"e": null, "a": 1}
+  },
+  {
+    "doc": [1,2],
+    "patch": {"a": "b", "c": null},
+    "result": {"a": "b"}
+  },
+  {
+    "doc": {},
+    "patch": {
+      "a": {
+        "bb": {
+          "cc": null
+        }
+      }
+    },
+    "result": {"a": {"bb": {}}}
+  }
+]

@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.Iterator;
 import java.util.function.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Json {
@@ -272,6 +273,13 @@ public abstract class Json {
             return asJsonNumber().map(j -> j.value);
         }
 
+
+        public final boolean isObject() { return asJsonObject().isDefined(); }
+        public final boolean isArray() { return asJsonArray().isDefined(); }
+        public final boolean isString() { return asJsonString().isDefined(); }
+        public final boolean isNull() { return asJsonNull().isDefined(); }
+        public final boolean isBoolean() { return asJsonBoolean().isDefined(); }
+        public final boolean isNumber() { return asJsonNumber().isDefined(); }
 
         /**
          * Perform a deep merge of this JSON value with another JSON value.
@@ -735,6 +743,14 @@ public abstract class Json {
 
         public Json.JObject getAsObjectOrEmpty(String name) {
             return getAsObject(name).getOrElse(Json.jEmptyObject());
+        }
+
+        public Json.JObject filter(BiPredicate<String, JValue> predicate) {
+            return Json.jObject(underlying.entrySet().stream().filter(e -> predicate.test(e.getKey(), e.getValue())).map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList()));
+        }
+
+        public Json.JObject filterNot(BiPredicate<String, JValue> predicate) {
+            return filter(predicate.negate());
         }
 
         public boolean isEmpty() {
