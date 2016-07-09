@@ -45,6 +45,10 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         this(type, codecs, (p) -> true, Option.none());
     }
 
+    public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate) {
+        this(type, codecs, predicate, Option.none());
+    }
+
     public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate, Option<String> factoryMethod) {
         this.type = type;
         this.codecs = codecs;
