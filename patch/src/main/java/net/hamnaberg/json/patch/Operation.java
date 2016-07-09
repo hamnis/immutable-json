@@ -33,15 +33,15 @@ public class Operation {
         }
     }
 
-    public Op op;
-    public Option<JsonPointer> from;
-    public JsonPointer path;
-    public Option<Json.JValue> value;
+    public final Op op;
+    public final Option<JsonPointer> from;
+    public final JsonPointer path;
+    public final Option<Json.JValue> value;
 
-    public Operation(Op op, Option<String> from, String path, Option<Json.JValue> value) {
+    public Operation(Op op, Option<JsonPointer> from, JsonPointer path, Option<Json.JValue> value) {
         this.op = op;
-        this.from = from.map(JsonPointer::compile);
-        this.path = JsonPointer.compile(path);
+        this.from = from;
+        this.path = path;
         this.value = value;
         if (EnumSet.of(Op.Add, Op.Replace, Op.Test).contains(op)) {
             if (!value.isDefined()) {
@@ -53,8 +53,8 @@ public class Operation {
     public static Operation fromJson(Json.JObject object) {
         return new Operation(
                 Op.fromString(object.getAsStringOrEmpty("op")),
-                object.getAsString("from"),
-                object.getAsStringOrEmpty("path"),
+                object.getAsString("from").map(JsonPointer::compile),
+                JsonPointer.compile(object.getAsStringOrEmpty("path")),
                 object.get("value")
         );
     }

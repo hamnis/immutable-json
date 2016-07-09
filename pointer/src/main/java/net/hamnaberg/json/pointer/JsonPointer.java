@@ -1,36 +1,34 @@
 package net.hamnaberg.json.pointer;
 
+import javaslang.collection.List;
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public final class JsonPointer {
     private final List<Ref> path;
 
     public static JsonPointer compile(String pattern) {
         if (pattern == null || pattern.trim().isEmpty()) {
-            return new JsonPointer(Collections.emptyList());
+            return new JsonPointer(List.empty());
         }
         return new JsonPointer(new JsonPointerParser().parse(pattern));
     }
 
     private JsonPointer(List<Ref> path) {
-        this.path = Collections.unmodifiableList(path);
+        this.path = path;
     }
 
     @Override
     public String toString() {
         if (path.isEmpty()) return "";
-        return path.stream().map(ref -> ref.fold(
+        return path.map(ref -> ref.fold(
                 r -> String.valueOf(r.index),
                 r -> escape(r.name),
                 () -> "-"
-        )).collect(Collectors.joining("/", "/", ""));
+        )).mkString("/", "/", "");
     }
 
     private String escape(String str) {

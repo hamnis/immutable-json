@@ -6,6 +6,7 @@ import java.util.function.Function;
 import javaslang.collection.List;
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
+import net.hamnaberg.json.pointer.JsonPointer;
 
 public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
 
@@ -25,30 +26,54 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch add(String path, Json.JValue value) {
+        return add(JsonPointer.compile(path), value);
+    }
+
+    public JsonPatch add(JsonPointer path, Json.JValue value) {
         return op(Operation.Op.Add, Option.none(), path, Option.of(value));
     }
 
     public JsonPatch remove(String path) {
+        return remove(JsonPointer.compile(path));
+    }
+
+    public JsonPatch remove(JsonPointer path) {
         return op(Operation.Op.Remove, Option.none(), path, Option.none());
     }
 
     public JsonPatch replace(String path, Json.JValue value) {
+        return replace(JsonPointer.compile(path), value);
+    }
+
+    public JsonPatch replace(JsonPointer path, Json.JValue value) {
         return op(Operation.Op.Replace, Option.none(), path, Option.of(value));
     }
 
     public JsonPatch test(String path, Json.JValue value) {
+        return test(JsonPointer.compile(path), value);
+    }
+
+    public JsonPatch test(JsonPointer path, Json.JValue value) {
         return op(Operation.Op.Test, Option.none(), path, Option.of(value));
     }
 
     public JsonPatch copy(String from, String path) {
+        return copy(JsonPointer.compile(from), JsonPointer.compile(path));
+    }
+
+    public JsonPatch copy(JsonPointer from, JsonPointer path) {
         return op(Operation.Op.Copy, Option.of(from), path, Option.none());
     }
 
     public JsonPatch move(String from, String path) {
+        return move(JsonPointer.compile(from), JsonPointer.compile(path));
+    }
+
+    public JsonPatch move(JsonPointer from, JsonPointer path) {
         return op(Operation.Op.Move, Option.of(from), path, Option.none());
     }
 
-    private JsonPatch op(Operation.Op op, Option<String> from, String path, Option<Json.JValue> value) {
+    private JsonPatch op(Operation.Op op, Option<JsonPointer> from, JsonPointer path, Option<Json.JValue> value) {
         return new JsonPatch(this.operations.append(new Operation(op, from, path, value)));
     }
 
