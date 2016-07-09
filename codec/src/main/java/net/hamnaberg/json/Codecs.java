@@ -124,7 +124,7 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<A> fromJson(Json.JValue value) {
-                return DecodeResult.fail("No 'null' value found");
+                return DecodeResult.ok(null);
             }
 
             @Override
