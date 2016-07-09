@@ -160,44 +160,27 @@ public abstract class Codecs {
 
     public static <A> JsonCodec<java.util.List<A>> javaListCodec(JsonCodec<A> codec) {
         JsonCodec<java.util.List<A>> listCodec = listCodec(codec).xmap(List::toJavaList, List::ofAll);
-        return makeCodec(listCodec.withDefaultValue(Collections.emptyList()), listCodec);
+        return JsonCodec.lift(listCodec.withDefaultValue(Collections.emptyList()), listCodec);
     }
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
         DecodeJson<Option<A>> decoder = value -> DecodeResult.ok(codec.fromJson(value).toOption());
         EncodeJson<Option<A>> encoder = value -> value.flatMap(codec::toJson).orElse(Option.some(Json.jNull()));
-        return makeCodec(decoder.withDefaultValue(Option.none()), encoder);
+        return JsonCodec.lift(decoder.withDefaultValue(Option.none()), encoder);
     }
 
     public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> underlying) {
         JsonCodec<Optional<A>> codec = OptionCodec(underlying).xmap(Option::toJavaOptional, Option::ofOptional);
-        return makeCodec(codec.withDefaultValue(Optional.empty()), codec);
+        return JsonCodec.lift(codec.withDefaultValue(Optional.empty()), codec);
     }
 
+    @Deprecated
+    /**
+     * @deprecated Use {@link JsonCodec#lift(DecodeJson, EncodeJson)} instead
+     */
     public static <A> JsonCodec<A> makeCodec(DecodeJson<A> decoder, EncodeJson<A> encoder) {
-        return new JsonCodec<A>() {
-            @Override
-            public DecodeResult<A> fromJson(Json.JValue value) {
-                return decoder.fromJson(value);
-            }
-
-            @Override
-            public Option<Json.JValue> toJson(A value) {
-                return encoder.toJson(value);
-            }
-
-            @Override
-            public Option<A> defaultValue() {
-                return decoder.defaultValue();
-            }
-
-            @Override
-            public String toString() {
-                return "decoder " + decoder.toString() + " encoder " + encoder.toString();
-            }
-        };
+        return JsonCodec.lift(decoder, encoder);
     }
-
 
     public static <TT, A> Function1<String, JsonCodec<TT>> codec1(Iso<TT, Tuple1<A>> iso, JsonCodec<A> c1) {
         return (n1) -> new JsonCodec<TT>() {
