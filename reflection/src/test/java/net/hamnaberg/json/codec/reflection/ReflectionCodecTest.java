@@ -60,11 +60,17 @@ public class ReflectionCodecTest {
         JsonCodec<Address> aCodec = new ReflectionCodec<>(Address.class);
         Map<String, JsonCodec<?>> codecs = Collections.singletonMap("workplaces", Codecs.listCodec(aCodec));
         JsonCodec<Consultant> consultantCodec = new ReflectionCodec<>(Consultant.class, codecs);
+        JsonCodec<Consultant> consultantCodecFactory = new ReflectionCodec<>(Consultant.class, codecs, p -> true, Option.of("create"));
 
         Consultant consultant = new Consultant("Erlend Hamnaberg", List.of(new Address("Ensjøveien", "Oslo"), new Address("Money, Money, Money", "Oslo")));
         DecodeResult<Consultant> consultantOpt = consultantCodec.fromJson(value);
+        DecodeResult<Consultant> consultantFactoryOpt = consultantCodecFactory.fromJson(value);
         assertTrue(consultantOpt.isOk());
         assertEquals(consultant, consultantOpt.unsafeGet());
+
+        assertTrue(consultantFactoryOpt.isOk());
+        assertEquals(consultant, consultantFactoryOpt.unsafeGet());
+
         Option<Json.JValue> jsonOpt = consultantCodec.toJson(consultant);
         assertTrue(jsonOpt.isDefined());
         assertEquals(value, jsonOpt.get());
@@ -77,6 +83,10 @@ public class ReflectionCodecTest {
         public Consultant(String name, List<Address> workplaces) {
             this.name = name;
             this.workplaces = workplaces;
+        }
+
+        public static Consultant create(String name, List<Address> workplaces) {
+            return new Consultant(name, workplaces);
         }
 
         @Override
