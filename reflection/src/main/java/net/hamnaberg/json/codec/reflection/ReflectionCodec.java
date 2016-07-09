@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public final class ReflectionCodec<A> implements JsonCodec<A> {
+    private final Class<A> type;
     private final Map<String, JsonCodec<?>> codecs;
     private final List<Param> fields;
     private final Factory<A> factory;
@@ -45,6 +46,7 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
     }
 
     public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate, Option<String> factoryMethod) {
+        this.type = type;
         this.codecs = codecs;
         this.fields = getFields(type).filter(predicate);
         this.factory = factoryMethod.map(n -> Factory.factory(type, n, fields)).getOrElse(Factory.constructor(type, fields));
@@ -87,6 +89,12 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         return Option.of(
                 (JsonCodec<Object>) codecs.getOrDefault(field.getName(), defaultCodecs.get(field.getType()))
         );
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format("ReflectionCodec(%s)", type.getName());
     }
 
     private static String getterOf(String field) {
