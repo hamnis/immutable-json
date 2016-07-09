@@ -156,8 +156,8 @@ public class PersonCodecTest {
                 ));
         }});
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec, Codecs.StringCodec).apply("street", "city");
-        JsonCodec<Person> personCodec = Codecs.codec3(PersonIso.INSTANCE, Codecs.StringCodec, Codecs.intCodec, aCodec).apply("name", "age", "address");
+        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.StringCodec), NamedJsonCodec.of("city", Codecs.StringCodec));
+        JsonCodec<Person> personCodec = Codecs.codec3(PersonIso.INSTANCE, NamedJsonCodec.of("name", Codecs.StringCodec), NamedJsonCodec.of("age", Codecs.intCodec), NamedJsonCodec.of("address", aCodec));
 
 
         Person person = new Person("Erlend Hamnaberg", 34, new Address("Ensjøveien", "Oslo"));
@@ -186,8 +186,8 @@ public class PersonCodecTest {
         }});
         Json.JValue optValueEqual = optValue.asJsonObjectOrEmpty().put("address", Json.jNull());
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec, Codecs.StringCodec).apply("street", "city");
-        JsonCodec<Person2> personCodec = Codecs.codec3(Person2Iso.INSTANCE, Codecs.StringCodec, Codecs.intCodec, Codecs.OptionCodec(aCodec)).apply("name", "age", "address");
+        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.StringCodec), NamedJsonCodec.of("city", Codecs.StringCodec));
+        JsonCodec<Person2> personCodec = Codecs.codec3(Person2Iso.INSTANCE, NamedJsonCodec.of("name", Codecs.StringCodec), NamedJsonCodec.of("age", Codecs.intCodec), NamedJsonCodec.of("address", Codecs.OptionCodec(aCodec)));
 
         Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
         Person2 person2 = new Person2("Erlend Hamnaberg", 34, Option.none());
