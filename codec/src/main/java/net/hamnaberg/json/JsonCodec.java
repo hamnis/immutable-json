@@ -36,8 +36,28 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         };
     }
 
+    default <B> JsonCodec<B> narrowBoth(Function<A, Try<B>> f, Function<B, Try<A>> g) {
+        JsonCodec<A> that = this;
+        return new JsonCodec<B>() {
+            @Override
+            public DecodeResult<B> fromJson(Json.JValue value) {
+                return that.fromJson(value).map(f).flatMap(meh -> meh.map(DecodeResult::ok).getOrElseGet(t -> DecodeResult.fail(t.getMessage())));
+            }
+
+            @Override
+            public Option<Json.JValue> toJson(B value) {
+                Try<A> apply = g.apply(value);
+                return apply.toOption().flatMap(that::toJson);
+            }
+        };
+    }
+
     default <B> JsonCodec<B> tryNarrow(Function<A, B> f, Function<B, A> g) {
         return narrow(a -> Try.of(() -> f.apply(a)), g);
+    }
+
+    default <B> JsonCodec<B> tryNarrowBoth(Function<A, B> f, Function<B, A> g) {
+        return narrowBoth(a -> Try.of(() -> f.apply(a)), b -> Try.of(() -> g.apply(b)));
     }
 
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder) {

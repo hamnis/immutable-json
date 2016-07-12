@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+
 import static net.hamnaberg.json.DecodeResult.decode;
 
 public abstract class Codecs {
@@ -172,6 +174,13 @@ public abstract class Codecs {
     public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> underlying) {
         JsonCodec<Optional<A>> codec = OptionCodec(underlying).xmap(Option::toJavaOptional, Option::ofOptional);
         return JsonCodec.lift(codec.withDefaultValue(Optional.empty()), codec);
+    }
+
+    public static <A> JsonCodec<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder, Function<A, Json.JObject> encoder) {
+        return JsonCodec.lift(
+                json -> decoder.apply(json.asJsonObjectOrEmpty()),
+                a -> Option.some(encoder.apply(a).asJValue())
+        );
     }
 
     @Deprecated
