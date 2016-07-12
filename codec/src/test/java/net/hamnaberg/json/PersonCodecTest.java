@@ -95,6 +95,11 @@ public class PersonCodecTest {
         public int hashCode() {
             return 31 * name.hashCode() + address.hashCode() + age;
         }
+
+
+        public Tuple3<String, Integer, Option<Address>> tupled() {
+            return new Tuple3<>(name, age, address);
+        }
     }
 
     private enum PersonIso implements Iso<Person, Tuple3<String, Integer, Address>> {
@@ -203,6 +208,31 @@ public class PersonCodecTest {
         assertTrue(json2Opt.isDefined());
         assertEquals(optValueEqual, json2Opt.get());
 
+    }
+
+    @Test
+    public void personAsTuple() {
+        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
+            put("name", Json.jString("Erlend Hamnaberg"));
+            put("age", Json.jNumber(34));
+            put("address", Json.jObject(
+                    Json.entry("street", Json.jString("Ensjøveien")),
+                    Json.entry("city", Json.jString("Oslo"))
+            ));
+        }});
+
+        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec, Codecs.StringCodec).apply("street", "city");
+        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec3(Iso.identity(), Codecs.StringCodec, Codecs.intCodec, Codecs.OptionCodec(aCodec)).apply("name", "age", "address");
+
+        Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
+
+        DecodeResult<Tuple3<String, Integer, Option<Address>>> personOpt = personCodec.fromJson(value);
+        assertTrue(personOpt.isOk());
+        assertEquals(person.tupled(), personOpt.unsafeGet());
+
+        Option<Json.JValue> jsonOpt = personCodec.toJson(person.tupled());
+        assertTrue(jsonOpt.isDefined());
+        assertEquals(value, jsonOpt.get());
     }
 
     @Test
