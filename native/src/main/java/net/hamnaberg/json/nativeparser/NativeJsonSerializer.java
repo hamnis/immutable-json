@@ -3,6 +3,7 @@ package net.hamnaberg.json.nativeparser;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JsonSerializer;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.function.Supplier;
@@ -28,7 +29,13 @@ public class NativeJsonSerializer implements JsonSerializer {
 
     @Override
     public void write(Json.JValue value, Writer writer) {
-        try (Writer w = writer) {
+        BufferedWriter buf;
+        if (writer instanceof BufferedWriter) {
+            buf = (BufferedWriter)writer;
+        } else {
+            buf = new BufferedWriter(writer);
+        }
+        try (Writer w = buf) {
             w.write(printer.writeString(value));
         } catch (IOException e) {
             throw new RuntimeException(e);

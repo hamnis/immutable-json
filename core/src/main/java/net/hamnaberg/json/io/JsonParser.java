@@ -17,7 +17,14 @@ public abstract class JsonParser {
     }
 
     public final Json.JValue parse(Reader reader) {
-        try (Reader r = reader) {
+        BufferedReader buf;
+        if (reader instanceof BufferedReader) {
+            buf = (BufferedReader) reader;
+        } else {
+            buf = new BufferedReader(reader);
+        }
+
+        try (Reader r = buf) {
             return parseImpl(r);
         } catch (Exception e) {
             throw new JsonParseException(e);
