@@ -4,9 +4,6 @@ import javaslang.control.Option;
 import net.hamnaberg.json.*;
 import org.junit.Test;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
