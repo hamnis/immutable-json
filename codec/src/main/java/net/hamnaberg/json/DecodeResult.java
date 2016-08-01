@@ -1,5 +1,6 @@
 package net.hamnaberg.json;
 
+import javaslang.collection.List;
 import javaslang.control.Option;
 
 import java.util.NoSuchElementException;
@@ -9,6 +10,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class DecodeResult<A> {
+
+    private DecodeResult() {
+    }
 
     public final <B> DecodeResult<B> map(Function<A, B> f) {
         return fold(okValue -> ok(f.apply(okValue.value)), fail -> fail(fail.message));
@@ -50,6 +54,21 @@ public abstract class DecodeResult<A> {
 
     public boolean isFailure() {
         return fold(a -> false, a -> true);
+    }
+
+    public static <A> DecodeResult<List<A>> sequence(List<DecodeResult<A>> decodeResults) {
+        if (decodeResults.isEmpty()) {
+            return DecodeResult.ok(List.empty());
+        }
+        List<A> list = List.empty();
+
+        for (DecodeResult<A> decodeResult : decodeResults) {
+            if (decodeResult.isFailure()) {
+                return DecodeResult.fail("One or more results failed");
+            }
+            list = list.prepend(decodeResult.unsafeGet());
+        }
+        return DecodeResult.ok(list.reverse());
     }
 
     public static <A> DecodeResult<A> ok(A value) {

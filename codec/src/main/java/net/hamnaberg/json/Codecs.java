@@ -140,7 +140,7 @@ public abstract class Codecs {
         return new JsonCodec<List<A>>() {
             @Override
             public DecodeResult<List<A>> fromJson(Json.JValue value) {
-                return DecodeResult.fromOption(value.asJsonArray().map(j -> j.mapOpt(a -> codec.fromJson(a).toOption())));
+                return DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(codec::fromJson));
             }
 
             @Override
