@@ -166,7 +166,7 @@ public abstract class Codecs {
     }
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
-        DecodeJson<Option<A>> decoder = value -> DecodeResult.ok(codec.fromJson(value).toOption());
+        DecodeJson<Option<A>> decoder = value -> value.isNull() ? DecodeResult.ok(Option.none()) : DecodeResult.ok(codec.fromJson(value).toOption());
         EncodeJson<Option<A>> encoder = value -> value.flatMap(codec::toJson).orElse(Option.some(Json.jNull()));
         return JsonCodec.lift(decoder.withDefaultValue(Option.none()), encoder);
     }
