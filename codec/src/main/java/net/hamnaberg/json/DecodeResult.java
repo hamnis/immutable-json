@@ -30,6 +30,14 @@ public abstract class DecodeResult<A> {
         return fold(Ok::getValue, ignore -> orElse.get());
     }
 
+    public final <X extends Throwable> A getOrElseThrow(Function<String, X> exProvider) throws X {
+        if (isFailure()) {
+            String msg = ((Failure)this).message;
+            throw exProvider.apply(msg);
+        }
+        return ((Ok<A>)this).value;
+    }
+
     public final A unsafeGet() {
         return fold(Ok::getValue, e -> {
             throw new NoSuchElementException(e.message);
