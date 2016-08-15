@@ -1,8 +1,14 @@
 package net.hamnaberg.json;
 
+import java.util.function.Function;
+
 public interface Iso<A, B> {
     A reverseGet(B b);
     B get(A a);
+
+    default Function<A, A> modify(Function<B, B> f) {
+        return a -> this.reverseGet(f.apply(this.get(a)));
+    }
 
     default Iso<B, A> reverse() {
         Iso<A, B> that = this;
