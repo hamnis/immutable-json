@@ -139,7 +139,7 @@ public abstract class DecodeResult<A> {
     }
 
     public final static class Failure extends DecodeResult<Object> {
-        private final String message;
+        public final String message;
 
         public Failure(String message) {
             this.message = message;
