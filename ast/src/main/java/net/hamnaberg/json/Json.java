@@ -203,6 +203,9 @@ public abstract class Json {
 
     public static abstract class JValue implements Serializable {
 
+        private JValue() {
+        }
+
         public abstract boolean equals(Object obj);
 
         public abstract int hashCode();
