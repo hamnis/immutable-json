@@ -1,6 +1,7 @@
 package net.hamnaberg.json;
 
 import javaslang.control.Option;
+import javaslang.control.Try;
 
 import java.util.function.Function;
 
@@ -17,6 +18,11 @@ public interface DecodeJson<A> {
 
     default <B> DecodeJson<B> map(Function<A, B> f) {
         return (json) -> this.fromJson(json).map(f);
+    }
+
+    default <B> DecodeJson<B> tryMap(Function<A, Try<B>> f) {
+        return (json) -> this.fromJson(json).map(f).
+                flatMap(t -> t.isSuccess() ? DecodeResult.ok(t.get()) : DecodeResult.fail(t.failed().get().getMessage()));
     }
 
     default <B> DecodeJson<B> flatMap(Function<A, DecodeJson<B>> f) {
