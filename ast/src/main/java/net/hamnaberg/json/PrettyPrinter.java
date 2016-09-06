@@ -1,25 +1,25 @@
-package net.hamnaberg.json.nativeparser;
-
-import net.hamnaberg.json.Json;
+package net.hamnaberg.json;
 
 import java.util.Map;
 import java.util.Set;
 
-class PrettyPrinter {
+public final class PrettyPrinter {
     private final static int INDENT_LEVELS = 16;
 
     private final int charsPerLevel;
     private final boolean spaceafterColon;
     private final char[] indents;
+    private final boolean dropNullKeys;
 
-    PrettyPrinter(int charsPerLevel, boolean spaceAfterColon) {
+    public PrettyPrinter(int charsPerLevel, boolean spaceAfterColon, boolean dropNullKeys) {
         this.spaceafterColon = spaceAfterColon;
         this.charsPerLevel = charsPerLevel;
         this.indents = newIndent(charsPerLevel);
+        this.dropNullKeys = dropNullKeys;
     }
 
-    PrettyPrinter(int charsPerLevel) {
-        this(charsPerLevel, charsPerLevel > 0);
+    public PrettyPrinter(int charsPerLevel) {
+        this(charsPerLevel, charsPerLevel > 0, false);
     }
 
     public static PrettyPrinter nospaces() {
@@ -32,6 +32,10 @@ class PrettyPrinter {
 
     public static PrettyPrinter spaces4() {
         return new PrettyPrinter(4);
+    }
+
+    public PrettyPrinter dropNullKeys(boolean choice) {
+        return new PrettyPrinter(charsPerLevel, spaceafterColon, choice);
     }
 
     private static char[] newIndent(int level) {
@@ -55,7 +59,7 @@ class PrettyPrinter {
         state.levelUp();
     }
 
-    String writeString(Json.JValue value) {
+    public String writeString(Json.JValue value) {
         PrinterState state = new PrinterState();
         writeValue(value, state);
         return state.toString();
@@ -90,6 +94,9 @@ class PrettyPrinter {
     }
 
     private void writeProperty(String name, Json.JValue value, PrinterState state) {
+        if (value.isNull() && dropNullKeys) {
+            return;
+        }
         state.append(escape(name)).append(":");
         if (spaceafterColon) {
             state.append(" ");
@@ -190,41 +197,41 @@ class PrettyPrinter {
             state.append(indents, 0, level);
         }
     }
-}
 
-class PrinterState {
-    private int level = 0;
-    private final StringBuilder sb = new StringBuilder();
+    private class PrinterState {
+        private int level = 0;
+        private final StringBuilder sb = new StringBuilder();
 
-    PrinterState append(String s) {
-        sb.append(s);
-        return this;
-    }
+        PrinterState append(String s) {
+            sb.append(s);
+            return this;
+        }
 
-    PrinterState append(char[] chars, int i, int length) {
-        sb.append(chars, i, length);
-        return this;
-    }
+        PrinterState append(char[] chars, int i, int length) {
+            sb.append(chars, i, length);
+            return this;
+        }
 
-    PrinterState append(boolean s) {
-        sb.append(s);
-        return this;
-    }
+        PrinterState append(boolean s) {
+            sb.append(s);
+            return this;
+        }
 
-    void levelUp() {
-        level++;
-    }
+        void levelUp() {
+            level++;
+        }
 
-    void levelDown() {
-        level--;
-    }
+        void levelDown() {
+            level--;
+        }
 
-    int getLevel() {
-        return level;
-    }
+        int getLevel() {
+            return level;
+        }
 
-    @Override
-    public String toString() {
-        return sb.toString();
+        @Override
+        public String toString() {
+            return sb.toString();
+        }
     }
 }

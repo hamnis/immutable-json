@@ -1,12 +1,12 @@
 package net.hamnaberg.json.nativeparser;
 
 import net.hamnaberg.json.Json;
+import net.hamnaberg.json.PrettyPrinter;
 import net.hamnaberg.json.io.JsonSerializer;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.function.Supplier;
 
 public class NativeJsonSerializer implements JsonSerializer {
     private final PrettyPrinter printer;

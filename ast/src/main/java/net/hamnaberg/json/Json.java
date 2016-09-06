@@ -316,6 +316,22 @@ public abstract class Json {
         public final JValue asJValue() {
             return this;
         }
+
+        public final String nospaces() {
+            return pretty(PrettyPrinter.nospaces());
+        }
+
+        public final String spaces2() {
+            return pretty(PrettyPrinter.spaces2());
+        }
+
+        public final String spaces4() {
+            return pretty(PrettyPrinter.spaces4());
+        }
+
+        public final String pretty(PrettyPrinter p) {
+            return p.writeString(this);
+        }
     }
 
     public static final class JString extends JValue {
