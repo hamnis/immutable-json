@@ -5,6 +5,7 @@ import javaslang.collection.List;
 import javaslang.control.Option;
 import org.junit.Test;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,6 +144,26 @@ public class JsonTest {
         assertEquals(withObject2, entry.deepmerge(withObject2));
         assertEquals(withObject3, withObject.deepmerge(withObject2));
         assertEquals(withObject3, withObject2.deepmerge(withObject));
+    }
+
+    @Test
+    public void serializable() throws IOException, ClassNotFoundException {
+        Json.JObject object = Json.jObject(
+                Json.entry("foo", 1),
+                Json.entry("bar", "bar"),
+                Json.entry("meh", false),
+                Json.entry("mmm", Json.jNull())
+        );
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream stream = new ObjectOutputStream(bos);
+
+        stream.writeObject(object);
+
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+        Json.JObject read = (Json.JObject) is.readObject();
+
+        assertEquals(object, read);
     }
 
     private List<Json.JValue> jsonRange(int start, int end) {
