@@ -1,0 +1,12 @@
+{
+  "revapi": {
+    "ignore": [
+      {
+      "code": "java.method.parameterTypeChanged",
+      "old": "method parameter void net.hamnaberg.json.nativeparser.NativeJsonSerializer::<init>(===net.hamnaberg.json.nativeparser.PrettyPrinter===)",
+      "new": "method parameter void net.hamnaberg.json.nativeparser.NativeJsonSerializer::<init>(===net.hamnaberg.json.PrettyPrinter===)",
+      "justification": "Made it possible to the native Json Serializer constructor."
+      }
+    ]
+  }
+}
