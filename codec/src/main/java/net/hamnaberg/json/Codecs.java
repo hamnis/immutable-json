@@ -15,149 +15,57 @@ import static net.hamnaberg.json.DecodeResult.decode;
 public abstract class Codecs {
     private Codecs(){}
 
-    public static final JsonCodec<String> StringCodec = new JsonCodec<String>() {
-        @Override
-        public Option<Json.JValue> toJson(String value) {
-            return Option.of(Json.jString(value));
-        }
+    public static final JsonCodec<String> StringCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asString()),
+            value -> Option.some(Json.jString(value)),
+            "StringCodec"
+    );
 
-        @Override
-        public DecodeResult<String> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asString());
-        }
+    public static final JsonCodec<Number> numberCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v)),
+            value -> Option.of(Json.jNumber(value)),
+            "NumberCodec"
+    );
 
-        @Override
-        public String toString() {
-            return "StringCodec";
-        }
-    };
+    public static final JsonCodec<Long> longCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong)),
+            value -> Option.of(Json.jNumber(value)),
+            "LongCodec"
+    );
 
-    public static final JsonCodec<Number> numberCodec = new JsonCodec<Number>() {
-        @Override
-        public Option<Json.JValue> toJson(Number value) {
-            return Option.of(Json.jNumber(value));
-        }
+    public static final JsonCodec<Double> doubleCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble)),
+            value -> Option.of(Json.jNumber(value)),
+            "DoubleCodec"
+    );
 
-        @Override
-        public DecodeResult<Number> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
-        }
+    public static final JsonCodec<Integer> intCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt)),
+            value -> Option.of(Json.jNumber(value)),
+            "IntCodec"
+    );
 
-        @Override
-        public String toString() {
-            return "NumberCodec";
-        }
-    };
-
-    public static final JsonCodec<Long> longCodec = new JsonCodec<Long>() {
-        @Override
-        public Option<Json.JValue> toJson(Long value) {
-            return Option.of(Json.jNumber(value));
-        }
-
-        @Override
-        public DecodeResult<Long> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
-        }
-
-        @Override
-        public String toString() {
-            return "LongCodec";
-        }
-    };
-
-    public static final JsonCodec<Double> doubleCodec = new JsonCodec<Double>() {
-        @Override
-        public Option<Json.JValue> toJson(Double value) {
-            return Option.of(Json.jNumber(value));
-        }
-
-        @Override
-        public DecodeResult<Double> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
-        }
-
-        @Override
-        public String toString() {
-            return "DoubleCodec";
-        }
-    };
-
-    public static final JsonCodec<Integer> intCodec = new JsonCodec<Integer>() {
-        @Override
-        public Option<Json.JValue> toJson(Integer value) {
-            return Option.of(Json.jNumber(value));
-        }
-
-        @Override
-        public DecodeResult<Integer> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
-        }
-
-        @Override
-        public String toString() {
-            return "IntCodec";
-        }
-    };
-
-    public static final JsonCodec<Boolean> booleanCodec = new JsonCodec<Boolean>() {
-        @Override
-        public Option<Json.JValue> toJson(Boolean value) {
-            return Option.of(Json.jBoolean(value));
-        }
-
-        @Override
-        public DecodeResult<Boolean> fromJson(Json.JValue value) {
-            return DecodeResult.fromOption(value.asBoolean());
-        }
-
-        @Override
-        public String toString() {
-            return "BooleanCodec";
-        }
-    };
+    public static final JsonCodec<Boolean> booleanCodec = new DefaultJsonCodec<>(
+            value -> DecodeResult.fromOption(value.asBoolean()),
+            value -> Option.of(Json.jBoolean(value)),
+            "BooleanCodec"
+    );
 
     public static <A> JsonCodec<A> nullCodec() {
-        return new JsonCodec<A>() {
-            @Override
-            public Option<Json.JValue> toJson(A value) {
-                return Option.of(Json.jNull());
-            }
-
-            @Override
-            public DecodeResult<A> fromJson(Json.JValue value) {
-                return DecodeResult.ok(null);
-            }
-
-            @Override
-            public String toString() {
-                return "NullCodec";
-            }
-        };
+        return new DefaultJsonCodec<>(
+                ignore -> DecodeResult.ok(null),
+                ignore -> Option.of(Json.jNull()),
+                "NullCodec"
+        );
     }
 
     public static <A> JsonCodec<List<A>> listCodec(JsonCodec<A> codec) {
-        return new JsonCodec<List<A>>() {
-            @Override
-            public DecodeResult<List<A>> fromJson(Json.JValue value) {
-                return DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(codec::fromJson));
-            }
-
-            @Override
-            public Option<Json.JValue> toJson(List<A> value) {
-                return Option.of(Json.jArray(value.flatMap(a -> codec.toJson(a).toList())));
-            }
-
-            @Override
-            public Option<List<A>> defaultValue() {
-                return Option.some(List.empty());
-            }
-
-            @Override
-            public String toString() {
-                return "listCodec(" + codec.toString() + ")";
-            }
-        };
+        DecodeJson<List<A>> decodeJson = value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(codec::fromJson));
+        return new DefaultJsonCodec<>(
+                decodeJson.withDefaultValue(List.empty()),
+                value -> Option.of(Json.jArray(value.flatMap(a -> codec.toJson(a).toList()))),
+                String.format("ListCodec(%s)", codec.toString())
+        );
     }
 
     public static <A> JsonCodec<java.util.List<A>> javaListCodec(JsonCodec<A> codec) {

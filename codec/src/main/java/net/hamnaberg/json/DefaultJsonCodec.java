@@ -2,16 +2,19 @@ package net.hamnaberg.json;
 
 import javaslang.control.Option;
 
-/**
- * Created by maedhros on 25/08/16.
- */
-class DefaultJsonCodec<A> implements JsonCodec<A> {
-    private DecodeJson<A> decoder;
-    private EncodeJson<A> encoder;
+final class DefaultJsonCodec<A> implements JsonCodec<A> {
+    private final String toString;
+    private final DecodeJson<A> decoder;
+    private final EncodeJson<A> encoder;
 
     DefaultJsonCodec(DecodeJson<A> decoder, EncodeJson<A> encoder) {
+        this(decoder, encoder, String.format("DefaultCodec(decoder=%s, encoder=%s)", decoder, encoder));
+    }
+
+    DefaultJsonCodec(DecodeJson<A> decoder, EncodeJson<A> encoder, String toString) {
         this.decoder = decoder;
         this.encoder = encoder;
+        this.toString = toString;
     }
 
     @Override
@@ -30,6 +33,6 @@ class DefaultJsonCodec<A> implements JsonCodec<A> {
     }
 
     public String toString() {
-        return String.format("DefaultCodec(decoder=%s, encoder=%s)", decoder, encoder);
+        return toString;
     }
 }
