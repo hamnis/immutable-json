@@ -768,6 +768,10 @@ public abstract class Json {
             return Json.jObject(underlying.entrySet().stream().filter(e -> predicate.test(e.getKey(), e.getValue())).map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList()));
         }
 
+        public Json.JObject filterKeys(Predicate<String> predicate) {
+            return Json.jObject(underlying.entrySet().stream().filter(e -> predicate.test(e.getKey())).map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList()));
+        }
+
         public Json.JObject filterNot(BiPredicate<String, JValue> predicate) {
             return filter(predicate.negate());
         }
