@@ -221,8 +221,8 @@ public class PersonCodecTest {
             ));
         }});
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec, Codecs.StringCodec).apply("street", "city");
-        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec3(Iso.identity(), Codecs.StringCodec, Codecs.intCodec, Codecs.OptionCodec(aCodec)).apply("name", "age", "address");
+        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec.named("street"), Codecs.StringCodec.named("city"));
+        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec3(Iso.identity(), Codecs.StringCodec.named("name"), Codecs.intCodec.named("age"), Codecs.OptionCodec(aCodec).named("address"));
 
         Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
 

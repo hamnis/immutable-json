@@ -25,6 +25,10 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return narrowBoth(a -> Try.of(() -> f.apply(a)), b -> Try.of(() -> g.apply(b)));
     }
 
+    default NamedJsonCodec<A> named(String name) {
+        return NamedJsonCodec.of(name, this);
+    }
+
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder) {
         return new DefaultJsonCodec<>(decoder, encoder);
     }

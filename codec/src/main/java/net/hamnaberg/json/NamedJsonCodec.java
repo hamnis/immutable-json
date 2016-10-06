@@ -2,26 +2,20 @@ package net.hamnaberg.json;
 
 import javaslang.control.Option;
 
-public interface NamedJsonCodec<A> extends JsonCodec<A> {
-    String name();
-
-    static <A> NamedJsonCodec<A> of(String name, JsonCodec<A> codec) {
-        return new DefaultNamedJsonCodec<>(name, codec);
-    }
-}
-
-class DefaultNamedJsonCodec<A> implements NamedJsonCodec<A> {
-    private final String name;
+public class NamedJsonCodec<A> implements JsonCodec<A> {
+    public final String name;
     private final JsonCodec<A> codec;
 
-    DefaultNamedJsonCodec(String name, JsonCodec<A> codec) {
+    private NamedJsonCodec(String name, JsonCodec<A> codec) {
         this.name = name;
         this.codec = codec;
     }
 
-    @Override
-    public String name() {
-        return name;
+    public static <A> NamedJsonCodec<A> of(String name, JsonCodec<A> codec) {
+        if (codec instanceof NamedJsonCodec) {
+            return new NamedJsonCodec<>(name, ((NamedJsonCodec<A>) codec).codec);
+        }
+        return new NamedJsonCodec<>(name, codec);
     }
 
     @Override
