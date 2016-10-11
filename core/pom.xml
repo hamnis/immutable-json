@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>3.7.0-SNAPSHOT</version>
+    <version>4.0.0</version>
   </parent>
   <name>Immutable JSON :: Core</name>
   <artifactId>immutable-json-core</artifactId>

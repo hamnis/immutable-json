@@ -1,12 +1,10 @@
 {
   "revapi": {
-    "ignore": [
-      {
-      "code": "java.method.visibilityReduced",
-      "old": "method void net.hamnaberg.json.Json.JValue::<init>()",
-      "new": "method void net.hamnaberg.json.Json.JValue::<init>()",
-      "justification": "Should have always been this way. Clients must never implement this"
+    "semver": {
+      "ignore": {
+        "enabled": true
       }
-    ]
+    },
+    "ignore": []
   }
 }

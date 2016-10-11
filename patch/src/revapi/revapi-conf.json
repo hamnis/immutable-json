@@ -1,42 +1,10 @@
 {
   "revapi": {
-    "ignore": [
-      {
-        "code": "java.field.nowFinal",
-        "old": "field net.hamnaberg.json.patch.Operation.from",
-        "new": "field net.hamnaberg.json.patch.Operation.from",
-        "justification": "This was always intended to be final"
-      },
-      {
-        "code": "java.field.nowFinal",
-        "old": "field net.hamnaberg.json.patch.Operation.op",
-        "new": "field net.hamnaberg.json.patch.Operation.op",
-        "justification": "This was always intended to be final"
-      },
-      {
-        "code": "java.field.nowFinal",
-        "old": "field net.hamnaberg.json.patch.Operation.path",
-        "new": "field net.hamnaberg.json.patch.Operation.path",
-        "justification": "This was always intended to be final"
-      },
-      {
-        "code": "java.field.nowFinal",
-        "old": "field net.hamnaberg.json.patch.Operation.value",
-        "new": "field net.hamnaberg.json.patch.Operation.value",
-        "justification": "This was always intended to be final"
-      },
-      {
-        "code": "java.method.parameterTypeChanged",
-        "old": "method parameter void net.hamnaberg.json.patch.Operation::<init>(net.hamnaberg.json.patch.Operation.Op, ===javaslang.control.Option<java.lang.String>===, java.lang.String, javaslang.control.Option<net.hamnaberg.json.Json.JValue>)",
-        "new": "method parameter void net.hamnaberg.json.patch.Operation::<init>(net.hamnaberg.json.patch.Operation.Op, ===javaslang.control.Option<net.hamnaberg.json.pointer.JsonPointer>===, net.hamnaberg.json.pointer.JsonPointer, javaslang.control.Option<net.hamnaberg.json.Json.JValue>)",
-        "justification": "Type safety, and was not expected to be used by clients"
-      },
-      {
-        "code": "java.method.parameterTypeChanged",
-        "old": "method parameter void net.hamnaberg.json.patch.Operation::<init>(net.hamnaberg.json.patch.Operation.Op, javaslang.control.Option<java.lang.String>, ===java.lang.String===, javaslang.control.Option<net.hamnaberg.json.Json.JValue>)",
-        "new": "method parameter void net.hamnaberg.json.patch.Operation::<init>(net.hamnaberg.json.patch.Operation.Op, javaslang.control.Option<net.hamnaberg.json.pointer.JsonPointer>, ===net.hamnaberg.json.pointer.JsonPointer===, javaslang.control.Option<net.hamnaberg.json.Json.JValue>)",
-        "justification": "Type safety, and was not expected to be used by clients"
+    "semver": {
+      "ignore": {
+        "enabled": true
       }
-    ]
+    },
+    "ignore": []
   }
 }
