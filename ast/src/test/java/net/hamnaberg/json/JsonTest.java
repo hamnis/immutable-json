@@ -98,10 +98,10 @@ public class JsonTest {
         assertFalse(Json.jEmptyObject().containsKey("Hello"));
         assertTrue(single.containsKey("k"));
         assertTrue(single.containsValue(Json.jNumber(23)));
-        assertEquals(single.mapToList(Json::entry), List.of(Json.entry("k", Json.jNumber(23))));
+        assertEquals(single.mapToList(Json::tuple), List.of(Json.tuple("k", Json.jNumber(23))));
         assertEquals(single.put("v", Json.jEmptyArray()), Json.jObject(
-                Json.entry("k", Json.jNumber(23)),
-                Json.entry("v", Json.jEmptyArray())
+                Json.tuple("k", Json.jNumber(23)),
+                Json.tuple("v", Json.jEmptyArray())
         ));
     }
 
@@ -111,7 +111,7 @@ public class JsonTest {
         Json.JObject single2 = Json.jObject("k2", Json.jEmptyArray());
         Json.JObject concat = single.concat(single2);
 
-        assertEquals(2, concat.entrySet().size());
+        assertEquals(2, concat.size());
     }
 
     @Test
@@ -149,10 +149,10 @@ public class JsonTest {
     @Test
     public void serializable() throws IOException, ClassNotFoundException {
         Json.JObject object = Json.jObject(
-                Json.entry("foo", 1),
-                Json.entry("bar", "bar"),
-                Json.entry("meh", false),
-                Json.entry("mmm", Json.jNull())
+                Json.tuple("foo", 1),
+                Json.tuple("bar", "bar"),
+                Json.tuple("meh", false),
+                Json.tuple("mmm", Json.jNull())
         );
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

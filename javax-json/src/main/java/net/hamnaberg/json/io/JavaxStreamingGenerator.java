@@ -1,5 +1,6 @@
 package net.hamnaberg.json.io;
 
+import javaslang.Tuple2;
 import net.hamnaberg.json.Json;
 import org.glassfish.json.JsonFactory;
 
@@ -37,8 +38,8 @@ public final class JavaxStreamingGenerator implements JsonSerializer {
                 j -> JsonFactory.jsonNumber(j.value),
                 j -> {
                     JsonObjectBuilder jb = javax.json.Json.createObjectBuilder();
-                    for (Map.Entry<String, Json.JValue> entry : j) {
-                        jb.add(entry.getKey(), convert(entry.getValue()));
+                    for (Tuple2<String, Json.JValue> entry : j) {
+                        jb.add(entry._1, convert(entry._2));
                     }
                     return jb.build();
                 },

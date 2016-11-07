@@ -1,11 +1,11 @@
 package net.hamnaberg.json.patch;
 
+import javaslang.collection.Map;
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.Json.*;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Implementation of Json Merge Patch as defined by <a href="http://tools.ietf.org/html/rfc7396">RFC7396</a>
@@ -22,7 +22,7 @@ public abstract class MergePatch {
         JObject object1 = obj1.asJsonObject().getOrElse(Json.jEmptyObject());
         JObject object2 = obj2.asJsonObject().getOrElse(Json.jEmptyObject());
 
-        Map<String, JValue> map = new LinkedHashMap<>();
+        LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
         object1.forEach((k, v) -> {
             if (object2.containsKey(k)) {
                 JValue value = object2.getOrDefault(k, Json.jNull());
@@ -53,7 +53,7 @@ public abstract class MergePatch {
             JObject object = maybeTarget.getOrElse(Json.jEmptyObject());
             JObject patch = patchValue.asJsonObject().getOrElse(Json.jEmptyObject());
 
-            Map<String, JValue> map = new LinkedHashMap<>(object.getValue());
+            Map<String, JValue> map = object.getValue();
 
             patch.forEach((k, v) -> {
                 if (v.asJsonNull().isDefined()) {
@@ -61,7 +61,7 @@ public abstract class MergePatch {
                         map.remove(k);
                     }
                 } else if (map.containsKey(k)) {
-                    map.put(k, patch(map.get(k), v));
+                    map.put(k, patch(map.apply(k), v));
                 } else {
                     map.put(k, patch(Json.jEmptyObject(), v));
                 }

@@ -5,6 +5,10 @@ import javaslang.Tuple;
 import javaslang.Tuple2;
 
 import javaslang.collection.List;
+import javaslang.collection.Set;
+import javaslang.collection.LinkedHashMap;
+import javaslang.collection.Map;
+import java.util.Map.Entry;
 import javaslang.control.Option;
 
 import java.io.Serializable;
@@ -12,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.Iterator;
 import java.util.function.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Json {
@@ -67,11 +70,11 @@ public abstract class Json {
     }
 
     public static JObject jEmptyObject() {
-        return new JObject(Collections.emptyMap());
+        return new JObject(LinkedHashMap.empty());
     }
 
     public static JObject jObject(String name, JValue value) {
-        return new JObject(Collections.singletonMap(name, value));
+        return new JObject(LinkedHashMap.of(name, value));
     }
 
     public static JObject jObject(String name, String value) {
@@ -103,65 +106,70 @@ public abstract class Json {
     }
 
     @SafeVarargs
-    public static JObject jObject(Map.Entry<String, JValue> first, Map.Entry<String, JValue>... list) {
-        LinkedHashMap<String, JValue> map = new LinkedHashMap<>(list.length + 1);
-        map.put(first.getKey(), first.getValue());
-        for (Map.Entry<String, JValue> entry : list) {
-            map.put(entry.getKey(), entry.getValue());
-        }
-        return new JObject(map);
+    public static JObject jObject(Entry<String, JValue> first, Entry<String, JValue>... list) {
+        return new JObject(LinkedHashMap.of(first.getKey(), first.getValue()).merge(LinkedHashMap.ofEntries(list)));
     }
 
     @SafeVarargs
     public static JObject jObject(Tuple2<String, JValue> first, Tuple2<String, JValue>... list) {
-        List<Tuple2<String, JValue>> entries = List.of(list).prepend(first);
-        return jObject(entries);
+        return jObject(List.of(list).prepend(first));
     }
 
     public static JObject jObject(Iterable<Tuple2<String, JValue>> value) {
-        LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
-        for (Tuple2<String, JValue> tuple2 : value) {
-            map.put(tuple2._1, tuple2._2);
+        if (value instanceof JObject) {
+            return (JObject) value;
         }
-        return new JObject(map);
+        return new JObject(LinkedHashMap.ofEntries(value));
     }
 
     public static JObject jObject(Map<String, JValue> value) {
         if (value instanceof LinkedHashMap) {
             return new JObject(value);
         }
-        return new JObject(new LinkedHashMap<>(value));
+        return new JObject(LinkedHashMap.ofEntries(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, JValue value) {
+    public static JObject jObject(java.util.Map<String, JValue> value) {
+        return new JObject(LinkedHashMap.ofAll(value));
+    }
+
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, JValue value) {
         return new AbstractMap.SimpleImmutableEntry<>(name, value);
     }
 
-    public static Map.Entry<String, JValue> entry(String name, String value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, String value) {
         return entry(name, jString(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, int value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, int value) {
         return entry(name, jNumber(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, double value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, double value) {
         return entry(name, jNumber(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, long value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, long value) {
         return entry(name, jNumber(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, BigDecimal value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, BigDecimal value) {
         return entry(name, jNumber(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, Number value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, Number value) {
         return entry(name, jNumber(value));
     }
 
-    public static Map.Entry<String, JValue> entry(String name, boolean value) {
+    @Deprecated
+    public static Entry<String, JValue> entry(String name, boolean value) {
         return entry(name, jBoolean(value));
     }
 
@@ -301,11 +309,11 @@ public abstract class Json {
 
             if (first.isDefined() && second.isDefined()) {
                 return second.get().stream().reduce(first.get(), (obj, kv) -> {
-                    Option<JValue> v1 = obj.get(kv.getKey());
+                    Option<JValue> v1 = obj.get(kv._1);
                     if (v1.isDefined()) {
-                        return obj.put(kv.getKey(), v1.get().deepmerge(kv.getValue()));
+                        return obj.put(kv._1, v1.get().deepmerge(kv._2));
                     } else {
-                        return obj.put(kv.getKey(), kv.getValue());
+                        return obj.put(kv._1, kv._2);
                     }
                 }, JObject::concat);
             } else {
@@ -664,11 +672,11 @@ public abstract class Json {
         }
     }
 
-    public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
+    public static final class JObject extends JValue implements Iterable<Tuple2<String, JValue>> {
         public final Map<String, JValue> underlying;
 
         private JObject(Map<String, JValue> value) {
-            this.underlying = Collections.unmodifiableMap(value);
+            this.underlying = value;
         }
 
         @Override
@@ -678,7 +686,7 @@ public abstract class Json {
 
             JObject jObject = (JObject) o;
 
-            return underlying.equals(jObject.underlying);
+            return underlying.toJavaMap().equals(jObject.underlying.toJavaMap());
 
         }
 
@@ -709,7 +717,7 @@ public abstract class Json {
         }
 
         public Option<JValue> get(String name) {
-            return Option.of(underlying.get(name));
+            return underlying.get(name);
         }
 
         public <A> Option<A> getAs(String name, Function<JValue, Option<A>> f) {
@@ -765,11 +773,11 @@ public abstract class Json {
         }
 
         public Json.JObject filter(BiPredicate<String, JValue> predicate) {
-            return Json.jObject(underlying.entrySet().stream().filter(e -> predicate.test(e.getKey(), e.getValue())).map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList()));
+            return Json.jObject(underlying.filter(e -> predicate.test(e._1, e._2)));
         }
 
         public Json.JObject filterKeys(Predicate<String> predicate) {
-            return Json.jObject(underlying.entrySet().stream().filter(e -> predicate.test(e.getKey())).map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList()));
+            return Json.jObject(underlying.filter(t -> predicate.test(t._1)));
         }
 
         public Json.JObject filterNot(BiPredicate<String, JValue> predicate) {
@@ -792,16 +800,12 @@ public abstract class Json {
             return List.ofAll(underlying.values());
         }
 
-        public Set<Map.Entry<String, JValue>> entrySet() {
-            return underlying.entrySet();
-        }
-
         public void forEach(BiConsumer<String, JValue> f) {
             underlying.forEach(f);
         }
 
         public <B> List<B> mapToList(BiFunction<String, JValue, B> f) {
-            return underlying.entrySet().stream().map(e -> f.apply(e.getKey(), e.getValue())).collect(List.collector());
+            return underlying.map(e -> f.apply(e._1, e._2)).toList();
         }
 
         public <B> List<B> mapValues(Function<JValue, B> f) {
@@ -821,18 +825,16 @@ public abstract class Json {
         }
 
         @Override
-        public Iterator<Map.Entry<String, JValue>> iterator() {
-            return underlying.entrySet().iterator();
+        public Iterator<Tuple2<String, JValue>> iterator() {
+            return underlying.iterator();
         }
 
-        public Stream<Map.Entry<String, JValue>> stream() {
-            return underlying.entrySet().stream();
+        public Stream<Tuple2<String, JValue>> stream() {
+            return underlying.toJavaStream();
         }
 
         public JObject put(String name, JValue value) {
-            LinkedHashMap<String, JValue> copy = new LinkedHashMap<>(this.underlying);
-            copy.put(name, value);
-            return new JObject(copy);
+            return new JObject(underlying.put(name, value));
         }
 
         public JObject put(String name, String value) {
@@ -867,16 +869,14 @@ public abstract class Json {
             if (other.isEmpty()) return this;
             if (this == other) return this;
 
-            LinkedHashMap<String, JValue> copy = new LinkedHashMap<>(this.underlying);
-            copy.putAll(other.underlying);
+            java.util.Map<String, JValue> copy = this.underlying.toJavaMap();
+            copy.putAll(other.underlying.toJavaMap());
             return jObject(copy);
         }
 
         public JObject remove(String name) {
             if (containsKey(name)) {
-                LinkedHashMap<String, JValue> copy = new LinkedHashMap<>(this.underlying);
-                copy.remove(name);
-                return new JObject(copy);
+                return new JObject(this.underlying.remove(name));
             }
             return this;
         }

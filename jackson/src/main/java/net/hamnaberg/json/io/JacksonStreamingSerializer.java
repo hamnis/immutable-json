@@ -52,12 +52,11 @@ public final class JacksonStreamingSerializer implements JsonSerializer {
                 liftChecked((j) -> generator.writeString(j.value)),
                 liftChecked((j) -> generator.writeBoolean(j.value)),
                 liftChecked((j) -> generator.writeNumber(j.value)),
-                liftChecked((j) -> {
+                liftChecked((jObject) -> {
                     generator.writeStartObject();
-                    for (Map.Entry<String, Json.JValue> kv : j) {
-                        Json.JValue v = kv.getValue();
-                        generator.writeFieldName(kv.getKey());
-                        write(v, generator);
+                    for (Tuple2<String, Json.JValue> property : jObject) {
+                        generator.writeFieldName(property._1);
+                        write(property._2, generator);
                     }
                     generator.writeEndObject();
                 }),
