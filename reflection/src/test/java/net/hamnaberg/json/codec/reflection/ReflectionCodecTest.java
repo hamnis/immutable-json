@@ -23,8 +23,8 @@ public class ReflectionCodecTest {
             put("name", Json.jString("Erlend Hamnaberg"));
             put("age", Json.jNumber(34));
             put("address", Json.jObject(
-                    Json.entry("street", Json.jString("Ensjøveien")),
-                    Json.entry("city", Json.jString("Oslo"))
+                    Json.tuple("street", Json.jString("Ensjøveien")),
+                    Json.tuple("city", Json.jString("Oslo"))
             ));
         }});
 
@@ -46,12 +46,12 @@ public class ReflectionCodecTest {
             put("name", Json.jString("Erlend Hamnaberg"));
             put("workplaces", Json.jArray(List.of(
                     Json.jObject(
-                            Json.entry("street", Json.jString("Ensjøveien")),
-                            Json.entry("city", Json.jString("Oslo"))
+                            Json.tuple("street", Json.jString("Ensjøveien")),
+                            Json.tuple("city", Json.jString("Oslo"))
                     ),
                     Json.jObject(
-                            Json.entry("street", Json.jString("Money, Money, Money")),
-                            Json.entry("city", Json.jString("Oslo"))
+                            Json.tuple("street", Json.jString("Money, Money, Money")),
+                            Json.tuple("city", Json.jString("Oslo"))
                     ))
                     )
             );

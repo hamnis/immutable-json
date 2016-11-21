@@ -46,8 +46,8 @@ public class JsonPointerTest {
                 Json.jObject( "collection",
                         Json.jObject("links", Json.jArray(
                                 Json.jObject(
-                                        Json.entry("rel", Json.jString("feed")),
-                                        Json.entry("href", Json.jString("http://example.com"))
+                                        Json.tuple("rel", Json.jString("feed")),
+                                        Json.tuple("href", Json.jString("http://example.com"))
                                 )
                         ))
                 );
@@ -79,7 +79,7 @@ public class JsonPointerTest {
                 Json.jObject( "collection",
                         Json.jObject("links", Json.jArray(
                                 Json.jObject(
-                                        Json.entry("rel", Json.jString("meh"))
+                                        Json.tuple("rel", Json.jString("meh"))
                                 )
                         ))
                 );

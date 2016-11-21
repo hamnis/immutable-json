@@ -23,11 +23,11 @@
  */
 package net.hamnaberg.json.nativeparser;
 
+import javaslang.Tuple2;
 import org.javafp.data.*;
 import org.javafp.parsecj.*;
 
 import java.math.BigDecimal;
-import java.util.*;
 
 import static org.javafp.parsecj.Combinators.*;
 import static org.javafp.parsecj.Text.*;
@@ -52,7 +52,7 @@ class Grammar {
 
     private static final Parser<Character, JValue> jbool = tok(jtrue.or(jfalse).bind(b -> retn(jBoolean(b).asJValue()))).label("boolean");
 
-    public static final Parser<Character, BigDecimal> bigdecimal =
+    private static final Parser<Character, BigDecimal> bigdecimal =
             bind(
                     regex("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?"),
                     s -> retn(new BigDecimal(s))
@@ -119,18 +119,12 @@ class Grammar {
                     retn(jArray(IList.toList(l)).asJValue())
             ).label("array");
 
-    private static LinkedHashMap<String, JValue> toMap(IList<Map.Entry<String, JValue>> fields) {
-        final LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
-        fields.forEach(field -> map.put(field.getKey(), field.getValue()));
-        return map;
-    }
-
-    private static final Parser<Character, Map.Entry<String, JValue>> jfield =
+    private static final Parser<Character, Tuple2<String, JValue>> jfield =
             jstring.bind(name ->
                     tok(chr(':'))
                             .then(jvalue)
                             .bind(value ->
-                                    retn(entry(name, value))
+                                    retn(tuple(name, value))
                             )
             );
 
@@ -141,7 +135,7 @@ class Grammar {
                     sepBy(
                             jfield,
                             tok(chr(','))
-                    ).bind(lf -> retn(jObject(toMap(lf)).asJValue()))
+                    ).bind(lf -> retn(jObject(lf).asJValue()))
             ).label("object");
 
     static {
@@ -157,9 +151,9 @@ class Grammar {
         );
     }
 
-    public static final Parser<Character, JValue> parser = wspaces.then(jvalue);
+    private static final Parser<Character, JValue> parser = wspaces.then(jvalue);
 
-    public static Reply<Character, JValue> parse(String str) {
+    static Reply<Character, JValue> parse(String str) {
         return parser.parse(State.of(str));
     }
 }

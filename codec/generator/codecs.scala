@@ -21,7 +21,7 @@ for((_, index) <- zipped) {
       val flatMapped = zippedCurrent.map{case (_, i) =>
         s"c$i.toJson(tuple._$i).flatMap(j$i -> "
       }
-      val finaltoJsonMap = zippedCurrent.map{ case (_, i) => s"Json.entry(n$i, j$i)" }.mkString("Option.of(Json.jObject(", ",","))")
+      val finaltoJsonMap = zippedCurrent.map{ case (_, i) => s"Json.tuple(n$i, j$i)" }.mkString("Option.of(Json.jObject(", ",","))")
       flatMapped.mkString("", "",  finaltoJsonMap + (")" * arity) + ";")
     }
 
