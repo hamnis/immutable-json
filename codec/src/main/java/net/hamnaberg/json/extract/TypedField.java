@@ -4,9 +4,9 @@ import javaslang.Value;
 import javaslang.collection.List;
 import javaslang.control.Option;
 import javaslang.control.Try;
-import net.hamnaberg.json.Codecs;
-import net.hamnaberg.json.DecodeJson;
-import net.hamnaberg.json.DecodeResult;
+import net.hamnaberg.json.codec.Codecs;
+import net.hamnaberg.json.codec.DecodeJson;
+import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;
 
 import java.util.function.Function;

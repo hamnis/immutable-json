@@ -1,6 +1,7 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import javaslang.control.Option;
+import net.hamnaberg.json.Json;
 
 final class DefaultJsonCodec<A> implements JsonCodec<A> {
     private final String toString;

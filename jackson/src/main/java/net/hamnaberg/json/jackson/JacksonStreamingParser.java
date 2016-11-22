@@ -1,8 +1,9 @@
-package net.hamnaberg.json.io;
+package net.hamnaberg.json.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
 import net.hamnaberg.json.*;
+import net.hamnaberg.json.io.JsonParser;
 
 import java.io.Reader;
 import java.util.ArrayList;

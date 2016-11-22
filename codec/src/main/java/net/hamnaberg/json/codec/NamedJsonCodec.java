@@ -1,6 +1,7 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import javaslang.control.Option;
+import net.hamnaberg.json.Json;
 
 public class NamedJsonCodec<A> implements JsonCodec<A> {
     public final String name;

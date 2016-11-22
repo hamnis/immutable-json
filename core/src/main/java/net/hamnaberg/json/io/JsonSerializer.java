@@ -1,23 +1,36 @@
 package net.hamnaberg.json.io;
 
 import net.hamnaberg.json.Json;
+import net.hamnaberg.json.PrettyPrinter;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public interface JsonSerializer {
-    default void write(Json.JValue value, OutputStream stream) {
+public enum JsonSerializer {
+    ;
+
+    public static void write(Json.JValue value, OutputStream stream) {
         write(value, new OutputStreamWriter(stream, StandardCharsets.UTF_8));
     }
 
-    default String writeToString(Json.JValue value) {
-        StringWriter writer = new StringWriter();
-        write(value, writer);
-        return writer.toString();
+    public static String writeToString(Json.JValue value, PrettyPrinter pretty) {
+        return value.pretty(pretty);
     }
 
-    void write(Json.JValue value, Writer reader);
+    public static String writeToString(Json.JValue value) {
+        return writeToString(value, PrettyPrinter.nospaces());
+    }
+
+    public static void write(Json.JValue value, Writer writer) {
+        write(value, writer, PrettyPrinter.nospaces());
+    }
+
+    public static void write(Json.JValue value, Writer writer, PrettyPrinter printer) {
+        final BufferedWriter buffer = (writer instanceof BufferedWriter) ? ((BufferedWriter)writer) : new BufferedWriter(writer);
+        try {
+            buffer.write(value.pretty(printer));
+        } catch (IOException e) {
+            throw new JsonWriteException(e);
+        }
+    }
 }

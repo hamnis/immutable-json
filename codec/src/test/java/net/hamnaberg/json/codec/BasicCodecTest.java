@@ -1,6 +1,10 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import javaslang.control.Try;
+import net.hamnaberg.json.Json;
+import net.hamnaberg.json.codec.Codecs;
+import net.hamnaberg.json.codec.DecodeResult;
+import net.hamnaberg.json.codec.JsonCodec;
 import org.junit.Test;
 
 import java.net.URI;

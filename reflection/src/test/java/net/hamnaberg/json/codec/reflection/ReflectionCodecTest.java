@@ -2,10 +2,10 @@ package net.hamnaberg.json.codec.reflection;
 
 import javaslang.collection.List;
 import javaslang.control.Option;
-import net.hamnaberg.json.Codecs;
-import net.hamnaberg.json.DecodeResult;
+import net.hamnaberg.json.codec.Codecs;
+import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;
-import net.hamnaberg.json.JsonCodec;
+import net.hamnaberg.json.codec.JsonCodec;
 import org.junit.Test;
 
 import java.util.Collections;

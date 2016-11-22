@@ -1,4 +1,4 @@
-package net.hamnaberg.json.io;
+package net.hamnaberg.json.javax;
 
 import net.hamnaberg.json.Json;
 

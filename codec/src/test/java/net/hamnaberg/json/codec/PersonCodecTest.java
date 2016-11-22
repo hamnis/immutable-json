@@ -1,8 +1,10 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.control.Option;
+import net.hamnaberg.json.Json;
+import net.hamnaberg.json.codec.*;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import java.util.function.Function;
 

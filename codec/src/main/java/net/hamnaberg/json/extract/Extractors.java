@@ -1,7 +1,7 @@
 package net.hamnaberg.json.extract;
 
 import javaslang.*;
-import net.hamnaberg.json.DecodeResult;
+import net.hamnaberg.json.codec.DecodeResult;
 
 
 public abstract class Extractors {

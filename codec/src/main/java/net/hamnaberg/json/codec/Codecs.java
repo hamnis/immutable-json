@@ -1,16 +1,15 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
+import net.hamnaberg.json.Json;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import static net.hamnaberg.json.DecodeResult.decode;
 
 public abstract class Codecs {
     private Codecs(){}
@@ -103,7 +102,7 @@ public abstract class Codecs {
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
 
-                DecodeResult<A> oa = decode(object, c1.name, c1);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
                 return oa.flatMap(a -> DecodeResult.ok(iso.reverseGet(new Tuple1<>(a))));
             }
 
@@ -131,8 +130,8 @@ public abstract class Codecs {
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
 
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
                 return oa.flatMap(a -> ob.flatMap(b -> DecodeResult.ok(iso.reverseGet(new Tuple2<>(a,b)))));
             }
 
@@ -160,9 +159,9 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> DecodeResult.ok(iso.reverseGet(new Tuple3<>(a,b,c))))));
             }
 
@@ -191,10 +190,10 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
-                DecodeResult<D> od = decode(object, c4.name, c4);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> DecodeResult.ok(iso.reverseGet(new Tuple4<>(a,b,c,d)))))));
             }
 
@@ -224,11 +223,11 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
-                DecodeResult<D> od = decode(object, c4.name, c4);
-                DecodeResult<E> oe = decode(object, c5.name, c5);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> DecodeResult.ok(iso.reverseGet(new Tuple5<>(a,b,c,d,e))))))));
             }
 
@@ -259,12 +258,12 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
-                DecodeResult<D> od = decode(object, c4.name, c4);
-                DecodeResult<E> oe = decode(object, c5.name, c5);
-                DecodeResult<F> of = decode(object, c6.name, c6);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> DecodeResult.ok(iso.reverseGet(new Tuple6<>(a,b,c,d,e,f)))))))));
             }
 
@@ -296,13 +295,13 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
-                DecodeResult<D> od = decode(object, c4.name, c4);
-                DecodeResult<E> oe = decode(object, c5.name, c5);
-                DecodeResult<F> of = decode(object, c6.name, c6);
-                DecodeResult<G> og = decode(object, c7.name, c7);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
+                DecodeResult<G> og = DecodeResult.decode(object, c7.name, c7);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> DecodeResult.ok(iso.reverseGet(new Tuple7<>(a,b,c,d,e,f,g))))))))));
             }
 
@@ -335,14 +334,14 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = decode(object, c1.name, c1);
-                DecodeResult<B> ob = decode(object, c2.name, c2);
-                DecodeResult<C> oc = decode(object, c3.name, c3);
-                DecodeResult<D> od = decode(object, c4.name, c4);
-                DecodeResult<E> oe = decode(object, c5.name, c5);
-                DecodeResult<F> of = decode(object, c6.name, c6);
-                DecodeResult<G> og = decode(object, c7.name, c7);
-                DecodeResult<H> oh = decode(object, c8.name, c8);
+                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
+                DecodeResult<G> og = DecodeResult.decode(object, c7.name, c7);
+                DecodeResult<H> oh = DecodeResult.decode(object, c8.name, c8);
                 return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> DecodeResult.ok(iso.reverseGet(new Tuple8<>(a,b,c,d,e,f,g,h)))))))))));
             }
 

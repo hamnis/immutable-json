@@ -1,4 +1,4 @@
-package net.hamnaberg.json;
+package net.hamnaberg.json.codec;
 
 public class IdIso<A> implements Iso<A, A> {
     @Override

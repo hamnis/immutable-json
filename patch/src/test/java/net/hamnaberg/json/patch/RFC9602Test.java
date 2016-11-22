@@ -2,7 +2,7 @@ package net.hamnaberg.json.patch;
 
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
-import net.hamnaberg.json.io.JacksonStreamingParser;
+import net.hamnaberg.json.jackson.JacksonStreamingParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
