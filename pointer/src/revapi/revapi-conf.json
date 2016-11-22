@@ -1,0 +1,10 @@
+{
+  "revapi": {
+    "semver": {
+      "ignore": {
+        "enabled": true
+      }
+    },
+    "ignore": []
+  }
+}
