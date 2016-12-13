@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.hamnaberg.json</groupId>
   <artifactId>immutable-json</artifactId>
-  <version>3.6.1-SNAPSHOT</version>
+  <version>3.6.1</version>
   <packaging>pom</packaging>
   <name>Immutable JSON</name>
   <description>Immutable JSON</description>
@@ -43,7 +43,7 @@
     <url>https://github.com/hamnis/immutable-json</url>
     <connection>scm:git:https://hamnis@github.com/hamnis/immutable-json.git</connection>
     <developerConnection>scm:git:git@github.com:hamnis/immutable-json.git</developerConnection>
-    <tag>v3.6.0</tag>
+    <tag>v3.6.1</tag>
   </scm>
 
   <issueManagement>
