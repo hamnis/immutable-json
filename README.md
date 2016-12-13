@@ -30,43 +30,43 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
  ```
 
