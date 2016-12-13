@@ -83,6 +83,10 @@ public final class PrettyPrinter {
         int index = 0;
         Map<String, Json.JValue> map = obj.underlying;
         for (Tuple2<String, Json.JValue> entry : map) {
+            if (entry._2.isNull() && dropNullKeys) {
+                continue;
+            }
+
             if (index > 0) {
                 state.append(",");
             }
@@ -95,9 +99,6 @@ public final class PrettyPrinter {
     }
 
     private void writeProperty(String name, Json.JValue value, PrinterState state) {
-        if (value.isNull() && dropNullKeys) {
-            return;
-        }
         state.append(escape(name)).append(":");
         if (spaceafterColon) {
             state.append(" ");
