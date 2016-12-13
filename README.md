@@ -24,7 +24,7 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>3.6.0</version>
+   <version>3.6.1</version>
  </dependency>
 
  <dependency>
