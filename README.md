@@ -7,9 +7,7 @@
  your data types to be immutable and efficient.
 
  Unfortunately there are no default immutable collections in Java, so we try to use javaslang where appropriate.
- Since this is the case we need to copy the collections every time we do transformations.
 
- This will improve when [JEP 269](http://openjdk.java.net/jeps/269) is part of the JDK.
 
 ## Status
 
@@ -26,50 +24,50 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>3.5.0</version>
+   <version>3.6.0</version>
  </dependency>
 
  <dependency>
-    <groupId>net.hamnaberg.json</groupId>
-    <artifactId>immutable-json-reflection-codec</artifactId>
-    <version>3.5.0</version>
-  </dependency>
+   <groupId>net.hamnaberg.json</groupId>
+   <artifactId>immutable-json-reflection-codec</artifactId>
+   <version>3.6.0</version>
+ </dependency>
  ```
 
  Snapshots can be found from [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/):
@@ -79,43 +77,43 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
   </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>3.6.0-SNAPSHOT</version>
+   <version>4.0.0-SNAPSHOT</version>
  </dependency>
   ```
 
