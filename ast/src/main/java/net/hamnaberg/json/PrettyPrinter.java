@@ -82,6 +82,9 @@ public final class PrettyPrinter {
         int index = 0;
         Set<Map.Entry<String, Json.JValue>> set = obj.entrySet();
         for (Map.Entry<String, Json.JValue> entry : set) {
+            if (entry.getValue().isNull() && dropNullKeys) {
+                continue;
+            }
             if (index > 0) {
                 state.append(",");
             }
@@ -94,9 +97,6 @@ public final class PrettyPrinter {
     }
 
     private void writeProperty(String name, Json.JValue value, PrinterState state) {
-        if (value.isNull() && dropNullKeys) {
-            return;
-        }
         state.append(escape(name)).append(":");
         if (spaceafterColon) {
             state.append(" ");
