@@ -74,7 +74,10 @@ public abstract class Json {
     }
 
     public static JObject jObject(String name, JValue value) {
-        return new JObject(LinkedHashMap.of(name, value));
+        return new JObject(LinkedHashMap.of(
+                Objects.requireNonNull(name, "Name for entry may not be null"),
+                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
+        ));
     }
 
     public static JObject jObject(String name, String value) {
@@ -135,7 +138,10 @@ public abstract class Json {
 
     @Deprecated
     public static Entry<String, JValue> entry(String name, JValue value) {
-        return new AbstractMap.SimpleImmutableEntry<>(name, value);
+        return new AbstractMap.SimpleImmutableEntry<>(
+                Objects.requireNonNull(name, "Name for entry may not be null"),
+                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
+        );
     }
 
     @Deprecated
@@ -174,7 +180,10 @@ public abstract class Json {
     }
 
     public static Tuple2<String, JValue> tuple(String name, JValue value) {
-        return Tuple.of(name, value);
+        return Tuple.of(
+                Objects.requireNonNull(name, "Name for entry may not be null"),
+                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
+        );
     }
 
     public static Tuple2<String, JValue> tuple(String name, String value) {
@@ -346,7 +355,7 @@ public abstract class Json {
         public final String value;
 
         private JString(String value) {
-            this.value = value;
+            this.value = Objects.requireNonNull(value, "String may not be null");
         }
 
         @Override
@@ -469,7 +478,7 @@ public abstract class Json {
         public final BigDecimal value;
 
         private JNumber(BigDecimal value) {
-            this.value = value;
+            this.value = Objects.requireNonNull(value, "Number may not be null");
         }
 
         @Override
@@ -526,7 +535,7 @@ public abstract class Json {
         public final List<JValue> value;
 
         private JArray(List<JValue> value) {
-            this.value = value;
+            this.value = Objects.requireNonNull(value, "You may not supply a null List in JArray");
         }
 
         @Override
@@ -676,7 +685,7 @@ public abstract class Json {
         public final Map<String, JValue> underlying;
 
         private JObject(Map<String, JValue> value) {
-            this.underlying = value;
+            this.underlying = Objects.requireNonNull(value, "You may not supply a null Map to JObject");
         }
 
         @Override
@@ -834,7 +843,10 @@ public abstract class Json {
         }
 
         public JObject put(String name, JValue value) {
-            return new JObject(underlying.put(name, value));
+            return new JObject(underlying.put(
+                    Objects.requireNonNull(name, "Name in JObject.put may not be null"),
+                    Objects.requireNonNull(value, String.format("Value for name %s JObject.put may not be null", name))
+            ));
         }
 
         public JObject put(String name, String value) {

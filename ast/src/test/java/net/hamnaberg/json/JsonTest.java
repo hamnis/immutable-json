@@ -9,6 +9,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -115,6 +116,15 @@ public class JsonTest {
     }
 
     @Test
+    public void nullTests() {
+        testNullPointer(() -> Json.jNumber(null), "Number may not be null");
+        testNullPointer(() -> Json.jString(null), "String may not be null");
+        testNullPointer(() -> Json.jArray(null), "elements is null");
+        testNullPointer(() -> Json.jObject(null, 1), "Name for entry may not be null");
+        testNullPointer(() -> Json.jObject("meh", (Json.JValue) null), "Value for named entry 'meh' may not be null");
+    }
+
+    @Test
     public void deepMerge() {
         Json.JValue merged = Json.jString("Hello").deepmerge(Json.jString("Bye"));
         assertEquals("Bye", merged.asString().getOrElse((String)null));
@@ -172,5 +182,14 @@ public class JsonTest {
             list.add(Json.jNumber(i));
         }
         return List.ofAll(list);
+    }
+
+    private void testNullPointer(Runnable r, String message) {
+        try {
+            r.run();
+            fail("Did not throw nullpointer");
+        } catch (NullPointerException e) {
+            assertEquals(message, e.getMessage());
+        }
     }
 }
