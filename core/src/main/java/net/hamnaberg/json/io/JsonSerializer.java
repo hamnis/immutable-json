@@ -29,6 +29,7 @@ public enum JsonSerializer {
         final BufferedWriter buffer = (writer instanceof BufferedWriter) ? ((BufferedWriter)writer) : new BufferedWriter(writer);
         try {
             buffer.write(value.pretty(printer));
+            buffer.flush();
         } catch (IOException e) {
             throw new JsonWriteException(e);
         }
