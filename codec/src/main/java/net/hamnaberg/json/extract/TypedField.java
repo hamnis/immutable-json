@@ -86,6 +86,10 @@ public abstract class TypedField<A> {
         return new TypedField<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder)) {};
     }
 
+    public static <B> TypedField<B> typedFieldOfExtract(String name, Extractor<B> decoder, Option<B> defaultValue) {
+        return typedFieldOf(name, decoder.decoder(), defaultValue);
+    }
+
     public static class TJArrayField extends TypedField<Json.JArray> {
         public TJArrayField(String name) {
             super(name, v -> DecodeResult.fromOption(v.asJsonArray()));
