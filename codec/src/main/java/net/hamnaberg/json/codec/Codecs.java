@@ -15,38 +15,38 @@ public abstract class Codecs {
     private Codecs(){}
 
     public static final JsonCodec<String> StringCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asString()),
-            value -> Option.some(Json.jString(value)),
+            Decoders.StringDecoder,
+            Encoders.StringEncoder,
             "StringCodec"
     );
 
     public static final JsonCodec<Number> numberCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v)),
-            value -> Option.of(Json.jNumber(value)),
+            Decoders.NumberDecoder,
+            Encoders.NumberEncoder,
             "NumberCodec"
     );
 
     public static final JsonCodec<Long> longCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong)),
-            value -> Option.of(Json.jNumber(value)),
+            Decoders.LongDecoder,
+            Encoders.LongEncoder,
             "LongCodec"
     );
 
     public static final JsonCodec<Double> doubleCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble)),
-            value -> Option.of(Json.jNumber(value)),
+            Decoders.DoubleDecoder,
+            Encoders.DoubleEncoder,
             "DoubleCodec"
     );
 
     public static final JsonCodec<Integer> intCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt)),
-            value -> Option.of(Json.jNumber(value)),
+            Decoders.IntDecoder,
+            Encoders.IntEncoder,
             "IntCodec"
     );
 
     public static final JsonCodec<Boolean> booleanCodec = new DefaultJsonCodec<>(
-            value -> DecodeResult.fromOption(value.asBoolean()),
-            value -> Option.of(Json.jBoolean(value)),
+            Decoders.BooleanDecoder,
+            Encoders.BooleanEncoder,
             "BooleanCodec"
     );
 
