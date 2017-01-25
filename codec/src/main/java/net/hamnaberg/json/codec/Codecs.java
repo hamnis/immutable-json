@@ -184,7 +184,7 @@ public abstract class Codecs {
             @Override
             public Option<Json.JValue> toJson(TT value) {
                 Tuple4<A, B, C, D> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c1.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4)))))));
+                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4)))))));
             }
 
             @Override
@@ -217,7 +217,7 @@ public abstract class Codecs {
             @Override
             public Option<Json.JValue> toJson(TT value) {
                 Tuple5<A, B, C, D, E> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c1.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5))))))));
+                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5))))))));
             }
 
             @Override
