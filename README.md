@@ -24,49 +24,49 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>4.0.0</version>
+   <version>4.1.0</version>
  </dependency>
  ```
 
@@ -77,43 +77,43 @@
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
   </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>4.1.0-SNAPSHOT</version>
+   <version>4.2.0-SNAPSHOT</version>
  </dependency>
   ```
 
