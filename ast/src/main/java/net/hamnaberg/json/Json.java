@@ -136,54 +136,23 @@ public abstract class Json {
         return new JObject(LinkedHashMap.ofAll(value));
     }
 
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, JValue value) {
-        return new AbstractMap.SimpleImmutableEntry<>(
-                Objects.requireNonNull(name, "Name for entry may not be null"),
-                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
-        );
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, String value) {
-        return entry(name, jString(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, int value) {
-        return entry(name, jNumber(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, double value) {
-        return entry(name, jNumber(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, long value) {
-        return entry(name, jNumber(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, BigDecimal value) {
-        return entry(name, jNumber(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, Number value) {
-        return entry(name, jNumber(value));
-    }
-
-    @Deprecated
-    public static Entry<String, JValue> entry(String name, boolean value) {
-        return entry(name, jBoolean(value));
-    }
-
     public static Tuple2<String, JValue> tuple(String name, JValue value) {
         return Tuple.of(
                 Objects.requireNonNull(name, "Name for entry may not be null"),
                 Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
         );
+    }
+
+    public static Tuple2<String, JValue> tuple(String name, Option<JValue> opt) {
+        return tuple(name, opt.getOrElse(Json::jNull));
+    }
+
+    public static <A> Tuple2<String, JValue> tuple(String name, A value, Function<A, Option<JValue>> f) {
+        return tuple(name, f.apply(value));
+    }
+
+    public static <A> Tuple2<String, JValue> tuple(String name, Option<A> value, Function<A, Option<JValue>> f) {
+        return tuple(name, value.flatMap(f));
     }
 
     public static Tuple2<String, JValue> tuple(String name, String value) {
