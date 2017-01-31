@@ -27,7 +27,7 @@ public class CodecsTest {
         Tuple3<String, Integer, Integer> expectedTuple = Tuple.of("Hello", 22, 11);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class CodecsTest {
         Tuple4<String, Integer, Integer, String> expectedTuple = Tuple.of("Hello", 22, 11, "Goodbye");
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class CodecsTest {
         Tuple5<String, Integer, Integer, String, Long> expectedTuple = Tuple.of("Hello", 22, 11, "Goodbye", 400000000L);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class CodecsTest {
                 Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class CodecsTest {
                 Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7");
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 
     @Test
@@ -165,6 +165,6 @@ public class CodecsTest {
                 Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7", 333333);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
-        assertEquals(expectedJson, codec.toJsonUnsafe(expectedTuple));
+        assertEquals(expectedJson, codec.toJson(expectedTuple));
     }
 }

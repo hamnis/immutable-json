@@ -13,16 +13,8 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return JsonCodec.lift(tryMap(f), value -> toJson(g.apply(value)));
     }
 
-    default <B> JsonCodec<B> narrowBoth(Function<A, Try<B>> f, Function<B, Try<A>> g) {
-        return JsonCodec.lift(tryMap(f), value -> g.apply(value).toOption().flatMap(this::toJson));
-    }
-
     default <B> JsonCodec<B> tryNarrow(Function<A, B> f, Function<B, A> g) {
         return narrow(a -> Try.of(() -> f.apply(a)), g);
-    }
-
-    default <B> JsonCodec<B> tryNarrowBoth(Function<A, B> f, Function<B, A> g) {
-        return narrowBoth(a -> Try.of(() -> f.apply(a)), b -> Try.of(() -> g.apply(b)));
     }
 
     default NamedJsonCodec<A> named(String name) {

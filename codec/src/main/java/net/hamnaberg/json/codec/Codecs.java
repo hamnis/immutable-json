@@ -53,7 +53,7 @@ public abstract class Codecs {
     public static <A> JsonCodec<A> nullCodec() {
         return new DefaultJsonCodec<>(
                 ignore -> DecodeResult.ok(null),
-                ignore -> Option.of(Json.jNull()),
+                ignore -> Json.jNull(),
                 "NullCodec"
         );
     }
@@ -62,7 +62,7 @@ public abstract class Codecs {
         DecodeJson<List<A>> decodeJson = value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(codec::fromJson));
         return new DefaultJsonCodec<>(
                 decodeJson.withDefaultValue(List.empty()),
-                value -> Option.of(Json.jArray(value.flatMap(a -> codec.toJson(a).toList()))),
+                value -> Json.jArray(value.map(codec::toJson)),
                 String.format("ListCodec(%s)", codec.toString())
         );
     }
@@ -74,7 +74,7 @@ public abstract class Codecs {
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
         DecodeJson<Option<A>> decoder = value -> value.isNull() ? DecodeResult.ok(Option.none()) : DecodeResult.ok(codec.fromJson(value).toOption());
-        EncodeJson<Option<A>> encoder = value -> value.flatMap(codec::toJson).orElse(Option.some(Json.jNull()));
+        EncodeJson<Option<A>> encoder = value -> value.map(codec::toJson).getOrElse(Json.jNull());
         return JsonCodec.lift(decoder.withDefaultValue(Option.none()), encoder);
     }
 
@@ -86,16 +86,19 @@ public abstract class Codecs {
     public static <A> JsonCodec<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder, Function<A, Json.JObject> encoder) {
         return JsonCodec.lift(
                 json -> decoder.apply(json.asJsonObjectOrEmpty()),
-                a -> Option.some(encoder.apply(a).asJValue())
+                a ->encoder.apply(a).asJValue()
         );
     }
 
     public static <TT, A> JsonCodec<TT> codec1(Iso<TT, Tuple1<A>> iso, NamedJsonCodec<A> c1) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple1<A> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> Option.of(Json.jObject(Json.tuple(c1.name, j1))));
+                return Json.jObject(
+                        c1.name,
+                        c1.toJson(tuple._1)
+                ).asJValue();
             }
 
             @Override
@@ -121,9 +124,12 @@ public abstract class Codecs {
     public static <TT, A, B> JsonCodec<TT> codec2(Iso<TT, Tuple2<A, B>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple2<A, B> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2)))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2))
+                );
             }
 
             @Override
@@ -151,9 +157,13 @@ public abstract class Codecs {
     public static <TT, A, B, C> JsonCodec<TT> codec3(Iso<TT, Tuple3<A, B, C>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple3<A, B, C> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3))))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3))
+                );
             }
 
             @Override
@@ -182,9 +192,14 @@ public abstract class Codecs {
     public static <TT, A, B, C, D> JsonCodec<TT> codec4(Iso<TT, Tuple4<A, B, C, D>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple4<A, B, C, D> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4)))))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3)),
+                        Json.tuple(c4.name, c4.toJson(tuple._4))
+                );
             }
 
             @Override
@@ -215,9 +230,15 @@ public abstract class Codecs {
     public static <TT, A, B, C, D, E> JsonCodec<TT> codec5(Iso<TT, Tuple5<A, B, C, D, E>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple5<A, B, C, D, E> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5))))))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3)),
+                        Json.tuple(c4.name, c4.toJson(tuple._4)),
+                        Json.tuple(c5.name, c5.toJson(tuple._5))
+                );
             }
 
             @Override
@@ -250,9 +271,16 @@ public abstract class Codecs {
     public static <TT, A, B, C, D, E, F> JsonCodec<TT> codec6(Iso<TT, Tuple6<A, B, C, D, E, F>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple6<A, B, C, D, E, F> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5),Json.tuple(c6.name, j6)))))))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3)),
+                        Json.tuple(c4.name, c4.toJson(tuple._4)),
+                        Json.tuple(c5.name, c5.toJson(tuple._5)),
+                        Json.tuple(c6.name, c6.toJson(tuple._6))
+                );
             }
 
             @Override
@@ -287,9 +315,17 @@ public abstract class Codecs {
     public static <TT, A, B, C, D, E, F, G> JsonCodec<TT> codec7(Iso<TT, Tuple7<A, B, C, D, E, F, G>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple7<A, B, C, D, E, F, G> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).map(j7 -> Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5),Json.tuple(c6.name, j6),Json.tuple(c7.name, j7)))))))));
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3)),
+                        Json.tuple(c4.name, c4.toJson(tuple._4)),
+                        Json.tuple(c5.name, c5.toJson(tuple._5)),
+                        Json.tuple(c6.name, c6.toJson(tuple._6)),
+                        Json.tuple(c7.name, c7.toJson(tuple._7))
+                );
             }
 
             @Override
@@ -326,9 +362,19 @@ public abstract class Codecs {
     public static <TT, A, B, C, D, E, F, G, H> JsonCodec<TT> codec8(Iso<TT, Tuple8<A, B, C, D, E, F, G, H>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7, NamedJsonCodec<H> c8) {
         return new JsonCodec<TT>() {
             @Override
-            public Option<Json.JValue> toJson(TT value) {
+            public Json.JValue toJson(TT value) {
                 Tuple8<A, B, C, D, E, F, G, H> tuple = iso.get(value);
-                return c1.toJson(tuple._1).flatMap(j1 -> c2.toJson(tuple._2).flatMap(j2 -> c3.toJson(tuple._3).flatMap(j3 -> c4.toJson(tuple._4).flatMap(j4 -> c5.toJson(tuple._5).flatMap(j5 -> c6.toJson(tuple._6).flatMap(j6 -> c7.toJson(tuple._7).flatMap(j7 -> c8.toJson(tuple._8).flatMap(j8 -> Option.of(Json.jObject(Json.tuple(c1.name, j1),Json.tuple(c2.name, j2),Json.tuple(c3.name, j3),Json.tuple(c4.name, j4),Json.tuple(c5.name, j5),Json.tuple(c6.name, j6),Json.tuple(c7.name, j7),Json.tuple(c8.name, j8)))))))))));
+
+                return Json.jObject(
+                        Json.tuple(c1.name, c1.toJson(tuple._1)),
+                        Json.tuple(c2.name, c2.toJson(tuple._2)),
+                        Json.tuple(c3.name, c3.toJson(tuple._3)),
+                        Json.tuple(c4.name, c4.toJson(tuple._4)),
+                        Json.tuple(c5.name, c5.toJson(tuple._5)),
+                        Json.tuple(c6.name, c6.toJson(tuple._6)),
+                        Json.tuple(c7.name, c7.toJson(tuple._7)),
+                        Json.tuple(c8.name, c8.toJson(tuple._8))
+                );
             }
 
             @Override

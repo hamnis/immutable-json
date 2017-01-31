@@ -10,15 +10,15 @@ import java.util.function.Function;
 public abstract class Encoders {
     private Encoders(){}
 
-    public static final EncodeJson<String> StringEncoder = value -> Option.some(Json.jString(value));
-    public static final EncodeJson<Number> NumberEncoder = value -> Option.of(Json.jNumber(value));
-    public static final EncodeJson<Long> LongEncoder = value -> Option.of(Json.jNumber(value));
-    public static final EncodeJson<Integer> IntEncoder = value -> Option.of(Json.jNumber(value));
-    public static final EncodeJson<Double> DoubleEncoder = value -> Option.of(Json.jNumber(value));
-    public static final EncodeJson<Boolean> BooleanEncoder = value -> Option.of(Json.jBoolean(value));
+    public static final EncodeJson<String> StringEncoder = Json::jString;
+    public static final EncodeJson<Number> NumberEncoder = Json::jNumber;
+    public static final EncodeJson<Long> LongEncoder = Json::jNumber;
+    public static final EncodeJson<Integer> IntEncoder = Json::jNumber;
+    public static final EncodeJson<Double> DoubleEncoder = Json::jNumber;
+    public static final EncodeJson<Boolean> BooleanEncoder = Json::jBoolean;
 
     public static <A> EncodeJson<List<A>> listEncoder(EncodeJson<A> encoder) {
-        return value -> Option.of(Json.jArray(value.flatMap(a -> encoder.toJson(a).toList())));
+        return value -> Json.jArray(value.map(encoder::toJson));
     }
 
     public static <A> EncodeJson<java.util.List<A>> javaListEncoder(EncodeJson<A> encoder) {
@@ -26,7 +26,7 @@ public abstract class Encoders {
     }
 
     public static <A> EncodeJson<Option<A>> OptionEncoder(EncodeJson<A> encoder) {
-        return value -> value.flatMap(encoder::toJson).orElse(Option.some(Json.jNull()));
+        return value -> value.map(encoder::toJson).getOrElse(Json.jNull());
     }
 
     public static <A> EncodeJson<Optional<A>> OptionalEncoder(EncodeJson<A> underlying) {
@@ -34,6 +34,6 @@ public abstract class Encoders {
     }
 
     public static <A> EncodeJson<A> objectEncoder(Function<A, Json.JObject> encoder) {
-        return a -> Option.some(encoder.apply(a).asJValue());
+        return a -> encoder.apply(a).asJValue();
     }
 }

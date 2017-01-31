@@ -35,9 +35,8 @@ public class ReflectionCodecTest {
         DecodeResult<Person> personOpt = personCodec.fromJson(value);
         assertTrue(personOpt.isOk());
         assertEquals(person, personOpt.unsafeGet());
-        Option<Json.JValue> jsonOpt = personCodec.toJson(person);
-        assertTrue(jsonOpt.isDefined());
-        assertEquals(value, jsonOpt.get());
+        Json.JValue encoded = personCodec.toJson(person);
+        assertEquals(value, encoded);
     }
 
     @Test
@@ -71,9 +70,8 @@ public class ReflectionCodecTest {
         assertTrue(consultantFactoryOpt.isOk());
         assertEquals(consultant, consultantFactoryOpt.unsafeGet());
 
-        Option<Json.JValue> jsonOpt = consultantCodec.toJson(consultant);
-        assertTrue(jsonOpt.isDefined());
-        assertEquals(value, jsonOpt.get());
+        Json.JValue encoded = consultantCodec.toJson(consultant);
+        assertEquals(value, encoded);
     }
 
     private static class Consultant {
