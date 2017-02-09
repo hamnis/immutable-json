@@ -166,9 +166,8 @@ public class PersonCodecTest {
         DecodeResult<Person> personOpt = personCodec.fromJson(value);
         assertTrue(personOpt.isOk());
         assertEquals(person, personOpt.unsafeGet());
-        Option<Json.JValue> jsonOpt = personCodec.toJson(person);
-        assertTrue(jsonOpt.isDefined());
-        assertEquals(value, jsonOpt.get());
+        Json.JValue encoded = personCodec.toJson(person);
+        assertEquals(value, encoded);
     }
 
     @Test
@@ -198,17 +197,15 @@ public class PersonCodecTest {
         assertTrue(personOpt.isOk());
         assertEquals(person, personOpt.unsafeGet());
 
-        Option<Json.JValue> jsonOpt = personCodec.toJson(person);
-        assertTrue(jsonOpt.isDefined());
-        assertEquals(value, jsonOpt.get());
+        Json.JValue encoded = personCodec.toJson(person);
+        assertEquals(value, encoded);
 
         DecodeResult<Person2> person2Opt = personCodec.fromJson(optValue);
         assertTrue(person2Opt.isOk());
         assertEquals(person2, person2Opt.unsafeGet());
 
-        Option<Json.JValue> json2Opt = personCodec.toJson(person2);
-        assertTrue(json2Opt.isDefined());
-        assertEquals(optValueEqual, json2Opt.get());
+        Json.JValue encoded2 = personCodec.toJson(person2);
+        assertEquals(optValueEqual, encoded2);
 
     }
 
@@ -232,9 +229,8 @@ public class PersonCodecTest {
         assertTrue(personOpt.isOk());
         assertEquals(person.tupled(), personOpt.unsafeGet());
 
-        Option<Json.JValue> jsonOpt = personCodec.toJson(person.tupled());
-        assertTrue(jsonOpt.isDefined());
-        assertEquals(value, jsonOpt.get());
+        Json.JValue jsonOpt = personCodec.toJson(person.tupled());
+        assertEquals(value, jsonOpt);
     }
 
     @Test
@@ -248,6 +244,6 @@ public class PersonCodecTest {
         assertTrue(localDateTimeOpt.isOk());
 
         assertEquals(expected, localDateTimeOpt.unsafeGet());
-        assertEquals(date, codec.toJson(expected).get());
+        assertEquals(date, codec.toJson(expected));
     }
 }

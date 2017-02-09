@@ -24,7 +24,7 @@ final class DefaultJsonCodec<A> implements JsonCodec<A> {
     }
 
     @Override
-    public Option<Json.JValue> toJson(A value) {
+    public Json.JValue toJson(A value) {
         return encoder.toJson(value);
     }
 

@@ -1,15 +1,15 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 
 import java.util.function.Function;
 
 public interface EncodeJson<A> {
-    Option<Json.JValue> toJson(A value);
+    Json.JValue toJson(A value);
 
+    @Deprecated
     default Json.JValue toJsonUnsafe(A value) {
-        return toJson(value).getOrElse(Json.jNull());
+        return toJson(value);
     }
 
     default <B> EncodeJson<B> contramap(Function<B, A> f) {

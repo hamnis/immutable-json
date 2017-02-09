@@ -57,15 +57,15 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
     }
 
     @Override
-    public Option<Json.JValue> toJson(A value) {
+    public Json.JValue toJson(A value) {
         Map<String, Json.JValue> map = new LinkedHashMap<>();
         for (Param field : fields) {
             Option<JsonCodec<Object>> codec = getCodec(field);
             Option<Object> optValue = field.get(value);
-            Option<Json.JValue> opt = optValue.flatMap(o -> codec.flatMap(c -> c.toJson(o)));
+            Option<Json.JValue> opt = optValue.flatMap(o -> codec.map(c -> c.toJson(o)));
             opt.forEach(v -> map.put(field.getName(), v));
         }
-        return map.isEmpty() ? Option.none() : Option.some(Json.jObject(map));
+        return map.isEmpty() ? Json.jNull() : Json.jObject(map);
     }
 
     @Override

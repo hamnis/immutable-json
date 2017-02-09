@@ -25,7 +25,7 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
     }
 
     @Override
-    public Option<Json.JValue> toJson(A value) {
+    public Json.JValue toJson(A value) {
         return codec.toJson(value);
     }
 
