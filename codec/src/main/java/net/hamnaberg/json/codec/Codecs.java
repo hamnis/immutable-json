@@ -14,47 +14,47 @@ import java.util.function.Function;
 public abstract class Codecs {
     private Codecs(){}
 
-    public static final JsonCodec<String> StringCodec = new DefaultJsonCodec<>(
-            Decoders.StringDecoder,
-            Encoders.StringEncoder,
-            "StringCodec"
+    public static final JsonCodec<String> CString = new DefaultJsonCodec<>(
+            Decoders.DString,
+            Encoders.EString,
+            "String"
     );
 
-    public static final JsonCodec<Number> numberCodec = new DefaultJsonCodec<>(
-            Decoders.NumberDecoder,
-            Encoders.NumberEncoder,
-            "NumberCodec"
+    public static final JsonCodec<Number> CNumber = new DefaultJsonCodec<>(
+            Decoders.DNumber,
+            Encoders.ENumber,
+            "Number"
     );
 
-    public static final JsonCodec<Long> longCodec = new DefaultJsonCodec<>(
-            Decoders.LongDecoder,
-            Encoders.LongEncoder,
-            "LongCodec"
+    public static final JsonCodec<Long> CLong = new DefaultJsonCodec<>(
+            Decoders.DLong,
+            Encoders.ELong,
+            "Long"
     );
 
-    public static final JsonCodec<Double> doubleCodec = new DefaultJsonCodec<>(
-            Decoders.DoubleDecoder,
-            Encoders.DoubleEncoder,
-            "DoubleCodec"
+    public static final JsonCodec<Double> CDouble = new DefaultJsonCodec<>(
+            Decoders.DDouble,
+            Encoders.EDouble,
+            "Double"
     );
 
-    public static final JsonCodec<Integer> intCodec = new DefaultJsonCodec<>(
-            Decoders.IntDecoder,
-            Encoders.IntEncoder,
-            "IntCodec"
+    public static final JsonCodec<Integer> CInt = new DefaultJsonCodec<>(
+            Decoders.DInt,
+            Encoders.EInt,
+            "Int"
     );
 
-    public static final JsonCodec<Boolean> booleanCodec = new DefaultJsonCodec<>(
-            Decoders.BooleanDecoder,
-            Encoders.BooleanEncoder,
-            "BooleanCodec"
+    public static final JsonCodec<Boolean> CBoolean = new DefaultJsonCodec<>(
+            Decoders.DBoolean,
+            Encoders.EBoolean,
+            "Boolean"
     );
 
     public static <A> JsonCodec<A> nullCodec() {
         return new DefaultJsonCodec<>(
                 ignore -> DecodeResult.ok(null),
                 ignore -> Json.jNull(),
-                "NullCodec"
+                "Null"
         );
     }
 
@@ -90,14 +90,45 @@ public abstract class Codecs {
         );
     }
 
-    public static <TT, A> JsonCodec<TT> codec1(Iso<TT, Tuple1<A>> iso, NamedJsonCodec<A> c1) {
+    public static <A1> JsonCodec<A1> of(NamedJsonCodec<A1> c1) {
+        return codec(c1);
+    }
+
+    public static <A1, A2> JsonCodec<Tuple2<A1, A2>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2) {
+        return codec(Iso.identity(), c1, c2);
+    }
+
+    public static <A1, A2, A3> JsonCodec<Tuple3<A1, A2, A3>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3) {
+        return codec(Iso.identity(), c1, c2, c3);
+    }
+
+    public static <A1, A2, A3, A4> JsonCodec<Tuple4<A1, A2, A3, A4>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4) {
+        return codec(Iso.identity(), c1, c2, c3, c4);
+    }
+
+    public static <A1, A2, A3, A4, A5> JsonCodec<Tuple5<A1, A2, A3, A4, A5>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5) {
+        return codec(Iso.identity(), c1, c2, c3, c4, c5);
+    }
+
+    public static <A1, A2, A3, A4, A5, A6> JsonCodec<Tuple6<A1, A2, A3, A4, A5, A6>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6) {
+        return codec(Iso.identity(), c1, c2, c3, c4, c5, c6);
+    }
+
+    public static <A1, A2, A3, A4, A5, A6, A7> JsonCodec<Tuple7<A1, A2, A3, A4, A5, A6, A7>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6, NamedJsonCodec<A7> c7) {
+        return codec(Iso.identity(), c1, c2, c3, c4, c5, c6, c7);
+    }
+
+    public static <A1, A2, A3, A4, A5, A6, A7, A8> JsonCodec<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>> of(NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6, NamedJsonCodec<A7> c7, NamedJsonCodec<A8> c8) {
+        return codec(Iso.identity(), c1, c2, c3, c4, c5, c6, c7, c8);
+    }
+
+    public static <TT> JsonCodec<TT> codec(NamedJsonCodec<TT> c1) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple1<A> tuple = iso.get(value);
                 return Json.jObject(
                         c1.name,
-                        c1.toJson(tuple._1)
+                        c1.toJson(value)
                 ).asJValue();
             }
 
@@ -105,8 +136,7 @@ public abstract class Codecs {
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
 
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                return oa.flatMap(a -> DecodeResult.ok(iso.reverseGet(new Tuple1<>(a))));
+                return DecodeResult.decode(object, c1.name, c1);
             }
 
             @Override
@@ -114,14 +144,12 @@ public abstract class Codecs {
                 Map<String, String> map = new HashMap<>();
                 map.put(c1.name, c1.toString());
 
-                return "codec1" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
-
-
-    public static <TT, A, B> JsonCodec<TT> codec2(Iso<TT, Tuple2<A, B>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2) {
+    public static <TT, A, B> JsonCodec<TT> codec(Iso<TT, Tuple2<A, B>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -147,14 +175,14 @@ public abstract class Codecs {
                 map.put(c1.name, c1.toString());
                 map.put(c2.name, c2.toString());
 
-                return "codec2" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C> JsonCodec<TT> codec3(Iso<TT, Tuple3<A, B, C>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3) {
+    public static <TT, A, B, C> JsonCodec<TT> codec(Iso<TT, Tuple3<A, B, C>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -182,14 +210,14 @@ public abstract class Codecs {
                 map.put(c2.name, c2.toString());
                 map.put(c3.name, c3.toString());
 
-                return "codec3" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C, D> JsonCodec<TT> codec4(Iso<TT, Tuple4<A, B, C, D>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4) {
+    public static <TT, A, B, C, D> JsonCodec<TT> codec(Iso<TT, Tuple4<A, B, C, D>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -220,14 +248,14 @@ public abstract class Codecs {
                 map.put(c3.name, c3.toString());
                 map.put(c4.name, c4.toString());
 
-                return "codec4" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C, D, E> JsonCodec<TT> codec5(Iso<TT, Tuple5<A, B, C, D, E>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5) {
+    public static <TT, A, B, C, D, E> JsonCodec<TT> codec(Iso<TT, Tuple5<A, B, C, D, E>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -261,14 +289,14 @@ public abstract class Codecs {
                 map.put(c4.name, c4.toString());
                 map.put(c5.name, c5.toString());
 
-                return "codec5" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C, D, E, F> JsonCodec<TT> codec6(Iso<TT, Tuple6<A, B, C, D, E, F>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6) {
+    public static <TT, A, B, C, D, E, F> JsonCodec<TT> codec(Iso<TT, Tuple6<A, B, C, D, E, F>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -305,14 +333,14 @@ public abstract class Codecs {
                 map.put(c5.name, c5.toString());
                 map.put(c6.name, c6.toString());
 
-                return "codec6" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C, D, E, F, G> JsonCodec<TT> codec7(Iso<TT, Tuple7<A, B, C, D, E, F, G>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7) {
+    public static <TT, A, B, C, D, E, F, G> JsonCodec<TT> codec(Iso<TT, Tuple7<A, B, C, D, E, F, G>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -352,14 +380,14 @@ public abstract class Codecs {
                 map.put(c6.name, c6.toString());
                 map.put(c7.name, c7.toString());
 
-                return "codec7" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }
 
 
 
-    public static <TT, A, B, C, D, E, F, G, H> JsonCodec<TT> codec8(Iso<TT, Tuple8<A, B, C, D, E, F, G, H>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7, NamedJsonCodec<H> c8) {
+    public static <TT, A, B, C, D, E, F, G, H> JsonCodec<TT> codec(Iso<TT, Tuple8<A, B, C, D, E, F, G, H>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7, NamedJsonCodec<H> c8) {
         return new JsonCodec<TT>() {
             @Override
             public Json.JValue toJson(TT value) {
@@ -403,7 +431,7 @@ public abstract class Codecs {
                 map.put(c7.name, c7.toString());
                 map.put(c8.name, c8.toString());
 
-                return "codec8" + map.toString();
+                return "codec" + map.toString();
             }
         };
     }

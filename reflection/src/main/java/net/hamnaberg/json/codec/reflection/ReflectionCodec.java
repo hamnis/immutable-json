@@ -24,16 +24,16 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
 
     static {
         Map<Class<?>, JsonCodec<?>> codecs = new HashMap<>();
-        codecs.put(String.class, Codecs.StringCodec);
-        codecs.put(Integer.class, Codecs.intCodec);
-        codecs.put(int.class, Codecs.intCodec);
-        codecs.put(double.class, Codecs.doubleCodec);
-        codecs.put(long.class, Codecs.longCodec);
-        codecs.put(Long.class, Codecs.longCodec);
-        codecs.put(Double.class, Codecs.doubleCodec);
-        codecs.put(BigInteger.class, Codecs.numberCodec);
-        codecs.put(Number.class, Codecs.numberCodec);
-        codecs.put(Boolean.class, Codecs.booleanCodec);
+        codecs.put(String.class, Codecs.CString);
+        codecs.put(Integer.class, Codecs.CInt);
+        codecs.put(int.class, Codecs.CInt);
+        codecs.put(double.class, Codecs.CDouble);
+        codecs.put(long.class, Codecs.CLong);
+        codecs.put(Long.class, Codecs.CLong);
+        codecs.put(Double.class, Codecs.CDouble);
+        codecs.put(BigInteger.class, Codecs.CNumber);
+        codecs.put(Number.class, Codecs.CNumber);
+        codecs.put(Boolean.class, Codecs.CBoolean);
         defaultCodecs = Collections.unmodifiableMap(codecs);
     }
 

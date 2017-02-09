@@ -17,7 +17,15 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return narrow(a -> Try.of(() -> f.apply(a)), g);
     }
 
+    /**
+     * @deprecated use {@link #field(String)} instead
+     */
+    @Deprecated
     default NamedJsonCodec<A> named(String name) {
+        return NamedJsonCodec.of(name, this);
+    }
+
+    default NamedJsonCodec<A> field(String name) {
         return NamedJsonCodec.of(name, this);
     }
 

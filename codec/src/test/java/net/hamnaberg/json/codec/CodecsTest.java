@@ -11,11 +11,11 @@ public class CodecsTest {
 
     @Test
     public void codec3() throws Exception {
-        JsonCodec<Tuple3<String, Integer, Integer>> codec = Codecs.codec3(
+        JsonCodec<Tuple3<String, Integer, Integer>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3")
         );
 
         Json.JObject expectedJson = Json.jObject(
@@ -32,12 +32,12 @@ public class CodecsTest {
 
     @Test
     public void codec4() throws Exception {
-        JsonCodec<Tuple4<String, Integer, Integer, String>> codec = Codecs.codec4(
+        JsonCodec<Tuple4<String, Integer, Integer, String>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3"),
-                Codecs.StringCodec.named("4")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3"),
+                Codecs.CString.field("4")
         );
 
         Json.JObject expectedJson = Json.jObject(
@@ -55,13 +55,13 @@ public class CodecsTest {
 
     @Test
     public void codec5() throws Exception {
-        JsonCodec<Tuple5<String, Integer, Integer, String, Long>> codec = Codecs.codec5(
+        JsonCodec<Tuple5<String, Integer, Integer, String, Long>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3"),
-                Codecs.StringCodec.named("4"),
-                Codecs.longCodec.named("5")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3"),
+                Codecs.CString.field("4"),
+                Codecs.CLong.field("5")
         );
 
         Json.JObject expectedJson = Json.jObject(
@@ -80,14 +80,14 @@ public class CodecsTest {
 
     @Test
     public void codec6() throws Exception {
-        JsonCodec<Tuple6<String, Integer, Integer, String, Long, Boolean>> codec = Codecs.codec6(
+        JsonCodec<Tuple6<String, Integer, Integer, String, Long, Boolean>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3"),
-                Codecs.StringCodec.named("4"),
-                Codecs.longCodec.named("5"),
-                Codecs.booleanCodec.named("6")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3"),
+                Codecs.CString.field("4"),
+                Codecs.CLong.field("5"),
+                Codecs.CBoolean.field("6")
         );
 
         Json.JObject expectedJson = Json.jObject(
@@ -108,15 +108,15 @@ public class CodecsTest {
 
     @Test
     public void codec7() throws Exception {
-        JsonCodec<Tuple7<String, Integer, Integer, String, Long, Boolean, String>> codec = Codecs.codec7(
+        JsonCodec<Tuple7<String, Integer, Integer, String, Long, Boolean, String>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3"),
-                Codecs.StringCodec.named("4"),
-                Codecs.longCodec.named("5"),
-                Codecs.booleanCodec.named("6"),
-                Codecs.StringCodec.named("7")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3"),
+                Codecs.CString.field("4"),
+                Codecs.CLong.field("5"),
+                Codecs.CBoolean.field("6"),
+                Codecs.CString.field("7")
         );
 
         Json.JObject expectedJson = Json.jObject(
@@ -138,16 +138,16 @@ public class CodecsTest {
 
     @Test
     public void codec8() throws Exception {
-        JsonCodec<Tuple8<String, Integer, Integer, String, Long, Boolean, String, Integer>> codec = Codecs.codec8(
+        JsonCodec<Tuple8<String, Integer, Integer, String, Long, Boolean, String, Integer>> codec = Codecs.codec(
                 Iso.identity(),
-                Codecs.StringCodec.named("1"),
-                Codecs.intCodec.named("2"),
-                Codecs.intCodec.named("3"),
-                Codecs.StringCodec.named("4"),
-                Codecs.longCodec.named("5"),
-                Codecs.booleanCodec.named("6"),
-                Codecs.StringCodec.named("7"),
-                Codecs.intCodec.named("8")
+                Codecs.CString.field("1"),
+                Codecs.CInt.field("2"),
+                Codecs.CInt.field("3"),
+                Codecs.CString.field("4"),
+                Codecs.CLong.field("5"),
+                Codecs.CBoolean.field("6"),
+                Codecs.CString.field("7"),
+                Codecs.CInt.field("8")
         );
 
         Json.JObject expectedJson = Json.jObject(

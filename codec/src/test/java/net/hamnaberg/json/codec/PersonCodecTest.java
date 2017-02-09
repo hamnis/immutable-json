@@ -4,7 +4,6 @@ import javaslang.Tuple2;
 import javaslang.Tuple3;
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
-import net.hamnaberg.json.codec.*;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -158,8 +157,8 @@ public class PersonCodecTest {
                 ));
         }});
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.StringCodec), NamedJsonCodec.of("city", Codecs.StringCodec));
-        JsonCodec<Person> personCodec = Codecs.codec3(PersonIso.INSTANCE, NamedJsonCodec.of("name", Codecs.StringCodec), NamedJsonCodec.of("age", Codecs.intCodec), NamedJsonCodec.of("address", aCodec));
+        JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.CString), NamedJsonCodec.of("city", Codecs.CString));
+        JsonCodec<Person> personCodec = Codecs.codec(PersonIso.INSTANCE, NamedJsonCodec.of("name", Codecs.CString), NamedJsonCodec.of("age", Codecs.CInt), NamedJsonCodec.of("address", aCodec));
 
 
         Person person = new Person("Erlend Hamnaberg", 34, new Address("Ensjøveien", "Oslo"));
@@ -187,8 +186,8 @@ public class PersonCodecTest {
         }});
         Json.JValue optValueEqual = optValue.asJsonObjectOrEmpty().put("address", Json.jNull());
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.StringCodec), NamedJsonCodec.of("city", Codecs.StringCodec));
-        JsonCodec<Person2> personCodec = Codecs.codec3(Person2Iso.INSTANCE, NamedJsonCodec.of("name", Codecs.StringCodec), NamedJsonCodec.of("age", Codecs.intCodec), NamedJsonCodec.of("address", Codecs.OptionCodec(aCodec)));
+        JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.CString), NamedJsonCodec.of("city", Codecs.CString));
+        JsonCodec<Person2> personCodec = Codecs.codec(Person2Iso.INSTANCE, NamedJsonCodec.of("name", Codecs.CString), NamedJsonCodec.of("age", Codecs.CInt), NamedJsonCodec.of("address", Codecs.OptionCodec(aCodec)));
 
         Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
         Person2 person2 = new Person2("Erlend Hamnaberg", 34, Option.none());
@@ -220,8 +219,8 @@ public class PersonCodecTest {
             ));
         }});
 
-        JsonCodec<Address> aCodec = Codecs.codec2(AddressIso.INSTANCE, Codecs.StringCodec.named("street"), Codecs.StringCodec.named("city"));
-        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec3(Iso.identity(), Codecs.StringCodec.named("name"), Codecs.intCodec.named("age"), Codecs.OptionCodec(aCodec).named("address"));
+        JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, Codecs.CString.field("street"), Codecs.CString.field("city"));
+        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec(Iso.identity(), Codecs.CString.field("name"), Codecs.CInt.field("age"), Codecs.OptionCodec(aCodec).field("address"));
 
         Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
 
@@ -238,7 +237,7 @@ public class PersonCodecTest {
         LocalDateTime expected = LocalDateTime.of(1981, 1, 27, 0, 0, 0);
         Json.JString date = Json.jString(expected.format(DateTimeFormatter.ISO_DATE_TIME));
 
-        JsonCodec<LocalDateTime> codec = Codecs.StringCodec.xmap(LocalDateTime::parse, ldt -> ldt.format(DateTimeFormatter.ISO_DATE_TIME));
+        JsonCodec<LocalDateTime> codec = Codecs.CString.xmap(LocalDateTime::parse, ldt -> ldt.format(DateTimeFormatter.ISO_DATE_TIME));
 
         DecodeResult<LocalDateTime> localDateTimeOpt = codec.fromJson(date);
         assertTrue(localDateTimeOpt.isOk());
