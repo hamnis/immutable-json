@@ -10,12 +10,12 @@ import java.util.function.Function;
 public abstract class Encoders {
     private Encoders(){}
 
-    public static final EncodeJson<String> StringEncoder = Json::jString;
-    public static final EncodeJson<Number> NumberEncoder = Json::jNumber;
-    public static final EncodeJson<Long> LongEncoder = Json::jNumber;
-    public static final EncodeJson<Integer> IntEncoder = Json::jNumber;
-    public static final EncodeJson<Double> DoubleEncoder = Json::jNumber;
-    public static final EncodeJson<Boolean> BooleanEncoder = Json::jBoolean;
+    public static final EncodeJson<String> EString = Json::jString;
+    public static final EncodeJson<Number> ENumber = Json::jNumber;
+    public static final EncodeJson<Long> ELong = Json::jNumber;
+    public static final EncodeJson<Integer> EInt = Json::jNumber;
+    public static final EncodeJson<Double> EDouble = Json::jNumber;
+    public static final EncodeJson<Boolean> EBoolean = Json::jBoolean;
 
     public static <A> EncodeJson<List<A>> listEncoder(EncodeJson<A> encoder) {
         return value -> Json.jArray(value.map(encoder::toJson));

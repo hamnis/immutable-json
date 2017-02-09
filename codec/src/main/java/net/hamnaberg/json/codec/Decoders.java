@@ -10,12 +10,12 @@ import java.util.function.Function;
 public abstract class Decoders {
     private Decoders(){}
 
-    public static final DecodeJson<String> StringDecoder = value -> DecodeResult.fromOption(value.asString());
-    public static final DecodeJson<Number> NumberDecoder = value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
-    public static final DecodeJson<Long> LongDecoder = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
-    public static final DecodeJson<Integer> IntDecoder = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
-    public static final DecodeJson<Double> DoubleDecoder = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
-    public static final DecodeJson<Boolean> BooleanDecoder = value -> DecodeResult.fromOption(value.asBoolean());
+    public static final DecodeJson<String> DString = value -> DecodeResult.fromOption(value.asString());
+    public static final DecodeJson<Number> DNumber = value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
+    public static final DecodeJson<Long> DLong = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
+    public static final DecodeJson<Integer> DInt = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
+    public static final DecodeJson<Double> DDouble = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
+    public static final DecodeJson<Boolean> DBoolean = value -> DecodeResult.fromOption(value.asBoolean());
 
     public static <A> DecodeJson<List<A>> listDecoder(DecodeJson<A> decoder) {
         return value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(decoder::fromJson));

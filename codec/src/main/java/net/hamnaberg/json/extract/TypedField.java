@@ -47,23 +47,23 @@ public abstract class TypedField<A> {
     }
 
     public static TypedField<String> TString(String name) {
-        return typedFieldOf(name, Codecs.StringCodec, Option.none());
+        return typedFieldOf(name, Codecs.CString, Option.none());
     }
 
     public static TypedField<Integer> TInt(String name) {
-        return typedFieldOf(name, Codecs.intCodec, Option.none());
+        return typedFieldOf(name, Codecs.CInt, Option.none());
     }
 
     public static TypedField<Double> TDouble(String name) {
-        return typedFieldOf(name, Codecs.doubleCodec, Option.none());
+        return typedFieldOf(name, Codecs.CDouble, Option.none());
     }
 
     public static TypedField<Long> TLong(String name) {
-        return typedFieldOf(name, Codecs.longCodec, Option.none());
+        return typedFieldOf(name, Codecs.CLong, Option.none());
     }
 
     public static TypedField<Boolean> TBoolean(String name) {
-        return typedFieldOf(name, Codecs.booleanCodec, Option.none());
+        return typedFieldOf(name, Codecs.CBoolean, Option.none());
     }
 
     public static TJArrayField TJArray(String name) {
