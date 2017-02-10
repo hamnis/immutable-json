@@ -82,6 +82,10 @@ public abstract class TypedField<A> {
         return typedFieldOf(name, json -> DecodeResult.ok(decoder.fromJson(json).toOption()), Option.some(Option.none()));
     }
 
+    public static <B> TypedField<B> typedFieldOf(String name, DecodeJson<B> decoder) {
+        return new TypedField<B>(name, decoder) {};
+    }
+
     public static <B> TypedField<B> typedFieldOf(String name, DecodeJson<B> decoder, Option<B> defaultValue) {
         return new TypedField<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder)) {};
     }

@@ -30,7 +30,7 @@ public class ExtractorsTest {
 
     @Test
     public void extractPerson() {
-        Extractor<Address> addressExtractor = Extractors.extract3(
+        Extractor<Address> addressExtractor = Extractors.extract(
                 TString("street"),
                 TString("city"),
                 TString("country").map(Country::new),
@@ -38,7 +38,7 @@ public class ExtractorsTest {
         );
 
         TypedField<List<String>> interests = TJArray("interests").mapToOptionalList(JValue::asString);
-        Extractor<Person> extractor = Extractors.extract4(
+        Extractor<Person> extractor = Extractors.extract(
                 TString("name"),
                 TInt("age"),
                 TJObject("address").extractTo(addressExtractor),
@@ -57,14 +57,14 @@ public class ExtractorsTest {
 
     @Test
     public void extractPerson2() {
-        Extractor<Address> addressExtractor = Extractors.extract3(
+        Extractor<Address> addressExtractor = Extractors.extract(
                 TString("street"),
                 TString("city"),
                 TString("country").map(Country::new),
                 Address::new
         );
 
-        Extractor<Person2> extractor = Extractors.extract3(
+        Extractor<Person2> extractor = Extractors.extract(
                 TString("name"),
                 TInt("age"),
                 TOptional("address", addressExtractor.decoder()),
