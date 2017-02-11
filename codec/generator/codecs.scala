@@ -27,7 +27,7 @@ def codecTemplate(arity: Int) = {
   val decodeEndParams = arities.map(_ => ")").mkString
   val decodeValues = arities.map(i => s"v$i").mkString(", ")
 
-  val toStringMap = arities.map(i => s"                map.put(c$i.name, c$i.toString())").mkString("", ";\n", ";")
+  val toStringMap = arities.map(i => s"                map.put(c$i.name, c$i.codec.toString())").mkString("", ";\n", ";")
 
   s"""
      |public static <TT, $types> JsonCodec<TT> codec(Iso<TT, Tuple$arity<$types>> iso, $codecParams) {
@@ -61,11 +61,11 @@ def codecTemplate(arity: Int) = {
 }
 
 
-(9 to 27).foreach{ i =>
+(2 to 27).foreach{ i =>
   println(ofTemplate(i))
 }
 
-/*(9 to 27).foreach{ i =>
+(2 to 27).foreach{ i =>
   println(codecTemplate(i))
-}*/
+}
 

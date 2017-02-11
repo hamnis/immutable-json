@@ -5,7 +5,7 @@ import net.hamnaberg.json.Json;
 
 public class NamedJsonCodec<A> implements JsonCodec<A> {
     public final String name;
-    private final JsonCodec<A> codec;
+    final JsonCodec<A> codec;
 
     private NamedJsonCodec(String name, JsonCodec<A> codec) {
         this.name = name;
@@ -36,7 +36,7 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
 
     @Override
     public String toString() {
-        return "DefaultNamedJsonCodec{" +
+        return "NamedJsonCodec{" +
                 "name='" + name + '\'' +
                 ", codec=" + codec +
                 '}';

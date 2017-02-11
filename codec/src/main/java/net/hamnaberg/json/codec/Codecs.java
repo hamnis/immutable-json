@@ -238,18 +238,19 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
+                map.put(c1.name, c1.codec.toString());
 
                 return "codec" + map.toString();
             }
         };
     }
 
-    public static <TT, A, B> JsonCodec<TT> codec(Iso<TT, Tuple2<A, B>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2) {
+    public static <TT, A1, A2> JsonCodec<TT> codec(Iso<TT, Tuple2<A1, A2>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple2<A, B> tuple = iso.get(value);
+                Tuple2<A1, A2> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2))
@@ -259,30 +260,28 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                return oa.flatMap(a -> ob.flatMap(b -> DecodeResult.ok(iso.reverseGet(new Tuple2<>(a,b)))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                return d1.flatMap(v1 -> d2.flatMap(v2 ->  DecodeResult.ok(iso.reverseGet(new Tuple2<>(v1, v2)))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C> JsonCodec<TT> codec(Iso<TT, Tuple3<A, B, C>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3) {
+    public static <TT, A1, A2, A3> JsonCodec<TT> codec(Iso<TT, Tuple3<A1, A2, A3>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple3<A, B, C> tuple = iso.get(value);
+                Tuple3<A1, A2, A3> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -293,31 +292,30 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> DecodeResult.ok(iso.reverseGet(new Tuple3<>(a,b,c))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 ->  DecodeResult.ok(iso.reverseGet(new Tuple3<>(v1, v2, v3))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C, D> JsonCodec<TT> codec(Iso<TT, Tuple4<A, B, C, D>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4) {
+    public static <TT, A1, A2, A3, A4> JsonCodec<TT> codec(Iso<TT, Tuple4<A1, A2, A3, A4>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple4<A, B, C, D> tuple = iso.get(value);
+                Tuple4<A1, A2, A3, A4> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -329,33 +327,32 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> DecodeResult.ok(iso.reverseGet(new Tuple4<>(a,b,c,d)))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 ->  DecodeResult.ok(iso.reverseGet(new Tuple4<>(v1, v2, v3, v4)))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C, D, E> JsonCodec<TT> codec(Iso<TT, Tuple5<A, B, C, D, E>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5) {
+    public static <TT, A1, A2, A3, A4, A5> JsonCodec<TT> codec(Iso<TT, Tuple5<A1, A2, A3, A4, A5>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple5<A, B, C, D, E> tuple = iso.get(value);
+                Tuple5<A1, A2, A3, A4, A5> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -368,35 +365,34 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> DecodeResult.ok(iso.reverseGet(new Tuple5<>(a,b,c,d,e))))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 ->  DecodeResult.ok(iso.reverseGet(new Tuple5<>(v1, v2, v3, v4, v5))))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C, D, E, F> JsonCodec<TT> codec(Iso<TT, Tuple6<A, B, C, D, E, F>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6) {
+    public static <TT, A1, A2, A3, A4, A5, A6> JsonCodec<TT> codec(Iso<TT, Tuple6<A1, A2, A3, A4, A5, A6>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple6<A, B, C, D, E, F> tuple = iso.get(value);
+                Tuple6<A1, A2, A3, A4, A5, A6> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -410,37 +406,36 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> DecodeResult.ok(iso.reverseGet(new Tuple6<>(a,b,c,d,e,f)))))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 ->  DecodeResult.ok(iso.reverseGet(new Tuple6<>(v1, v2, v3, v4, v5, v6)))))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C, D, E, F, G> JsonCodec<TT> codec(Iso<TT, Tuple7<A, B, C, D, E, F, G>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7) {
+    public static <TT, A1, A2, A3, A4, A5, A6, A7> JsonCodec<TT> codec(Iso<TT, Tuple7<A1, A2, A3, A4, A5, A6, A7>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6, NamedJsonCodec<A7> c7) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple7<A, B, C, D, E, F, G> tuple = iso.get(value);
+                Tuple7<A1, A2, A3, A4, A5, A6, A7> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -455,40 +450,38 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<G> og = DecodeResult.decode(object, c7.name, c7);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> DecodeResult.ok(iso.reverseGet(new Tuple7<>(a,b,c,d,e,f,g))))))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
+                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 ->  DecodeResult.ok(iso.reverseGet(new Tuple7<>(v1, v2, v3, v4, v5, v6, v7))))))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
 
 
-
-    public static <TT, A, B, C, D, E, F, G, H> JsonCodec<TT> codec(Iso<TT, Tuple8<A, B, C, D, E, F, G, H>> iso, NamedJsonCodec<A> c1, NamedJsonCodec<B> c2, NamedJsonCodec<C> c3, NamedJsonCodec<D> c4, NamedJsonCodec<E> c5, NamedJsonCodec<F> c6, NamedJsonCodec<G> c7, NamedJsonCodec<H> c8) {
+    public static <TT, A1, A2, A3, A4, A5, A6, A7, A8> JsonCodec<TT> codec(Iso<TT, Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6, NamedJsonCodec<A7> c7, NamedJsonCodec<A8> c8) {
         return new JsonCodec<TT>() {
+
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple8<A, B, C, D, E, F, G, H> tuple = iso.get(value);
-
+                Tuple8<A1, A2, A3, A4, A5, A6, A7, A8> tuple = iso.get(value);
                 return Json.jObject(
                         Json.tuple(c1.name, c1.toJson(tuple._1)),
                         Json.tuple(c2.name, c2.toJson(tuple._2)),
@@ -504,33 +497,33 @@ public abstract class Codecs {
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A> oa = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<B> ob = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<C> oc = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<D> od = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<E> oe = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<F> of = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<G> og = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<H> oh = DecodeResult.decode(object, c8.name, c8);
-                return oa.flatMap(a -> ob.flatMap(b -> oc.flatMap(c -> od.flatMap(d -> oe.flatMap(e -> of.flatMap(f -> og.flatMap(g -> oh.flatMap(h -> DecodeResult.ok(iso.reverseGet(new Tuple8<>(a,b,c,d,e,f,g,h)))))))))));
+                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
+                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
+                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
+                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
+                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
+                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
+                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
+                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
+                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 ->  DecodeResult.ok(iso.reverseGet(new Tuple8<>(v1, v2, v3, v4, v5, v6, v7, v8)))))))))));
             }
 
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
                 return "codec" + map.toString();
             }
         };
     }
+
 
     public static <TT, A1, A2, A3, A4, A5, A6, A7, A8, A9> JsonCodec<TT> codec(Iso<TT, Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2, NamedJsonCodec<A3> c3, NamedJsonCodec<A4> c4, NamedJsonCodec<A5> c5, NamedJsonCodec<A6> c6, NamedJsonCodec<A7> c7, NamedJsonCodec<A8> c8, NamedJsonCodec<A9> c9) {
         return new JsonCodec<TT>() {
@@ -569,15 +562,15 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -623,16 +616,16 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -680,17 +673,17 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -740,18 +733,18 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -803,19 +796,19 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -869,20 +862,20 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -938,21 +931,21 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1010,22 +1003,22 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1085,23 +1078,23 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1163,24 +1156,24 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1244,25 +1237,25 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1328,26 +1321,26 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1415,27 +1408,27 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1505,28 +1498,28 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1598,29 +1591,29 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
-                map.put(c23.name, c23.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
+                map.put(c23.name, c23.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1694,30 +1687,30 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
-                map.put(c23.name, c23.toString());
-                map.put(c24.name, c24.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
+                map.put(c23.name, c23.codec.toString());
+                map.put(c24.name, c24.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1793,31 +1786,31 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
-                map.put(c23.name, c23.toString());
-                map.put(c24.name, c24.toString());
-                map.put(c25.name, c25.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
+                map.put(c23.name, c23.codec.toString());
+                map.put(c24.name, c24.codec.toString());
+                map.put(c25.name, c25.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -1895,32 +1888,32 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
-                map.put(c23.name, c23.toString());
-                map.put(c24.name, c24.toString());
-                map.put(c25.name, c25.toString());
-                map.put(c26.name, c26.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
+                map.put(c23.name, c23.codec.toString());
+                map.put(c24.name, c24.codec.toString());
+                map.put(c25.name, c25.codec.toString());
+                map.put(c26.name, c26.codec.toString());
                 return "codec" + map.toString();
             }
         };
@@ -2000,33 +1993,33 @@ public abstract class Codecs {
             @Override
             public String toString() {
                 Map<String, String> map = new HashMap<>();
-                map.put(c1.name, c1.toString());
-                map.put(c2.name, c2.toString());
-                map.put(c3.name, c3.toString());
-                map.put(c4.name, c4.toString());
-                map.put(c5.name, c5.toString());
-                map.put(c6.name, c6.toString());
-                map.put(c7.name, c7.toString());
-                map.put(c8.name, c8.toString());
-                map.put(c9.name, c9.toString());
-                map.put(c10.name, c10.toString());
-                map.put(c11.name, c11.toString());
-                map.put(c12.name, c12.toString());
-                map.put(c13.name, c13.toString());
-                map.put(c14.name, c14.toString());
-                map.put(c15.name, c15.toString());
-                map.put(c16.name, c16.toString());
-                map.put(c17.name, c17.toString());
-                map.put(c18.name, c18.toString());
-                map.put(c19.name, c19.toString());
-                map.put(c20.name, c20.toString());
-                map.put(c21.name, c21.toString());
-                map.put(c22.name, c22.toString());
-                map.put(c23.name, c23.toString());
-                map.put(c24.name, c24.toString());
-                map.put(c25.name, c25.toString());
-                map.put(c26.name, c26.toString());
-                map.put(c27.name, c27.toString());
+                map.put(c1.name, c1.codec.toString());
+                map.put(c2.name, c2.codec.toString());
+                map.put(c3.name, c3.codec.toString());
+                map.put(c4.name, c4.codec.toString());
+                map.put(c5.name, c5.codec.toString());
+                map.put(c6.name, c6.codec.toString());
+                map.put(c7.name, c7.codec.toString());
+                map.put(c8.name, c8.codec.toString());
+                map.put(c9.name, c9.codec.toString());
+                map.put(c10.name, c10.codec.toString());
+                map.put(c11.name, c11.codec.toString());
+                map.put(c12.name, c12.codec.toString());
+                map.put(c13.name, c13.codec.toString());
+                map.put(c14.name, c14.codec.toString());
+                map.put(c15.name, c15.codec.toString());
+                map.put(c16.name, c16.codec.toString());
+                map.put(c17.name, c17.codec.toString());
+                map.put(c18.name, c18.codec.toString());
+                map.put(c19.name, c19.codec.toString());
+                map.put(c20.name, c20.codec.toString());
+                map.put(c21.name, c21.codec.toString());
+                map.put(c22.name, c22.codec.toString());
+                map.put(c23.name, c23.codec.toString());
+                map.put(c24.name, c24.codec.toString());
+                map.put(c25.name, c25.codec.toString());
+                map.put(c26.name, c26.codec.toString());
+                map.put(c27.name, c27.codec.toString());
                 return "codec" + map.toString();
             }
         };
