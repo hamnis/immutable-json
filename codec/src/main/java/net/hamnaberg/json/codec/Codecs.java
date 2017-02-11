@@ -259,10 +259,11 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                return d1.flatMap(v1 -> d2.flatMap(v2 ->  DecodeResult.ok(iso.reverseGet(new Tuple2<>(v1, v2)))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        Tuple2::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -291,11 +292,12 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 ->  DecodeResult.ok(iso.reverseGet(new Tuple3<>(v1, v2, v3))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        Tuple3::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -326,12 +328,13 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 ->  DecodeResult.ok(iso.reverseGet(new Tuple4<>(v1, v2, v3, v4)))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        Tuple4::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -364,13 +367,14 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 ->  DecodeResult.ok(iso.reverseGet(new Tuple5<>(v1, v2, v3, v4, v5))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        Tuple5::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -405,14 +409,15 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 ->  DecodeResult.ok(iso.reverseGet(new Tuple6<>(v1, v2, v3, v4, v5, v6)))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        Tuple6::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -449,15 +454,16 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 ->  DecodeResult.ok(iso.reverseGet(new Tuple7<>(v1, v2, v3, v4, v5, v6, v7))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        Tuple7::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -496,16 +502,17 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 ->  DecodeResult.ok(iso.reverseGet(new Tuple8<>(v1, v2, v3, v4, v5, v6, v7, v8)))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        Tuple8::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -546,17 +553,18 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 ->  DecodeResult.ok(iso.reverseGet(new Tuple9<>(v1, v2, v3, v4, v5, v6, v7, v8, v9))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        Tuple9::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -599,18 +607,19 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 ->  DecodeResult.ok(iso.reverseGet(new Tuple10<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10)))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        Tuple10::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -655,19 +664,20 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 ->  DecodeResult.ok(iso.reverseGet(new Tuple11<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        Tuple11::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -714,20 +724,21 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 ->  DecodeResult.ok(iso.reverseGet(new Tuple12<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12)))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        Tuple12::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -776,21 +787,22 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 ->  DecodeResult.ok(iso.reverseGet(new Tuple13<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        Tuple13::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -841,22 +853,23 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 ->  DecodeResult.ok(iso.reverseGet(new Tuple14<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14)))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        Tuple14::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -909,23 +922,24 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 ->  DecodeResult.ok(iso.reverseGet(new Tuple15<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        Tuple15::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -980,24 +994,25 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 ->  DecodeResult.ok(iso.reverseGet(new Tuple16<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16)))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        Tuple16::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1054,25 +1069,26 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 ->  DecodeResult.ok(iso.reverseGet(new Tuple17<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        Tuple17::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1131,26 +1147,27 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 ->  DecodeResult.ok(iso.reverseGet(new Tuple18<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18)))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        Tuple18::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1211,27 +1228,28 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 ->  DecodeResult.ok(iso.reverseGet(new Tuple19<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        Tuple19::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1294,28 +1312,29 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 ->  DecodeResult.ok(iso.reverseGet(new Tuple20<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20)))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        Tuple20::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1380,29 +1399,30 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 ->  DecodeResult.ok(iso.reverseGet(new Tuple21<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        Tuple21::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1469,30 +1489,31 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 ->  DecodeResult.ok(iso.reverseGet(new Tuple22<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22)))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        Tuple22::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1561,31 +1582,32 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                DecodeResult<A23> d23 = DecodeResult.decode(object, c23.name, c23);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 -> d23.flatMap(v23 ->  DecodeResult.ok(iso.reverseGet(new Tuple23<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23))))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        Tuple23::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1656,32 +1678,33 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                DecodeResult<A23> d23 = DecodeResult.decode(object, c23.name, c23);
-                DecodeResult<A24> d24 = DecodeResult.decode(object, c24.name, c24);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 -> d23.flatMap(v23 -> d24.flatMap(v24 ->  DecodeResult.ok(iso.reverseGet(new Tuple24<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24)))))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
+                        Tuple24::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1754,33 +1777,34 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                DecodeResult<A23> d23 = DecodeResult.decode(object, c23.name, c23);
-                DecodeResult<A24> d24 = DecodeResult.decode(object, c24.name, c24);
-                DecodeResult<A25> d25 = DecodeResult.decode(object, c25.name, c25);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 -> d23.flatMap(v23 -> d24.flatMap(v24 -> d25.flatMap(v25 ->  DecodeResult.ok(iso.reverseGet(new Tuple25<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25))))))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
+                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
+                        Tuple25::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1855,34 +1879,35 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                DecodeResult<A23> d23 = DecodeResult.decode(object, c23.name, c23);
-                DecodeResult<A24> d24 = DecodeResult.decode(object, c24.name, c24);
-                DecodeResult<A25> d25 = DecodeResult.decode(object, c25.name, c25);
-                DecodeResult<A26> d26 = DecodeResult.decode(object, c26.name, c26);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 -> d23.flatMap(v23 -> d24.flatMap(v24 -> d25.flatMap(v25 -> d26.flatMap(v26 ->  DecodeResult.ok(iso.reverseGet(new Tuple26<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26)))))))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
+                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
+                        FieldDecoder.typedFieldOf(c26.name, c26.codec),
+                        Tuple26::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override
@@ -1959,35 +1984,36 @@ public abstract class Codecs {
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
-                Json.JObject object = value.asJsonObjectOrEmpty();
-                DecodeResult<A1> d1 = DecodeResult.decode(object, c1.name, c1);
-                DecodeResult<A2> d2 = DecodeResult.decode(object, c2.name, c2);
-                DecodeResult<A3> d3 = DecodeResult.decode(object, c3.name, c3);
-                DecodeResult<A4> d4 = DecodeResult.decode(object, c4.name, c4);
-                DecodeResult<A5> d5 = DecodeResult.decode(object, c5.name, c5);
-                DecodeResult<A6> d6 = DecodeResult.decode(object, c6.name, c6);
-                DecodeResult<A7> d7 = DecodeResult.decode(object, c7.name, c7);
-                DecodeResult<A8> d8 = DecodeResult.decode(object, c8.name, c8);
-                DecodeResult<A9> d9 = DecodeResult.decode(object, c9.name, c9);
-                DecodeResult<A10> d10 = DecodeResult.decode(object, c10.name, c10);
-                DecodeResult<A11> d11 = DecodeResult.decode(object, c11.name, c11);
-                DecodeResult<A12> d12 = DecodeResult.decode(object, c12.name, c12);
-                DecodeResult<A13> d13 = DecodeResult.decode(object, c13.name, c13);
-                DecodeResult<A14> d14 = DecodeResult.decode(object, c14.name, c14);
-                DecodeResult<A15> d15 = DecodeResult.decode(object, c15.name, c15);
-                DecodeResult<A16> d16 = DecodeResult.decode(object, c16.name, c16);
-                DecodeResult<A17> d17 = DecodeResult.decode(object, c17.name, c17);
-                DecodeResult<A18> d18 = DecodeResult.decode(object, c18.name, c18);
-                DecodeResult<A19> d19 = DecodeResult.decode(object, c19.name, c19);
-                DecodeResult<A20> d20 = DecodeResult.decode(object, c20.name, c20);
-                DecodeResult<A21> d21 = DecodeResult.decode(object, c21.name, c21);
-                DecodeResult<A22> d22 = DecodeResult.decode(object, c22.name, c22);
-                DecodeResult<A23> d23 = DecodeResult.decode(object, c23.name, c23);
-                DecodeResult<A24> d24 = DecodeResult.decode(object, c24.name, c24);
-                DecodeResult<A25> d25 = DecodeResult.decode(object, c25.name, c25);
-                DecodeResult<A26> d26 = DecodeResult.decode(object, c26.name, c26);
-                DecodeResult<A27> d27 = DecodeResult.decode(object, c27.name, c27);
-                return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 -> d12.flatMap(v12 -> d13.flatMap(v13 -> d14.flatMap(v14 -> d15.flatMap(v15 -> d16.flatMap(v16 -> d17.flatMap(v17 -> d18.flatMap(v18 -> d19.flatMap(v19 -> d20.flatMap(v20 -> d21.flatMap(v21 -> d22.flatMap(v22 -> d23.flatMap(v23 -> d24.flatMap(v24 -> d25.flatMap(v25 -> d26.flatMap(v26 -> d27.flatMap(v27 ->  DecodeResult.ok(iso.reverseGet(new Tuple27<>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27))))))))))))))))))))))))))))));
+                return Decoders.decode(
+                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
+                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
+                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
+                        FieldDecoder.typedFieldOf(c26.name, c26.codec),
+                        FieldDecoder.typedFieldOf(c27.name, c27.codec),
+                        Tuple27::new
+                ).fromJson(value).map(iso::reverseGet);
             }
 
             @Override

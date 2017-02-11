@@ -21,11 +21,14 @@ def codecTemplate(arity: Int) = {
   val codecParams = arities.map(i => s"NamedJsonCodec<A$i> c$i").mkString(", ")
   val toJson = arities.map(i => s"                Json.tuple(c$i.name, c$i.toJson(tuple._$i))").mkString(",\n")
 
-  val fromValues = arities.map(i => s"            DecodeResult<A$i> d$i = DecodeResult.decode(object, c$i.name, c$i);").mkString("\n")
+  /*val fromValues = arities.map(i => s"            DecodeResult<A$i> d$i = DecodeResult.decode(object, c$i.name, c$i);").mkString("\n")
 
   val decode = arities.map(i => s"d$i.flatMap(v$i -> ").mkString("")
   val decodeEndParams = arities.map(_ => ")").mkString
   val decodeValues = arities.map(i => s"v$i").mkString(", ")
+
+  */
+  val fromJson = arities.map(i => s"                FieldDecoder.typedFieldOf(c$i.name, c$i.codec)").mkString("", ",\n", ",")
 
   val toStringMap = arities.map(i => s"                map.put(c$i.name, c$i.codec.toString())").mkString("", ";\n", ";")
 
@@ -43,9 +46,10 @@ def codecTemplate(arity: Int) = {
      |
      |        @Override
      |        public DecodeResult<TT> fromJson(Json.JValue value) {
-     |            Json.JObject object = value.asJsonObjectOrEmpty();
-     |$fromValues
-     |            return $decode DecodeResult.ok(iso.reverseGet(new Tuple$arity<>($decodeValues))$decodeEndParams);
+     |            return Decoders.decode(
+     |$fromJson
+     |                Tuple$arity::new
+     |            ).fromJson(value).map(iso::reverseGet);
      |        }
      |
      |        @Override
