@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec;
 
-public class IdIso<A> implements Iso<A, A> {
+public final class IdIso<A> implements Iso<A, A> {
     @Override
     public A reverseGet(A a) {
         return a;

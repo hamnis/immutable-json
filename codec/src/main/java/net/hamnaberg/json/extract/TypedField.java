@@ -4,13 +4,15 @@ import javaslang.Value;
 import javaslang.collection.List;
 import javaslang.control.Option;
 import javaslang.control.Try;
-import net.hamnaberg.json.codec.Codecs;
+import net.hamnaberg.json.codec.Decoders;
 import net.hamnaberg.json.codec.DecodeJson;
 import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;
+import net.hamnaberg.json.codec.FieldDecoder;
 
 import java.util.function.Function;
 
+@Deprecated
 public abstract class TypedField<A> {
     public final String name;
     public final DecodeJson<A> decoder;
@@ -42,28 +44,32 @@ public abstract class TypedField<A> {
         return narrow(a -> Try.of(() -> f.apply(a)));
     }
 
+    public FieldDecoder<A> toFieldDecoder() {
+        return FieldDecoder.typedFieldOf(name, decoder);
+    }
+
     public TypedField<A> withDefaultValue(A defaultValue) {
         return typedFieldOf(this.name, this.decoder, Option.some(defaultValue));
     }
 
     public static TypedField<String> TString(String name) {
-        return typedFieldOf(name, Codecs.CString, Option.none());
+        return typedFieldOf(name, Decoders.DString, Option.none());
     }
 
     public static TypedField<Integer> TInt(String name) {
-        return typedFieldOf(name, Codecs.CInt, Option.none());
+        return typedFieldOf(name, Decoders.DInt, Option.none());
     }
 
     public static TypedField<Double> TDouble(String name) {
-        return typedFieldOf(name, Codecs.CDouble, Option.none());
+        return typedFieldOf(name, Decoders.DDouble, Option.none());
     }
 
     public static TypedField<Long> TLong(String name) {
-        return typedFieldOf(name, Codecs.CLong, Option.none());
+        return typedFieldOf(name, Decoders.DLong, Option.none());
     }
 
     public static TypedField<Boolean> TBoolean(String name) {
-        return typedFieldOf(name, Codecs.CBoolean, Option.none());
+        return typedFieldOf(name, Decoders.DBoolean, Option.none());
     }
 
     public static TJArrayField TJArray(String name) {
