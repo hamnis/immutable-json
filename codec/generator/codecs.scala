@@ -19,16 +19,8 @@ def codecTemplate(arity: Int) = {
   val arities = (1 to arity)
   val types = arities.map(i => s"A$i").mkString(", ")
   val codecParams = arities.map(i => s"NamedJsonCodec<A$i> c$i").mkString(", ")
-  val toJson = arities.map(i => s"                Json.tuple(c$i.name, c$i.toJson(tuple._$i))").mkString(",\n")
-
-  /*val fromValues = arities.map(i => s"            DecodeResult<A$i> d$i = DecodeResult.decode(object, c$i.name, c$i);").mkString("\n")
-
-  val decode = arities.map(i => s"d$i.flatMap(v$i -> ").mkString("")
-  val decodeEndParams = arities.map(_ => ")").mkString
-  val decodeValues = arities.map(i => s"v$i").mkString(", ")
-
-  */
-  val fromJson = arities.map(i => s"                FieldDecoder.typedFieldOf(c$i.name, c$i.codec)").mkString("", ",\n", ",")
+  val toJson = arities.map(i => s"                c$i.toFieldEncoder()").mkString(",\n")
+  val fromJson = arities.map(i => s"                c$i.toFieldDecoder()").mkString("", ",\n", ",")
 
   val toStringMap = arities.map(i => s"                map.put(c$i.name, c$i.codec.toString())").mkString("", ";\n", ";")
 
@@ -38,10 +30,9 @@ def codecTemplate(arity: Int) = {
      |
      |        @Override
      |        public Json.JValue toJson(TT value) {
-     |            Tuple$arity<$types> tuple = iso.get(value);
-     |            return Json.jObject(
+     |            return Encoders.encode(
      |$toJson
-     |            );
+     |            ).toJson(iso.get(value));
      |        }
      |
      |        @Override
@@ -64,10 +55,10 @@ def codecTemplate(arity: Int) = {
 
 }
 
-
+/*
 (2 to 27).foreach{ i =>
   println(ofTemplate(i))
-}
+}*/
 
 (2 to 27).foreach{ i =>
   println(codecTemplate(i))

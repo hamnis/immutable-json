@@ -245,23 +245,23 @@ public abstract class Codecs {
         };
     }
 
+
     public static <TT, A1, A2> JsonCodec<TT> codec(Iso<TT, Tuple2<A1, A2>> iso, NamedJsonCodec<A1> c1, NamedJsonCodec<A2> c2) {
         return new JsonCodec<TT>() {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple2<A1, A2> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
                         Tuple2::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -282,20 +282,19 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple3<A1, A2, A3> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
                         Tuple3::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -317,22 +316,21 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple4<A1, A2, A3, A4> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
                         Tuple4::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -355,24 +353,23 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple5<A1, A2, A3, A4, A5> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
                         Tuple5::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -396,26 +393,25 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple6<A1, A2, A3, A4, A5, A6> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
                         Tuple6::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -440,28 +436,27 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple7<A1, A2, A3, A4, A5, A6, A7> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
                         Tuple7::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -487,30 +482,29 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple8<A1, A2, A3, A4, A5, A6, A7, A8> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
                         Tuple8::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -537,32 +531,31 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
                         Tuple9::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -590,34 +583,33 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple10<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
                         Tuple10::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -646,36 +638,35 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple11<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
                         Tuple11::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -705,38 +696,37 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple12<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
                         Tuple12::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -767,40 +757,39 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
                         Tuple13::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -832,42 +821,41 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
                         Tuple14::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -900,44 +888,43 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
                         Tuple15::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -971,46 +958,45 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple16<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
                         Tuple16::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1045,48 +1031,47 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
                         Tuple17::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1122,50 +1107,49 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple18<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
                         Tuple18::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1202,52 +1186,51 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple19<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
                         Tuple19::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1285,54 +1268,53 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple20<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
                         Tuple20::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1371,56 +1353,55 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple21<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
                         Tuple21::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1460,58 +1441,57 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple22<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
                         Tuple22::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1552,60 +1532,59 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple23<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22)),
-                        Json.tuple(c23.name, c23.toJson(tuple._23))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder(),
+                        c23.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
-                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
+                        c23.toFieldDecoder(),
                         Tuple23::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1647,62 +1626,61 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple24<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22)),
-                        Json.tuple(c23.name, c23.toJson(tuple._23)),
-                        Json.tuple(c24.name, c24.toJson(tuple._24))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder(),
+                        c23.toFieldEncoder(),
+                        c24.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
-                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
-                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
+                        c23.toFieldDecoder(),
+                        c24.toFieldDecoder(),
                         Tuple24::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1745,64 +1723,63 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple25<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22)),
-                        Json.tuple(c23.name, c23.toJson(tuple._23)),
-                        Json.tuple(c24.name, c24.toJson(tuple._24)),
-                        Json.tuple(c25.name, c25.toJson(tuple._25))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder(),
+                        c23.toFieldEncoder(),
+                        c24.toFieldEncoder(),
+                        c25.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
-                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
-                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
-                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
+                        c23.toFieldDecoder(),
+                        c24.toFieldDecoder(),
+                        c25.toFieldDecoder(),
                         Tuple25::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1846,66 +1823,65 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple26<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22)),
-                        Json.tuple(c23.name, c23.toJson(tuple._23)),
-                        Json.tuple(c24.name, c24.toJson(tuple._24)),
-                        Json.tuple(c25.name, c25.toJson(tuple._25)),
-                        Json.tuple(c26.name, c26.toJson(tuple._26))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder(),
+                        c23.toFieldEncoder(),
+                        c24.toFieldEncoder(),
+                        c25.toFieldEncoder(),
+                        c26.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
-                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
-                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
-                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
-                        FieldDecoder.typedFieldOf(c26.name, c26.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
+                        c23.toFieldDecoder(),
+                        c24.toFieldDecoder(),
+                        c25.toFieldDecoder(),
+                        c26.toFieldDecoder(),
                         Tuple26::new
                 ).fromJson(value).map(iso::reverseGet);
             }
@@ -1950,68 +1926,67 @@ public abstract class Codecs {
 
             @Override
             public Json.JValue toJson(TT value) {
-                Tuple27<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27> tuple = iso.get(value);
-                return Json.jObject(
-                        Json.tuple(c1.name, c1.toJson(tuple._1)),
-                        Json.tuple(c2.name, c2.toJson(tuple._2)),
-                        Json.tuple(c3.name, c3.toJson(tuple._3)),
-                        Json.tuple(c4.name, c4.toJson(tuple._4)),
-                        Json.tuple(c5.name, c5.toJson(tuple._5)),
-                        Json.tuple(c6.name, c6.toJson(tuple._6)),
-                        Json.tuple(c7.name, c7.toJson(tuple._7)),
-                        Json.tuple(c8.name, c8.toJson(tuple._8)),
-                        Json.tuple(c9.name, c9.toJson(tuple._9)),
-                        Json.tuple(c10.name, c10.toJson(tuple._10)),
-                        Json.tuple(c11.name, c11.toJson(tuple._11)),
-                        Json.tuple(c12.name, c12.toJson(tuple._12)),
-                        Json.tuple(c13.name, c13.toJson(tuple._13)),
-                        Json.tuple(c14.name, c14.toJson(tuple._14)),
-                        Json.tuple(c15.name, c15.toJson(tuple._15)),
-                        Json.tuple(c16.name, c16.toJson(tuple._16)),
-                        Json.tuple(c17.name, c17.toJson(tuple._17)),
-                        Json.tuple(c18.name, c18.toJson(tuple._18)),
-                        Json.tuple(c19.name, c19.toJson(tuple._19)),
-                        Json.tuple(c20.name, c20.toJson(tuple._20)),
-                        Json.tuple(c21.name, c21.toJson(tuple._21)),
-                        Json.tuple(c22.name, c22.toJson(tuple._22)),
-                        Json.tuple(c23.name, c23.toJson(tuple._23)),
-                        Json.tuple(c24.name, c24.toJson(tuple._24)),
-                        Json.tuple(c25.name, c25.toJson(tuple._25)),
-                        Json.tuple(c26.name, c26.toJson(tuple._26)),
-                        Json.tuple(c27.name, c27.toJson(tuple._27))
-                );
+                return Encoders.encode(
+                        c1.toFieldEncoder(),
+                        c2.toFieldEncoder(),
+                        c3.toFieldEncoder(),
+                        c4.toFieldEncoder(),
+                        c5.toFieldEncoder(),
+                        c6.toFieldEncoder(),
+                        c7.toFieldEncoder(),
+                        c8.toFieldEncoder(),
+                        c9.toFieldEncoder(),
+                        c10.toFieldEncoder(),
+                        c11.toFieldEncoder(),
+                        c12.toFieldEncoder(),
+                        c13.toFieldEncoder(),
+                        c14.toFieldEncoder(),
+                        c15.toFieldEncoder(),
+                        c16.toFieldEncoder(),
+                        c17.toFieldEncoder(),
+                        c18.toFieldEncoder(),
+                        c19.toFieldEncoder(),
+                        c20.toFieldEncoder(),
+                        c21.toFieldEncoder(),
+                        c22.toFieldEncoder(),
+                        c23.toFieldEncoder(),
+                        c24.toFieldEncoder(),
+                        c25.toFieldEncoder(),
+                        c26.toFieldEncoder(),
+                        c27.toFieldEncoder()
+                ).toJson(iso.get(value));
             }
 
             @Override
             public DecodeResult<TT> fromJson(Json.JValue value) {
                 return Decoders.decode(
-                        FieldDecoder.typedFieldOf(c1.name, c1.codec),
-                        FieldDecoder.typedFieldOf(c2.name, c2.codec),
-                        FieldDecoder.typedFieldOf(c3.name, c3.codec),
-                        FieldDecoder.typedFieldOf(c4.name, c4.codec),
-                        FieldDecoder.typedFieldOf(c5.name, c5.codec),
-                        FieldDecoder.typedFieldOf(c6.name, c6.codec),
-                        FieldDecoder.typedFieldOf(c7.name, c7.codec),
-                        FieldDecoder.typedFieldOf(c8.name, c8.codec),
-                        FieldDecoder.typedFieldOf(c9.name, c9.codec),
-                        FieldDecoder.typedFieldOf(c10.name, c10.codec),
-                        FieldDecoder.typedFieldOf(c11.name, c11.codec),
-                        FieldDecoder.typedFieldOf(c12.name, c12.codec),
-                        FieldDecoder.typedFieldOf(c13.name, c13.codec),
-                        FieldDecoder.typedFieldOf(c14.name, c14.codec),
-                        FieldDecoder.typedFieldOf(c15.name, c15.codec),
-                        FieldDecoder.typedFieldOf(c16.name, c16.codec),
-                        FieldDecoder.typedFieldOf(c17.name, c17.codec),
-                        FieldDecoder.typedFieldOf(c18.name, c18.codec),
-                        FieldDecoder.typedFieldOf(c19.name, c19.codec),
-                        FieldDecoder.typedFieldOf(c20.name, c20.codec),
-                        FieldDecoder.typedFieldOf(c21.name, c21.codec),
-                        FieldDecoder.typedFieldOf(c22.name, c22.codec),
-                        FieldDecoder.typedFieldOf(c23.name, c23.codec),
-                        FieldDecoder.typedFieldOf(c24.name, c24.codec),
-                        FieldDecoder.typedFieldOf(c25.name, c25.codec),
-                        FieldDecoder.typedFieldOf(c26.name, c26.codec),
-                        FieldDecoder.typedFieldOf(c27.name, c27.codec),
+                        c1.toFieldDecoder(),
+                        c2.toFieldDecoder(),
+                        c3.toFieldDecoder(),
+                        c4.toFieldDecoder(),
+                        c5.toFieldDecoder(),
+                        c6.toFieldDecoder(),
+                        c7.toFieldDecoder(),
+                        c8.toFieldDecoder(),
+                        c9.toFieldDecoder(),
+                        c10.toFieldDecoder(),
+                        c11.toFieldDecoder(),
+                        c12.toFieldDecoder(),
+                        c13.toFieldDecoder(),
+                        c14.toFieldDecoder(),
+                        c15.toFieldDecoder(),
+                        c16.toFieldDecoder(),
+                        c17.toFieldDecoder(),
+                        c18.toFieldDecoder(),
+                        c19.toFieldDecoder(),
+                        c20.toFieldDecoder(),
+                        c21.toFieldDecoder(),
+                        c22.toFieldDecoder(),
+                        c23.toFieldDecoder(),
+                        c24.toFieldDecoder(),
+                        c25.toFieldDecoder(),
+                        c26.toFieldDecoder(),
+                        c27.toFieldDecoder(),
                         Tuple27::new
                 ).fromJson(value).map(iso::reverseGet);
             }

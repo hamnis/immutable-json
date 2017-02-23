@@ -19,6 +19,14 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
         return new NamedJsonCodec<>(name, codec);
     }
 
+    public FieldDecoder<A> toFieldDecoder() {
+        return FieldDecoder.typedFieldOf(name, codec);
+    }
+
+    public FieldEncoder<A> toFieldEncoder() {
+        return FieldEncoder.typedFieldOf(name, codec);
+    }
+
     @Override
     public DecodeResult<A> fromJson(Json.JValue value) {
         return codec.fromJson(value);
