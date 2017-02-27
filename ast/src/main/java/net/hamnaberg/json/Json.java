@@ -651,10 +651,10 @@ public abstract class Json {
     }
 
     public static final class JObject extends JValue implements Iterable<Tuple2<String, JValue>> {
-        public final Map<String, JValue> underlying;
+        public final Map<String, JValue> value;
 
         private JObject(Map<String, JValue> value) {
-            this.underlying = Objects.requireNonNull(value, "You may not supply a null Map to JObject");
+            this.value = Objects.requireNonNull(value, "You may not supply a null Map to JObject");
         }
 
         @Override
@@ -664,19 +664,19 @@ public abstract class Json {
 
             JObject jObject = (JObject) o;
 
-            return underlying.toJavaMap().equals(jObject.underlying.toJavaMap());
+            return value.toJavaMap().equals(jObject.value.toJavaMap());
 
         }
 
         @Override
         public int hashCode() {
-            return underlying.hashCode();
+            return value.hashCode();
         }
 
         @Override
         public String toString() {
             return "JObject{" +
-                    "value=" + underlying +
+                    "value=" + value +
                     '}';
         }
 
@@ -691,11 +691,11 @@ public abstract class Json {
         }
 
         public Map<String, JValue> getValue() {
-            return underlying;
+            return value;
         }
 
         public Option<JValue> get(String name) {
-            return underlying.get(name);
+            return value.get(name);
         }
 
         public <A> Option<A> getAs(String name, Function<JValue, Option<A>> f) {
@@ -751,11 +751,11 @@ public abstract class Json {
         }
 
         public Json.JObject filter(BiPredicate<String, JValue> predicate) {
-            return Json.jObject(underlying.filter(e -> predicate.test(e._1, e._2)));
+            return Json.jObject(value.filter(e -> predicate.test(e._1, e._2)));
         }
 
         public Json.JObject filterKeys(Predicate<String> predicate) {
-            return Json.jObject(underlying.filter(t -> predicate.test(t._1)));
+            return Json.jObject(value.filter(t -> predicate.test(t._1)));
         }
 
         public Json.JObject filterNot(BiPredicate<String, JValue> predicate) {
@@ -763,7 +763,7 @@ public abstract class Json {
         }
 
         public boolean isEmpty() {
-            return underlying.isEmpty();
+            return value.isEmpty();
         }
 
         public boolean containsKey(String key) {
@@ -771,19 +771,19 @@ public abstract class Json {
         }
 
         public boolean containsValue(JValue value) {
-            return this.underlying.containsValue(value);
+            return this.value.containsValue(value);
         }
 
         public List<JValue> values() {
-            return List.ofAll(underlying.values());
+            return List.ofAll(value.values());
         }
 
         public void forEach(BiConsumer<String, JValue> f) {
-            underlying.forEach(f);
+            value.forEach(f);
         }
 
         public <B> List<B> mapToList(BiFunction<String, JValue, B> f) {
-            return underlying.map(e -> f.apply(e._1, e._2)).toList();
+            return value.map(e -> f.apply(e._1, e._2)).toList();
         }
 
         public <B> List<B> mapValues(Function<JValue, B> f) {
@@ -795,24 +795,24 @@ public abstract class Json {
         }
 
         public int size() {
-            return underlying.size();
+            return value.size();
         }
 
         public Set<String> keySet() {
-            return underlying.keySet();
+            return value.keySet();
         }
 
         @Override
         public Iterator<Tuple2<String, JValue>> iterator() {
-            return underlying.iterator();
+            return value.iterator();
         }
 
         public Stream<Tuple2<String, JValue>> stream() {
-            return underlying.toJavaStream();
+            return value.toJavaStream();
         }
 
         public JObject put(String name, JValue value) {
-            return new JObject(underlying.put(
+            return new JObject(this.value.put(
                     Objects.requireNonNull(name, "Name in JObject.put may not be null"),
                     Objects.requireNonNull(value, String.format("Value for name %s JObject.put may not be null", name))
             ));
@@ -850,14 +850,14 @@ public abstract class Json {
             if (other.isEmpty()) return this;
             if (this == other) return this;
 
-            java.util.Map<String, JValue> copy = this.underlying.toJavaMap();
-            copy.putAll(other.underlying.toJavaMap());
+            java.util.Map<String, JValue> copy = this.value.toJavaMap();
+            copy.putAll(other.value.toJavaMap());
             return jObject(copy);
         }
 
         public JObject remove(String name) {
             if (containsKey(name)) {
-                return new JObject(this.underlying.remove(name));
+                return new JObject(this.value.remove(name));
             }
             return this;
         }

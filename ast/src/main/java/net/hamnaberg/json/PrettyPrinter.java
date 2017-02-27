@@ -81,7 +81,7 @@ public final class PrettyPrinter {
         writeStartObject(state);
 
         int index = 0;
-        Map<String, Json.JValue> map = obj.underlying;
+        Map<String, Json.JValue> map = obj.value;
         for (Tuple2<String, Json.JValue> entry : map) {
             if (entry._2.isNull() && dropNullKeys) {
                 continue;
