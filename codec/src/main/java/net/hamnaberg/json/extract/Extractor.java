@@ -7,6 +7,10 @@ import net.hamnaberg.json.Json;
 import java.util.function.Function;
 
 @FunctionalInterface
+@Deprecated
+/**
+ * @deprecated Use {@link DecodeJson} with {@link net.hamnaberg.json.codec.FieldDecoder}s instead.
+ */
 public interface Extractor<A> extends Function<Json.JObject, DecodeResult<A>> {
 
     default DecodeJson<A> decoder() {

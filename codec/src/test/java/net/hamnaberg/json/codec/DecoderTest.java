@@ -1,16 +1,15 @@
-package net.hamnaberg.json.extract;
+package net.hamnaberg.json.codec;
 
 import javaslang.collection.List;
 import javaslang.control.Option;
-import net.hamnaberg.json.codec.DecodeResult;
 import org.junit.Test;
 
-
 import static net.hamnaberg.json.Json.*;
-import static net.hamnaberg.json.extract.TypedField.*;
-import static org.junit.Assert.*;
+import static net.hamnaberg.json.codec.FieldDecoder.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class ExtractorsTest {
+public class DecoderTest {
 
     JObject json = jObject(
             tuple("name", jString("Erlend")),
@@ -30,22 +29,22 @@ public class ExtractorsTest {
 
     @Test
     public void extractPerson() {
-        Extractor<Address> addressExtractor = Extractors.extract(
+        DecodeJson<Address> addressExtractor = Decoders.decode(
                 TString("street"),
                 TString("city"),
                 TString("country").map(Country::new),
                 Address::new
         );
 
-        TypedField<List<String>> interests = TJArray("interests").mapToOptionalList(JValue::asString);
-        Extractor<Person> extractor = Extractors.extract(
+        FieldDecoder<List<String>> interests = TJArray("interests").mapToOptionalList(JValue::asString);
+        DecodeJson<Person> extractor = Decoders.decode(
                 TString("name"),
                 TInt("age"),
-                TJObject("address").extractTo(addressExtractor),
+                TJObject("address").decodeTo(addressExtractor),
                 interests,
                 Person::new
         );
-        DecodeResult<Person> personOpt = extractor.apply(json);
+        DecodeResult<Person> personOpt = extractor.fromJson(json);
         assertTrue(personOpt.isOk());
         personOpt.forEach(person -> {
             assertEquals("Erlend", person.name);
@@ -57,21 +56,21 @@ public class ExtractorsTest {
 
     @Test
     public void extractPerson2() {
-        Extractor<Address> addressExtractor = Extractors.extract(
+        DecodeJson<Address> addressExtractor = Decoders.decode(
                 TString("street"),
                 TString("city"),
                 TString("country").map(Country::new),
                 Address::new
         );
 
-        Extractor<Person2> extractor = Extractors.extract(
+        DecodeJson<Person2> extractor = Decoders.decode(
                 TString("name"),
                 TInt("age"),
-                TOptional("address", addressExtractor.decoder()),
+                TOptional("address", addressExtractor),
                 Person2::new
         );
-        DecodeResult<Person2> personOpt = extractor.apply(json);
-        DecodeResult<Person2> person2Opt = extractor.apply(json2);
+        DecodeResult<Person2> personOpt = extractor.fromJson(json);
+        DecodeResult<Person2> person2Opt = extractor.fromJson(json2);
         assertTrue(personOpt.isOk());
         assertTrue(person2Opt.isOk());
         personOpt.forEach(person -> {

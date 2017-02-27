@@ -1,39 +1,28 @@
 #!/usr/bin/env scala
 
-val arities = ('A' to 'I').toList
+def template(arity: Int)= {
+  val functionName = if (arity < 9) "Function" else "F"
+  val arities = (1 to arity)
+  val types = arities.map(i => s"A$i").mkString(", ")
+  val params = arities.map(i => s"TypedField<A$i> tf$i").mkString(", ")
+  val apply = arities.map(i => s"d$i.flatMap(v$i -> ").mkString("")
+  //val extractions = arities.map(i => s"     DecodeResult<A$i> d$i = DecodeResult.decode(object, tf$i.name, tf$i.decoder);").mkString("\n")
+  //val endParams = arities.map(_ => ")").mkString
+  //val values = arities.map(i => s"v$i").mkString(", ")
+  val mappings = arities.map(i => s"tf$i.toFieldDecoder()").mkString(", ")
 
-val zipped = arities.zipWithIndex
+  s"""|public static <TT, $types> Extractor<TT> extract($params, $functionName$arity<$types, TT> func) {
+     |  return (object) -> {
+     |    return Decoders.decode($mappings, func).fromJson(object);
+     |  };
+     |}
+     |""".stripMargin
+}
 
-for((_, index) <- zipped) {
-  val arity = index
-  if (arity > 0) {
-    val currentArity = arities.take(index)
-    val zippedCurrent = currentArity.zipWithIndex.map{case (a, i) => a -> (i+1)}
-    val genericsArgs = currentArity.mkString(", ")
 
-    val typeArgs = zippedCurrent.map{case (a,i) => s"TypedField<$a> f${i}"}.mkString(", ")
-    val fromJsonOpt = zippedCurrent.map{case (a, i) =>
-      s"Option<$a> o${Character.toLowerCase(a)} = object.getAs(f${i}.name, f${i}.decoder::fromJson);"
-    }.mkString("\n      ")
+//println(template(2))
 
-    val fromJson = {
-      val fromJsonflatMap = zippedCurrent.map{case (a, i) =>
-        val lower = Character.toLowerCase(a)
-        s"o${lower}.flatMap(${lower} -> "
-      }
-      val finalFromJsonMap = currentArity.map{ a => Character.toLowerCase(a) }.mkString(s"Option.of(func.apply(", ", ", "))")
-      fromJsonflatMap.mkString("", "",  finalFromJsonMap + (")" * arity) + ";")
-    }
 
-    val template =
-      s"""
-         |public static <TT, ${genericsArgs}> Extractor<TT> extract$arity($typeArgs, Function$arity<$genericsArgs, TT> func) {
-         |    return (object) -> {
-         |      $fromJsonOpt
-         |      return $fromJson
-         |    };
-         |}
-      """.stripMargin
-    println(template)
-  }
+(2 to 27).foreach{ i =>
+  println(template(i))
 }

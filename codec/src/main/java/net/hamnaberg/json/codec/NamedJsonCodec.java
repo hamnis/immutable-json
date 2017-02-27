@@ -5,7 +5,7 @@ import net.hamnaberg.json.Json;
 
 public class NamedJsonCodec<A> implements JsonCodec<A> {
     public final String name;
-    private final JsonCodec<A> codec;
+    final JsonCodec<A> codec;
 
     private NamedJsonCodec(String name, JsonCodec<A> codec) {
         this.name = name;
@@ -17,6 +17,14 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
             return new NamedJsonCodec<>(name, ((NamedJsonCodec<A>) codec).codec);
         }
         return new NamedJsonCodec<>(name, codec);
+    }
+
+    public FieldDecoder<A> toFieldDecoder() {
+        return FieldDecoder.typedFieldOf(name, codec);
+    }
+
+    public FieldEncoder<A> toFieldEncoder() {
+        return FieldEncoder.typedFieldOf(name, codec);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
 
     @Override
     public String toString() {
-        return "DefaultNamedJsonCodec{" +
+        return "NamedJsonCodec{" +
                 "name='" + name + '\'' +
                 ", codec=" + codec +
                 '}';
