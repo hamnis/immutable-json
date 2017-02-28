@@ -1,5 +1,6 @@
 package net.hamnaberg.json.codec;
 
+import javaslang.collection.List;
 import javaslang.control.Option;
 import javaslang.control.Try;
 import net.hamnaberg.json.Json;
@@ -38,6 +39,10 @@ public interface DecodeJson<A> {
             return new DecodeJsonWithDefault<>(((DecodeJsonWithDefault<A>)this).delegate, defaultValue);
         }
         return new DecodeJsonWithDefault<>(this, defaultValue);
+    }
+
+    static <A> DecodeJson<List<A>> sequence(List<DecodeJson<A>> toSequence) {
+        return value -> DecodeResult.sequence(toSequence.map(d -> d.fromJson(value)));
     }
 
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {
