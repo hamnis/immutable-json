@@ -1,5 +1,6 @@
 package net.hamnaberg.json.codec;
 
+import javaslang.control.Option;
 import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 
@@ -31,7 +32,11 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
     }
 
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder) {
-        return new DefaultJsonCodec<>(decoder, encoder);
+        return lift(decoder, encoder, Option.none());
+    }
+
+    static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder, Option<A> defaultValue) {
+        return new DefaultJsonCodec<>(defaultValue.map(decoder::withDefaultValue).getOrElse(decoder), encoder);
     }
 
     static <A> JsonCodec<A> codecWithDefault(JsonCodec<A> codec, A defaultValue) {
