@@ -14,7 +14,7 @@ public interface DecodeJson<A> {
     }
 
     default A fromJsonUnsafe(Json.JValue value) {
-        return fromJson(value).toOption().getOrElse((A)null);
+        return fromJson(value).unsafeGet();
     }
 
     default <B> DecodeJson<B> map(Function<A, B> f) {
