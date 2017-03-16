@@ -1,5 +1,9 @@
 package net.hamnaberg.json.codec;
 
+import javaslang.Tuple;
+import javaslang.Tuple2;
+import javaslang.collection.List;
+import javaslang.control.Either;
 import javaslang.control.Option;
 import javaslang.control.Try;
 import net.hamnaberg.json.Json;
@@ -38,6 +42,22 @@ public interface DecodeJson<A> {
             return new DecodeJsonWithDefault<>(((DecodeJsonWithDefault<A>)this).delegate, defaultValue);
         }
         return new DecodeJsonWithDefault<>(this, defaultValue);
+    }
+
+    default DecodeJson<A> or(DecodeJson<A> orElse) {
+        return value -> fromJson(value).fold(a -> a, ignore -> orElse.fromJson(value));
+    }
+
+    default <B> DecodeJson<Tuple2<A, B>> and(DecodeJson<B> next) {
+        return value -> {
+            DecodeResult<A> aRes = fromJson(value);
+            DecodeResult<B> bRes = next.fromJson(value);
+            return aRes.flatMap(a -> bRes.map(b -> Tuple.of(a, b)));
+        };
+    }
+
+    static <A> DecodeJson<List<A>> sequence(List<DecodeJson<A>> toSequence) {
+        return value -> DecodeResult.sequence(toSequence.map(d -> d.fromJson(value)));
     }
 
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {
