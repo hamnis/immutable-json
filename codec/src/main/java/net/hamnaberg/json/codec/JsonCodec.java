@@ -31,15 +31,16 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return NamedJsonCodec.of(name, this);
     }
 
+    @Override
+    default JsonCodec<A> withDefaultValue(A defaultValue) {
+        return lift(new DecodeJsonWithDefault<>(this, defaultValue), this);
+    }
+
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder) {
         return lift(decoder, encoder, Option.none());
     }
 
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder, Option<A> defaultValue) {
         return new DefaultJsonCodec<>(defaultValue.map(decoder::withDefaultValue).getOrElse(decoder), encoder);
-    }
-
-    static <A> JsonCodec<A> codecWithDefault(JsonCodec<A> codec, A defaultValue) {
-        return lift(codec.withDefaultValue(defaultValue), codec);
     }
 }
