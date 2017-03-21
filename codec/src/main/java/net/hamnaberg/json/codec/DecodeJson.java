@@ -9,6 +9,8 @@ import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public interface DecodeJson<A> {
     DecodeResult<A> fromJson(Json.JValue value);
@@ -45,7 +47,11 @@ public interface DecodeJson<A> {
     }
 
     default DecodeJson<A> or(DecodeJson<A> orElse) {
-        return value -> fromJson(value).fold(a -> a, ignore -> orElse.fromJson(value));
+        return value -> fromJson(value).fold(a -> a, aFail -> orElse.fromJson(value).fold(a -> a, bFail -> DecodeResult.fail(aFail.message + " " + bFail.message)));
+    }
+
+    default <L> DecodeJson<Either<L, A>> either(DecodeJson<L> left) {
+        return either(left, this);
     }
 
     default <B> DecodeJson<Tuple2<A, B>> and(DecodeJson<B> next) {
@@ -56,8 +62,20 @@ public interface DecodeJson<A> {
         };
     }
 
+    default DecodeJson<A> filter(Predicate<A> p) {
+        return filter(p, () -> "Filter failed");
+    }
+
+    default DecodeJson<A> filter(Predicate<A> p, Supplier<String> errorSupplier) {
+        return value -> fromJson(value).filter(p, errorSupplier);
+    }
+
     static <A> DecodeJson<List<A>> sequence(List<DecodeJson<A>> toSequence) {
         return value -> DecodeResult.sequence(toSequence.map(d -> d.fromJson(value)));
+    }
+
+    static <L, R> DecodeJson<Either<L, R>> either(DecodeJson<L> left, DecodeJson<R> right) {
+        return right.<Either<L, R>>map(Either::right).or(left.map(Either::left));
     }
 
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {

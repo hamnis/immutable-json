@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class DecodeResult<A> {
@@ -17,6 +18,14 @@ public abstract class DecodeResult<A> {
 
     public final <B> DecodeResult<B> map(Function<A, B> f) {
         return fold(okValue -> ok(f.apply(okValue.value)), fail -> fail(fail.message));
+    }
+
+    public final DecodeResult<A> filter(Predicate<A> p) {
+        return filter(p, () -> "Filter failed");
+    }
+
+    public final DecodeResult<A> filter(Predicate<A> p, Supplier<String> errorSupplier) {
+        return flatMap(a -> p.test(a) ? ok(a) : fail(errorSupplier.get()));
     }
 
     public final void forEach(Consumer<A> f) {
