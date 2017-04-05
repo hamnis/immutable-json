@@ -6,14 +6,23 @@ import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.util.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.net.URI;
+import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.function.Function;
 
 public abstract class Codecs {
     private Codecs(){}
+
+    public static final JsonCodec<Json.JValue> CIdentity = new DefaultJsonCodec<>(
+            Decoders.DIdentity,
+            Encoders.EIdentity,
+            "Identity"
+    );
 
     public static final JsonCodec<String> CString = new DefaultJsonCodec<>(
             Decoders.DString,
@@ -49,6 +58,35 @@ public abstract class Codecs {
             Decoders.DBoolean,
             Encoders.EBoolean,
             "Boolean"
+    );
+
+    public static final JsonCodec<URI> CURI = new DefaultJsonCodec<>(
+            Decoders.DURI,
+            Encoders.EURI,
+            "URI"
+    );
+
+    public static final JsonCodec<URL> CURL = new DefaultJsonCodec<>(
+            Decoders.DURL,
+            Encoders.EURL,
+            "URL"
+    );
+    public static final JsonCodec<UUID> CUUID = new DefaultJsonCodec<>(
+            Decoders.DUUID,
+            Encoders.EUUID,
+            "UUID"
+    );
+
+    public static final JsonCodec<ZonedDateTime> CISODateTimeUTC = new DefaultJsonCodec<>(
+            Decoders.DISODateTimeUTC,
+            Encoders.EISODateTimeUTC,
+            "ZonedDateTime"
+    );
+
+    public static final JsonCodec<Instant> CISOInstantUTC = new DefaultJsonCodec<>(
+            Decoders.DISOInstantUTC,
+            Encoders.EISOInstantUTC,
+            "Instant"
     );
 
     public static <A> JsonCodec<A> nullCodec() {

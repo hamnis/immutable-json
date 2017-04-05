@@ -3,21 +3,44 @@ package net.hamnaberg.json.codec;
 import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
+import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.util.*;
 
+import java.net.URI;
+import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class Decoders {
     private Decoders(){}
 
+    public static final DecodeJson<Json.JValue> DIdentity = DecodeResult::ok;
     public static final DecodeJson<String> DString = value -> DecodeResult.fromOption(value.asString());
     public static final DecodeJson<Number> DNumber = value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
     public static final DecodeJson<Long> DLong = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
     public static final DecodeJson<Integer> DInt = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
     public static final DecodeJson<Double> DDouble = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
     public static final DecodeJson<Boolean> DBoolean = value -> DecodeResult.fromOption(value.asBoolean());
+    public static final DecodeJson<UUID> DUUID = DString.tryMap(s -> Try.of(() -> UUID.fromString(s)));
+    public static final DecodeJson<URI> DURI = DString.tryMap(s -> Try.of(() -> URI.create(s)));
+    public static final DecodeJson<URL> DURL = DURI.tryMap(uri -> Try.of(uri::toURL));
+    public static final DecodeJson<ZonedDateTime> DISODateTimeUTC = zonedDateTimeDecoder(DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneOffset.UTC));
+    public static final DecodeJson<Instant> DISOInstantUTC = instantDecoder(DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC));
+
+    public static DecodeJson<ZonedDateTime> zonedDateTimeDecoder(DateTimeFormatter formatter) {
+        return DString.tryMap(s -> Try.of(() -> ZonedDateTime.parse(s, formatter)));
+    }
+
+    public static DecodeJson<Instant> instantDecoder(DateTimeFormatter formatter) {
+        return DString.tryMap(s -> Try.of(() -> formatter.parse(s, Instant::from)));
+    }
 
     public static <A> DecodeJson<List<A>> listDecoder(DecodeJson<A> decoder) {
         return value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(decoder::fromJson));

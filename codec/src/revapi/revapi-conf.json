@@ -5,6 +5,17 @@
         "enabled": true
       }
     },
-    "ignore": []
+    "ignore": [
+      {
+        "code": "java.method.finalMethodAddedToNonFinalClass",
+        "new": "method net.hamnaberg.json.codec.DecodeResult<A> net.hamnaberg.json.codec.DecodeResult<A>::filter(java.util.function.Predicate<A>)",
+        "justification": "Not extensible."
+      },
+      {
+        "code": "java.method.finalMethodAddedToNonFinalClass",
+        "new": "method net.hamnaberg.json.codec.DecodeResult<A> net.hamnaberg.json.codec.DecodeResult<A>::filter(java.util.function.Predicate<A>, java.util.function.Supplier<java.lang.String>)",
+        "justification": "Not extensible."
+      }
+    ]
   }
 }

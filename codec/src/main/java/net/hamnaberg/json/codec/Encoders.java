@@ -3,21 +3,43 @@ package net.hamnaberg.json.codec;
 import javaslang.*;
 import javaslang.collection.List;
 import javaslang.control.Option;
+import javaslang.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.util.*;
 
+import java.net.URI;
+import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class Encoders {
     private Encoders(){}
 
+    public static final EncodeJson<Json.JValue> EIdentity = j -> j;
     public static final EncodeJson<String> EString = Json::jString;
     public static final EncodeJson<Number> ENumber = Json::jNumber;
     public static final EncodeJson<Long> ELong = Json::jNumber;
     public static final EncodeJson<Integer> EInt = Json::jNumber;
     public static final EncodeJson<Double> EDouble = Json::jNumber;
     public static final EncodeJson<Boolean> EBoolean = Json::jBoolean;
+    public static final EncodeJson<URI> EURI = EString.contramap(URI::toString);
+    public static final EncodeJson<URL> EURL = EString.contramap(URL::toExternalForm);
+    public static final EncodeJson<UUID> EUUID = EString.contramap(UUID::toString);
+    public static final EncodeJson<ZonedDateTime> EISODateTimeUTC = zonedDateTimeEncoder(DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneOffset.UTC));
+    public static final EncodeJson<Instant> EISOInstantUTC = instantEncoder(DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC));
+
+    public static EncodeJson<ZonedDateTime> zonedDateTimeEncoder(DateTimeFormatter formatter) {
+        return EString.contramap(formatter::format);
+    }
+
+    public static EncodeJson<Instant> instantEncoder(DateTimeFormatter formatter) {
+        return EString.contramap(formatter::format);
+    }
 
     public static <A> EncodeJson<List<A>> listEncoder(EncodeJson<A> encoder) {
         return value -> Json.jArray(value.map(encoder::toJson));

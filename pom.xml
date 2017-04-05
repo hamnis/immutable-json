@@ -210,7 +210,7 @@
           </dependency>
         </dependencies>
         <configuration>
-          <oldVersion>4.0.0</oldVersion>
+          <oldVersion>5.0.0</oldVersion>
           <analysisConfigurationFiles>
             <file>src/revapi/revapi-conf.json</file>
           </analysisConfigurationFiles>
