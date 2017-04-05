@@ -55,12 +55,30 @@ public abstract class Decoders {
         return decoder.withDefaultValue(Option.none());
     }
 
+    @Deprecated
+    /**
+     *
+     * @deprecated use {@link #optionalDecoder(DecodeJson)} instead
+     */
     public static <A> DecodeJson<Optional<A>> OptionalCodec(DecodeJson<A> underlying) {
+        return optionalDecoder(underlying);
+    }
+
+    @Deprecated
+    /**
+     *
+     * @deprecated use {@link #objectDecoder} instead
+     */
+    public static <A> DecodeJson<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder) {
+        return json -> decoder.apply(json.asJsonObjectOrEmpty());
+    }
+
+    public static <A> DecodeJson<Optional<A>> optionalDecoder(DecodeJson<A> underlying) {
         DecodeJson<Optional<A>> decoder = OptionDecoder(underlying).map(Option::toJavaOptional);
         return decoder.withDefaultValue(Optional.empty());
     }
 
-    public static <A> DecodeJson<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder) {
+    public static <A> DecodeJson<A> objectDecoder(Function<Json.JObject, DecodeResult<A>> decoder) {
         return json -> decoder.apply(json.asJsonObjectOrEmpty());
     }
 
