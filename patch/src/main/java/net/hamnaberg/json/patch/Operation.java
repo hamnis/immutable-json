@@ -8,7 +8,7 @@ import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Operation {
+class Operation {
     enum Op {
         Add("add"),
         Remove("remove"),
