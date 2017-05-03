@@ -3,13 +3,19 @@ package net.hamnaberg.json.javax;
 import net.hamnaberg.json.Json;
 
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.json.stream.JsonParser;
 
-public class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
+public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
+    private final EnumSet<JsonParser.Event> scalarSet =
+            EnumSet.of(
+                    JsonParser.Event.VALUE_STRING,
+                    JsonParser.Event.VALUE_NUMBER,
+                    JsonParser.Event.VALUE_TRUE,
+                    JsonParser.Event.VALUE_FALSE,
+                    JsonParser.Event.VALUE_NULL
+            );
+
     @Override
     protected Json.JValue parseImpl(Reader reader) throws Exception {
         JsonParser parser = javax.json.Json.createParser(reader);
@@ -46,16 +52,7 @@ public class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
     }
 
     private boolean isScalar(JsonParser.Event event) {
-        switch (event) {
-            case VALUE_STRING:
-            case VALUE_NUMBER:
-            case VALUE_TRUE:
-            case VALUE_FALSE:
-            case VALUE_NULL:
-                return true;
-            default:
-                return false;
-        }
+        return scalarSet.contains(event);
     }
 
     private Json.JArray handleArray(JsonParser parser) {

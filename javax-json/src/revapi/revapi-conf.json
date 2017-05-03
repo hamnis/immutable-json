@@ -35,6 +35,25 @@
         "fieldName": "serialVersionUID",
         "elementKind": "field",
         "justification": "Not my problem"
+      },
+      {
+        "code": "java.class.nowFinal",
+        "old": "class net.hamnaberg.json.javax.JavaxJsonParser",
+        "new": "class net.hamnaberg.json.javax.JavaxJsonParser",
+        "oldModifiers": "public",
+        "newModifiers": "public final",
+        "package": "net.hamnaberg.json.javax",
+        "classSimpleName": "JavaxJsonParser",
+        "elementKind": "class",
+        "justification": "Never intended for extension"
+      },
+      {
+        "code": "java.class.removed",
+        "old": "class org.glassfish.json.JsonFactory",
+        "package": "org.glassfish.json",
+        "classSimpleName": "JsonFactory",
+        "elementKind": "class",
+        "justification": "Forgotten to remove"
       }
     ]
   }
