@@ -1,6 +1,7 @@
 package net.hamnaberg.json.codec;
 
 import javaslang.collection.List;
+import javaslang.control.Either;
 import javaslang.control.Option;
 import net.hamnaberg.json.Json;
 
@@ -33,7 +34,7 @@ public abstract class DecodeResult<A> {
     }
 
     public final <B> DecodeResult<B> flatMap(Function<A, DecodeResult<B>> f) {
-        return fold(okValue -> f.apply(okValue.value), fail -> fail(fail.message));
+        return fold(f.compose(Ok::getValue), fail -> fail(fail.message));
     }
 
     public final A getOrElse(Supplier<A> orElse) {
@@ -52,6 +53,10 @@ public abstract class DecodeResult<A> {
         return fold(Ok::getValue, e -> {
             throw new NoSuchElementException(e.message);
         });
+    }
+
+    public final Either<String, A> toEither() {
+        return fold(ok -> Either.right(ok.value), err -> Either.left(err.message));
     }
 
     public final Option<A> toOption() {
