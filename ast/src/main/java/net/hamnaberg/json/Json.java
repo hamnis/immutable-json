@@ -270,6 +270,25 @@ public abstract class Json {
         public final boolean isBoolean() { return asJsonBoolean().isDefined(); }
         public final boolean isNumber() { return asJsonNumber().isDefined(); }
 
+        public final boolean isScalar() {
+            return fold(j -> true, j -> true, j -> true, j -> false, j -> false, () -> true);
+        }
+
+        public final JValue mapToJson(Function<JValue, JValue> f) {
+            return f.apply(this);
+        }
+
+        public final Option<String> scalarToString() {
+            return fold(
+                    j -> Option.some(j.value),
+                    j -> Option.some(String.valueOf(j.value)),
+                    j -> Option.some(j.value.toString()),
+                    emptyOption(),
+                    emptyOption(),
+                    () -> Option.some("null")
+            );
+        }
+
         /**
          * Perform a deep merge of this JSON value with another JSON value.
          * <p>
