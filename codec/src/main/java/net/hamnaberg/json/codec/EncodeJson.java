@@ -15,4 +15,8 @@ public interface EncodeJson<A> {
     default <B> EncodeJson<B> contramap(Function<B, A> f) {
         return value -> this.toJson(f.apply(value));
     }
+
+    default FieldEncoder<A> fieldEncoder(String name) {
+        return FieldEncoder.typedFieldOf(name, this);
+    }
 }

@@ -62,6 +62,10 @@ public interface DecodeJson<A> {
         };
     }
 
+    default FieldDecoder<A> fieldDecoder(String name) {
+        return FieldDecoder.typedFieldOf(name, this);
+    }
+
     default DecodeJson<A> filter(Predicate<A> p) {
         return filter(p, () -> "Filter failed");
     }
