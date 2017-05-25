@@ -216,13 +216,13 @@
           </analysisConfigurationFiles>
           <failOnMissingConfigurationFiles>false</failOnMissingConfigurationFiles>
         </configuration>
-        <executions>
+        <!--<executions>
           <execution>
             <goals>
               <goal>check</goal>
             </goals>
           </execution>
-        </executions>
+        </executions>-->
       </plugin>
     </plugins>
   </build>
