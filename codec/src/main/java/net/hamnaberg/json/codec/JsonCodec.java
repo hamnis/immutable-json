@@ -11,6 +11,10 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return JsonCodec.lift(value -> fromJson(value).map(f), value -> toJson(g.apply(value)));
     }
 
+    default <B> JsonCodec<B> xmapi(Iso<A, B> iso) {
+        return xmap(iso::get, iso::reverseGet);
+    }
+
     default <B> JsonCodec<B> narrow(Function<A, Try<B>> f, Function<B, A> g) {
         return JsonCodec.lift(tryMap(f), value -> toJson(g.apply(value)));
     }
