@@ -198,7 +198,7 @@ public abstract class Json {
 
         /**
          * This is NOT the json representation. For that you
-         * will need to use JsonSerializer in the core module.
+         * will need to use {@link #pretty(PrettyPrinter)}.
          *
          * @return as String describing the data structure.
          */
@@ -274,7 +274,7 @@ public abstract class Json {
             return fold(j -> true, j -> true, j -> true, j -> false, j -> false, () -> true);
         }
 
-        public final JValue mapToJson(Function<JValue, JValue> f) {
+        public final JValue mapJson(Function<JValue, JValue> f) {
             return f.apply(this);
         }
 
