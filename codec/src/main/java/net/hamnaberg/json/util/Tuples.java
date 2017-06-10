@@ -1,6 +1,6 @@
 package net.hamnaberg.json.util;
 
-import javaslang.*;
+import io.vavr.*;
 
 public final class Tuples {
     private Tuples() {

@@ -35,8 +35,8 @@
       <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.javaslang</groupId>
-      <artifactId>javaslang</artifactId>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
     </dependency>
   </dependencies>
 </project>
