@@ -1,7 +1,7 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.control.Option;
-import javaslang.control.Try;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 
 import java.util.function.Function;

@@ -1,7 +1,7 @@
 package net.hamnaberg.json.pointer;
 
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 import java.util.ArrayList;
 

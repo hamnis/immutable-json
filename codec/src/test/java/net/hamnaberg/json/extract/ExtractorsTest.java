@@ -1,7 +1,7 @@
 package net.hamnaberg.json.extract;
 
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import net.hamnaberg.json.codec.DecodeResult;
 import org.junit.Test;
 

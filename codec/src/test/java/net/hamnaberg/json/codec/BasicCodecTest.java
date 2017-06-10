@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.control.Try;
+import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec.reflection;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

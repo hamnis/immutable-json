@@ -1,8 +1,8 @@
 package net.hamnaberg.json;
 
 
-import javaslang.Tuple2;
-import javaslang.collection.Map;
+import io.vavr.Tuple2;
+import io.vavr.collection.Map;
 
 public final class PrettyPrinter {
     private final static int INDENT_LEVELS = 16;

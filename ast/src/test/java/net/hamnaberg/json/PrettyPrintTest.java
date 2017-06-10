@@ -1,6 +1,6 @@
 package net.hamnaberg.json;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

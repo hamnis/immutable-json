@@ -1,7 +1,7 @@
 
 package net.hamnaberg.json.util;
 
-import javaslang.collection.List;
+import io.vavr.collection.List;
 
 public final class Tuple12<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> {
     public final A1 _1;
@@ -55,4 +55,3 @@ public final class Tuple12<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> {
         return toList().hashCode();
     }
 }
-    
