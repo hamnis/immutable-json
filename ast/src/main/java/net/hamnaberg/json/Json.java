@@ -183,6 +183,22 @@ public abstract class Json {
         return tuple(name, jBoolean(value));
     }
 
+    public static Tuple2<String, JValue> nullableTuple(String name, String value) {
+        return tuple(name, Option.of(value).map(Json::jString));
+    }
+
+    public static Tuple2<String, JValue> nullableTuple(String name, BigDecimal value) {
+        return tuple(name, Option.of(value).map(Json::jNumber));
+    }
+
+    public static Tuple2<String, JValue> nullableTuple(String name, Number value) {
+        return tuple(name, Option.of(value).map(Json::jNumber));
+    }
+
+    public static Tuple2<String, JValue> nullableTuple(String name, JValue value) {
+        return tuple(name, Option.of(value));
+    }
+
     private static <A, B> Function<A, Option<B>> emptyOption() {
         return (ignore) -> Option.none();
     }
