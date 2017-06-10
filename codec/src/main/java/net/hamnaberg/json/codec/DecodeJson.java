@@ -82,6 +82,10 @@ public interface DecodeJson<A> {
         return right.<Either<L, R>>map(Either::right).or(left.map(Either::left));
     }
 
+    static <A> DecodeJson<A> successful(A value) {
+        return ignore -> DecodeResult.ok(value);
+    }
+
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {
         final DecodeJson<A> delegate;
         private final A defaultValue;
