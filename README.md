@@ -15,6 +15,64 @@
  [![Build Status](https://travis-ci.org/hamnis/immutable-json.png)](https://travis-ci.org/hamnis/immutable-json)
  [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
 
+## Usage
+
+A short example showing encoding/decoding of a few different types.
+Note the `List` type is from `io.vavr.collections` to have an immutable List type.
+
+
+```java
+    static class Event {
+        public final UUID ID;
+        public final List<String> tags;
+        public final String message;
+
+        public Event(UUID ID, List<String> tags, String message) {
+            this.ID = ID;
+            this.tags = tags;
+            this.message = message;
+        }
+    }
+
+    @Test
+    public void testEvent() throws Exception {
+        String expected = "{"+
+                      "\"id\":\"1e2f28ff-54b5-4ad4-9edb-36712dc52202\","+
+                      "\"tags\":[\"travel\",\"code\"],"+
+                      "\"message\":\"This is a test\""+
+                   "}";
+
+        // create a decoder for our Event
+        DecodeJson<Event> decode = Decoders.decode(
+                FieldDecoder.TString("id").tryNarrow(UUID::fromString),
+                FieldDecoder.TJArray("tags")
+                        .mapToList(jValue -> jValue.asString().getOrElse(""))
+                        .withDefaultValue(List.empty()),
+                FieldDecoder.TString("message"),
+                Event::new
+        );
+
+        // create an encoder that will encode our Event into json
+        EncodeJson<Event> encode = Encoders.encode(
+                FieldEncoder.typedFieldOf("id", Encoders.EString.contramap(UUID::toString)),
+                FieldEncoder.EList("tags", Encoders.EString),
+                FieldEncoder.EString("message")
+        ).contramap(event -> Tuple.of(event.ID, event.tags, event.message));
+
+        // a codec can both encode and decode a value
+        JsonCodec<Event> codec = JsonCodec.lift(decode, encode);
+
+        // parse raw json with help of jackson parser
+        Json.JValue jValue = new JacksonStreamingParser().parse(expected);
+
+        String json = codec
+                .toJson(codec.fromJson(jValue).unsafeGet())
+                .nospaces();
+
+        assertThat(json).isEqualTo(expected);
+    }
+```
+
 
 ## Where can we find this
 
