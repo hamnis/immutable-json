@@ -2,8 +2,8 @@ package net.hamnaberg.json.util;
 
 import javaslang.*;
 
-public final class ExtTuples {
-    private ExtTuples() {
+public final class Tuples {
+    private Tuples() {
     }
 
     public static <A1, A2> Tuple2<A1, A2> of(A1 _1, A2 _2) {
