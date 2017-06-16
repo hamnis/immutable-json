@@ -18,7 +18,7 @@
 ## Usage
 
 A short example showing encoding/decoding of a few different types.
-Note the `List` type is from `io.vavr.collections` to have an immutable List type.
+Note the `List` type is from `javaslang.collection` to have an immutable List type.
 
 
 ```java
@@ -82,49 +82,49 @@ Note the `List` type is from `io.vavr.collections` to have an immutable List typ
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>5.1.0</version>
+   <version>5.2.0</version>
  </dependency>
  ```
 
@@ -135,46 +135,52 @@ Note the `List` type is from `io.vavr.collections` to have an immutable List typ
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
   </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>5.2.0-SNAPSHOT</version>
+   <version>5.3.0-SNAPSHOT</version>
  </dependency>
   ```
 
 ## License
 
  We are using the Apache License 2.0
+
+
+## Contributing 
+All contributions are welcome! Documentation is sorely lacking and really needs some love.
+If you find a missing combinator, please open a PR or issue so we can discuss it.
+Any bugs or missing features are also welcome. 
