@@ -6,7 +6,9 @@
  If you want to program in functional style in Java, you want
  your data types to be immutable and efficient.
 
- Unfortunately there are no default immutable collections in Java, so we try to use javaslang where appropriate.
+ Unfortunately there are no default immutable collections in Java, so we try to use [Vavr](http://www.vavr.io/) where appropriate.
+ Vavr only has tuples and functions up to arity 8. We have increased the tuple and function arity to 27. 
+ Have a look in the `net.hamnaberg.json.util` in the `codec` package. 
 
 
 ## Status
@@ -19,6 +21,7 @@
 
 A short example showing encoding/decoding of a few different types.
 Note the `List` type is from `io.vavr.collection` to have an immutable List type.
+Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple constructors up to `Tuple27`
 
 
 ```java
@@ -57,7 +60,7 @@ Note the `List` type is from `io.vavr.collection` to have an immutable List type
                 FieldEncoder.typedFieldOf("id", Encoders.EString.contramap(UUID::toString)),
                 FieldEncoder.EList("tags", Encoders.EString),
                 FieldEncoder.EString("message")
-        ).contramap(event -> Tuple.of(event.ID, event.tags, event.message));
+        ).contramap(event -> Tuples.of(event.ID, event.tags, event.message));
 
         // a codec can both encode and decode a value
         JsonCodec<Event> codec = JsonCodec.lift(decode, encode);
