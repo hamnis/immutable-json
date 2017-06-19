@@ -17,7 +17,22 @@
  [![Build Status](https://travis-ci.org/hamnis/immutable-json.png)](https://travis-ci.org/hamnis/immutable-json)
  [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
 
-## Usage
+
+#Community
+
+## Adopters
+
+Are you using immutable-json? Please consider opening a pull request to list your organization here:
+
+* Your Organization here
+
+## Related projects
+
+* [Siren.java](https://github.com/arktekk/siren.java)
+* [Collection JSON (Java)](https://github.com/hamnis/json-collection)
+
+
+# Usage
 
 A short example showing encoding/decoding of a few different types.
 Note the `List` type is from `io.vavr.collection` to have an immutable List type.
@@ -76,8 +91,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
     }
 ```
 
-
-## Where can we find this
+# Where can we find this
 
  Using maven, you download it from Maven Central using these coordinates:
 
