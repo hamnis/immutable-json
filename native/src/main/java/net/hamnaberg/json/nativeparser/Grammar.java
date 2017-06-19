@@ -23,7 +23,7 @@
  */
 package net.hamnaberg.json.nativeparser;
 
-import javaslang.Tuple2;
+import io.vavr.Tuple2;
 import org.javafp.data.*;
 import org.javafp.parsecj.*;
 

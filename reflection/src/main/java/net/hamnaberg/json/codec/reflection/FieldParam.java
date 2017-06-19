@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec.reflection;
 
-import javaslang.control.Option;
+import io.vavr.control.Option;
 
 import java.lang.reflect.Field;
 

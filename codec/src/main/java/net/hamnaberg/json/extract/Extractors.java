@@ -1,6 +1,6 @@
 package net.hamnaberg.json.extract;
 
-import javaslang.*;
+import io.vavr.*;
 import net.hamnaberg.json.codec.Decoders;
 import net.hamnaberg.json.util.*;
 

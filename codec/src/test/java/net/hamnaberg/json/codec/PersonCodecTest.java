@@ -1,8 +1,8 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.Tuple2;
-import javaslang.Tuple3;
-import javaslang.control.Option;
+import io.vavr.Tuple2;
+import io.vavr.Tuple3;
+import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 

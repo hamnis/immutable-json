@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec.reflection;
 
-import javaslang.control.Option;
+import io.vavr.control.Option;
 
 public interface Param {
     Option<Object> get(Object value);

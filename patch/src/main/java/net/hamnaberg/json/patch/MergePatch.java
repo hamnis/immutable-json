@@ -1,7 +1,7 @@
 package net.hamnaberg.json.patch;
 
-import javaslang.collection.Map;
-import javaslang.control.Option;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.Json.*;
 

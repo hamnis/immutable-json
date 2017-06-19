@@ -4,47 +4,6 @@
       "ignore": {
         "enabled": true
       }
-    },
-    "ignore": [
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Map<K, V>.serialVersionUID",
-        "new": "field javaslang.collection.Map<K, V>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Map",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Seq<T>.serialVersionUID",
-        "new": "field javaslang.collection.Seq<T>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Seq",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Set<T>.serialVersionUID",
-        "new": "field javaslang.collection.Set<T>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Set",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.class.nonPublicPartOfAPI",
-        "old": "class net.hamnaberg.json.internal.org.javafp.parsecj.LazyMessage<S extends java.lang.Object>",
-        "new": "class net.hamnaberg.json.internal.org.javafp.parsecj.LazyMessage<S extends java.lang.Object>",
-        "package": "net.hamnaberg.json.internal.org.javafp.parsecj",
-        "classSimpleName": "LazyMessage",
-        "elementKind": "class",
-        "justification": "Embedded lib, not under my control"
-      }
-    ]
+    }
   }
 }

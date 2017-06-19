@@ -4,49 +4,6 @@
       "ignore": {
         "enabled": true
       }
-    },
-    "ignore": [
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Map<K, V>.serialVersionUID",
-        "new": "field javaslang.collection.Map<K, V>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Map",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Seq<T>.serialVersionUID",
-        "new": "field javaslang.collection.Seq<T>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Seq",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.field.serialVersionUIDUnchanged",
-        "old": "field javaslang.collection.Set<T>.serialVersionUID",
-        "new": "field javaslang.collection.Set<T>.serialVersionUID",
-        "package": "javaslang.collection",
-        "classSimpleName": "Set",
-        "fieldName": "serialVersionUID",
-        "elementKind": "field",
-        "justification": "Not my problem"
-      },
-      {
-        "code": "java.class.visibilityReduced",
-        "old": "class net.hamnaberg.json.patch.Operation",
-        "new": "class net.hamnaberg.json.patch.Operation",
-        "oldVisibility": "public",
-        "newVisibility": "package",
-        "package": "net.hamnaberg.json.patch",
-        "classSimpleName": "Operation",
-        "elementKind": "class",
-        "justification": "Should always have been hidden"
-      }
-    ]
+    }
   }
 }

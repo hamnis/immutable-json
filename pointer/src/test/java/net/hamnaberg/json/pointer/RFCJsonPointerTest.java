@@ -1,6 +1,6 @@
 package net.hamnaberg.json.pointer;
 
-import javaslang.control.Option;
+import io.vavr.control.Option;
 import net.hamnaberg.json.*;
 import org.junit.Test;
 

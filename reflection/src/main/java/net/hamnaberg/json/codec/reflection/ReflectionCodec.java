@@ -1,7 +1,7 @@
 package net.hamnaberg.json.codec.reflection;
 
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import net.hamnaberg.json.codec.Codecs;
 import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;

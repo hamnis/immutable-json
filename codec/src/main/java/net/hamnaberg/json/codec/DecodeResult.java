@@ -1,8 +1,8 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.collection.List;
-import javaslang.control.Either;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
 import java.util.NoSuchElementException;

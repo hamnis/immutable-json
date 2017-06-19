@@ -1,9 +1,9 @@
 package net.hamnaberg.json.extract;
 
-import javaslang.Value;
-import javaslang.collection.List;
-import javaslang.control.Option;
-import javaslang.control.Try;
+import io.vavr.Value;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import net.hamnaberg.json.codec.Decoders;
 import net.hamnaberg.json.codec.DecodeJson;
 import net.hamnaberg.json.codec.DecodeResult;

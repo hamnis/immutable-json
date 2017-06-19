@@ -3,8 +3,8 @@ package net.hamnaberg.json.patch;
 
 import java.util.function.Function;
 
-import javaslang.collection.List;
-import javaslang.control.Option;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.pointer.JsonPointer;
 

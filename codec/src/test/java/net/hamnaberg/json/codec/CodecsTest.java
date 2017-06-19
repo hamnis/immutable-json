@@ -1,6 +1,6 @@
 package net.hamnaberg.json.codec;
 
-import javaslang.*;
+import io.vavr.*;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 

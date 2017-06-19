@@ -1,6 +1,6 @@
 package net.hamnaberg.json.patch;
 
-import javaslang.control.Option;
+import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.jackson.JacksonStreamingParser;
 import org.junit.Test;

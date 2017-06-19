@@ -1,15 +1,15 @@
 package net.hamnaberg.json;
 
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 
-import javaslang.collection.List;
-import javaslang.collection.Set;
-import javaslang.collection.LinkedHashMap;
-import javaslang.collection.Map;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
+import io.vavr.collection.LinkedHashMap;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import java.util.Map.Entry;
-import javaslang.control.Option;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

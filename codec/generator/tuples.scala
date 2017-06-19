@@ -16,7 +16,7 @@ def applyTemplate(arity: Int) = {
   s"""
      |package net.hamnaberg.json.util;
      |
-     |import javaslang.collection.List;
+     |import io.vavr.collection.List;
      |
      |public final class Tuple$arity<$types> {
      |$fields

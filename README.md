@@ -6,7 +6,9 @@
  If you want to program in functional style in Java, you want
  your data types to be immutable and efficient.
 
- Unfortunately there are no default immutable collections in Java, so we try to use javaslang where appropriate.
+ Unfortunately there are no default immutable collections in Java, so we try to use [Vavr](http://www.vavr.io/) where appropriate.
+ Vavr only has tuples and functions up to arity 8. We have increased the tuple and function arity to 27. 
+ Have a look in the `net.hamnaberg.json.util` in the `codec` package. 
 
 
 ## Status
@@ -15,10 +17,26 @@
  [![Build Status](https://travis-ci.org/hamnis/immutable-json.png)](https://travis-ci.org/hamnis/immutable-json)
  [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
 
-## Usage
+
+#Community
+
+## Adopters
+
+Are you using immutable-json? Please consider opening a pull request to list your organization here:
+
+* Your Organization here
+
+## Related projects
+
+* [Siren.java](https://github.com/arktekk/siren.java)
+* [Collection JSON (Java)](https://github.com/hamnis/json-collection)
+
+
+# Usage
 
 A short example showing encoding/decoding of a few different types.
-Note the `List` type is from `javaslang.collection` to have an immutable List type.
+Note the `List` type is from `io.vavr.collection` to have an immutable List type.
+Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple constructors up to `Tuple27`
 
 
 ```java
@@ -57,7 +75,7 @@ Note the `List` type is from `javaslang.collection` to have an immutable List ty
                 FieldEncoder.typedFieldOf("id", Encoders.EString.contramap(UUID::toString)),
                 FieldEncoder.EList("tags", Encoders.EString),
                 FieldEncoder.EString("message")
-        ).contramap(event -> Tuple.of(event.ID, event.tags, event.message));
+        ).contramap(event -> Tuples.of(event.ID, event.tags, event.message));
 
         // a codec can both encode and decode a value
         JsonCodec<Event> codec = JsonCodec.lift(decode, encode);
@@ -73,8 +91,7 @@ Note the `List` type is from `javaslang.collection` to have an immutable List ty
     }
 ```
 
-
-## Where can we find this
+# Where can we find this
 
  Using maven, you download it from Maven Central using these coordinates:
 
@@ -135,43 +152,43 @@ Note the `List` type is from `javaslang.collection` to have an immutable List ty
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
   </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>5.3.0-SNAPSHOT</version>
+   <version>6.0.0-SNAPSHOT</version>
  </dependency>
   ```
 
