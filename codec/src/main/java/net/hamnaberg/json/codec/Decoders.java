@@ -46,31 +46,13 @@ public abstract class Decoders {
         return value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(decoder::fromJson));
     }
 
-    public static <A> DecodeJson<java.util.List<A>> javaListDecoder(DecodeJson<A> codec) {
-        return listDecoder(codec).map(List::toJavaList);
+    public static <A> DecodeJson<java.util.List<A>> javaListDecoder(DecodeJson<A> decoder) {
+        return listDecoder(decoder).map(List::toJavaList);
     }
 
-    public static <A> DecodeJson<Option<A>> OptionDecoder(DecodeJson<A> codec) {
-        DecodeJson<Option<A>> decoder = value -> value.isNull() ? DecodeResult.ok(Option.none()) : DecodeResult.ok(codec.fromJson(value).toOption());
-        return decoder.withDefaultValue(Option.none());
-    }
-
-    @Deprecated
-    /**
-     *
-     * @deprecated use {@link #optionalDecoder(DecodeJson)} instead
-     */
-    public static <A> DecodeJson<Optional<A>> OptionalCodec(DecodeJson<A> underlying) {
-        return optionalDecoder(underlying);
-    }
-
-    @Deprecated
-    /**
-     *
-     * @deprecated use {@link #objectDecoder} instead
-     */
-    public static <A> DecodeJson<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder) {
-        return json -> decoder.apply(json.asJsonObjectOrEmpty());
+    public static <A> DecodeJson<Option<A>> OptionDecoder(DecodeJson<A> decoder) {
+        DecodeJson<Option<A>> outerDecoder = value -> value.isNull() ? DecodeResult.ok(Option.none()) : DecodeResult.ok(decoder.fromJson(value).toOption());
+        return outerDecoder.withDefaultValue(Option.none());
     }
 
     public static <A> DecodeJson<Optional<A>> optionalDecoder(DecodeJson<A> underlying) {

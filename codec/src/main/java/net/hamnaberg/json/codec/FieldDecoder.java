@@ -1,11 +1,10 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.Value;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import net.hamnaberg.json.Json;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class FieldDecoder<A> {
@@ -63,16 +62,20 @@ public abstract class FieldDecoder<A> {
         return typedFieldOf(name, Decoders.DBoolean, Option.none());
     }
 
-    public static TJArrayField TJArray(String name) {
-        return new TJArrayField(name);
-    }
-
-    public static TJObjectField TJObject(String name) {
-        return new TJObjectField(name);
-    }
-
     public static <B> FieldDecoder<Option<B>> TOptional(String name, DecodeJson<B> decoder) {
-        return typedFieldOf(name, json -> DecodeResult.ok(decoder.fromJson(json).toOption()), Option.some(Option.none()));
+        return typedFieldOf(name, Decoders.OptionDecoder(decoder), Option.some(Option.none()));
+    }
+
+    public static <B> FieldDecoder<Optional<B>> TJavaOptional(String name, DecodeJson<B> decoder) {
+        return TOptional(name, decoder).map(Option::toJavaOptional);
+    }
+
+    public static <B> FieldDecoder<List<B>> TList(String name, DecodeJson<B> decoder) {
+        return typedFieldOf(name, Decoders.listDecoder(decoder));
+    }
+
+    public static <B> FieldDecoder<java.util.List<B>> TJavaList(String name, DecodeJson<B> decoder) {
+        return typedFieldOf(name, Decoders.javaListDecoder(decoder));
     }
 
     public static <B> FieldDecoder<B> typedFieldOf(String name, DecodeJson<B> decoder) {
@@ -81,28 +84,5 @@ public abstract class FieldDecoder<A> {
 
     public static <B> FieldDecoder<B> typedFieldOf(String name, DecodeJson<B> decoder, Option<B> defaultValue) {
         return new FieldDecoder<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder)) {};
-    }
-
-    public static class TJArrayField extends FieldDecoder<Json.JArray> {
-        public TJArrayField(String name) {
-            super(name, v -> DecodeResult.fromOption(v.asJsonArray()));
-        }
-
-        public <B> FieldDecoder<List<B>> mapToList(Function<Json.JValue, B> f) {
-            return typedFieldOf(name, decoder.map(ja -> ja.mapToList(f)), Option.none());
-        }
-        public <B> FieldDecoder<List<B>> mapToOptionalList(Function<Json.JValue, Option<B>> f) {
-            return typedFieldOf(name, decoder.map(ja -> ja.flatMapToList(f.andThen(Value::toList))), Option.none());
-        }
-    }
-
-    public static class TJObjectField extends FieldDecoder<Json.JObject> {
-        public TJObjectField(String name) {
-            super(name, v -> DecodeResult.fromOption(v.asJsonObject()));
-        }
-
-        public <B> FieldDecoder<B> decodeTo(DecodeJson<B> mapper) {
-            return typedFieldOf(name, json -> mapper.fromJson(json.asJsonObjectOrEmpty()), Option.none());
-        }
     }
 }

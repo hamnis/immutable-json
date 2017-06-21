@@ -36,11 +36,11 @@ public class DecoderTest {
                 Address::new
         );
 
-        FieldDecoder<List<String>> interests = TJArray("interests").mapToOptionalList(JValue::asString);
+        FieldDecoder<List<String>> interests = TList("interests", Decoders.DString);
         DecodeJson<Person> extractor = Decoders.decode(
                 TString("name"),
                 TInt("age"),
-                TJObject("address").decodeTo(addressExtractor),
+                typedFieldOf("address", addressExtractor),
                 interests,
                 Person::new
         );
