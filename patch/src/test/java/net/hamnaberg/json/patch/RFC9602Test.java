@@ -27,7 +27,7 @@ public class RFC9602Test {
     }
 
     static Collection<Object[]> buildTestSpec(InputStream stream) {
-        Json.JValue value = new JacksonStreamingParser().parse(stream);
+        Json.JValue value = new JacksonStreamingParser().parseUnsafe(stream);
         Json.JArray tests = value.asJsonArrayOrEmpty();
         return tests.mapToList(j -> {
             Json.JObject object = j.asJsonObjectOrEmpty();

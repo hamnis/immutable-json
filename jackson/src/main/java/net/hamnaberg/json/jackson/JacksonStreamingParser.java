@@ -2,7 +2,9 @@ package net.hamnaberg.json.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
+import io.vavr.control.Try;
 import net.hamnaberg.json.*;
+import net.hamnaberg.json.io.JsonParseException;
 import net.hamnaberg.json.io.JsonParser;
 
 import java.io.Reader;
@@ -14,21 +16,23 @@ public final class JacksonStreamingParser extends JsonParser {
     private final JsonFactory factory = new JsonFactory();
 
     @Override
-    protected Json.JValue parseImpl(Reader reader) throws Exception {
-        com.fasterxml.jackson.core.JsonParser parser = factory.createParser(reader);
-        JsonToken token;
-        while ((token = parser.nextToken()) != null ) {
-            if (token == JsonToken.START_OBJECT) {
-                return handleObject(parser);
+    protected Try<Json.JValue> parseImpl(Reader reader) {
+        return Try.of(() -> {
+            com.fasterxml.jackson.core.JsonParser parser = factory.createParser(reader);
+            JsonToken token;
+            while ((token = parser.nextToken()) != null ) {
+                if (token == JsonToken.START_OBJECT) {
+                    return handleObject(parser);
+                }
+                else if (token == JsonToken.START_ARRAY) {
+                    return handleArray(parser);
+                }
+                else if (token.isScalarValue()) {
+                    return handleScalarValue(parser);
+                }
             }
-            else if (token == JsonToken.START_ARRAY) {
-                return handleArray(parser);
-            }
-            else if (token.isScalarValue()) {
-                return handleScalarValue(parser);
-            }
-        }
-        throw new IllegalStateException("Nothing parsed...");
+            throw new JsonParseException("Nothing parsed");
+        });
     }
 
     private Json.JObject handleObject(com.fasterxml.jackson.core.JsonParser parser) throws Exception {

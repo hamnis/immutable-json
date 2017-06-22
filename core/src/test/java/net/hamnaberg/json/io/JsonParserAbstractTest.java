@@ -14,7 +14,7 @@ public abstract class JsonParserAbstractTest {
     public void parseItemsJson() throws Exception {
         InputStream stream = getClass().getResourceAsStream("/items.json");
         assertNotNull("Stream was null", stream);
-        Json.JValue parsed = getParser().parse(stream);
+        Json.JValue parsed = getParser().parseUnsafe(stream);
         Option<Json.JValue> firstLink = parsed.
                 asJsonObjectOrEmpty().
                 getOrDefault("collection", Json.jEmptyObject()).
