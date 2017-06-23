@@ -47,7 +47,7 @@ public interface DecodeJson<A> {
     }
 
     default DecodeJson<A> or(DecodeJson<A> orElse) {
-        return value -> fromJson(value).fold(a -> a, aFail -> orElse.fromJson(value).fold(a -> a, bFail -> DecodeResult.fail(aFail.message + " " + bFail.message)));
+        return value -> fromJson(value).fold(aFail -> orElse.fromJson(value).fold(bFail -> DecodeResult.fail(aFail + " " + bFail), DecodeResult::ok), DecodeResult::ok);
     }
 
     default <L> DecodeJson<Either<L, A>> either(DecodeJson<L> left) {
