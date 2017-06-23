@@ -20,6 +20,10 @@ public abstract class JsonParser {
         return parse(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
     }
 
+    public final Try<Json.JValue> parse(byte[] bytes) {
+        return parse(new ByteArrayInputStream(bytes));
+    }
+
     public final Try<Json.JValue> parse(String string) {
         return parse(new StringReader(string));
     }
@@ -46,6 +50,10 @@ public abstract class JsonParser {
         return parseUnsafe(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
     }
 
+    public final Json.JValue parseUnsafe(byte[] bytes) {
+        return parseUnsafe(new ByteArrayInputStream(bytes));
+    }
+
     public final Json.JValue parseUnsafe(String string) {
         return parseUnsafe(new StringReader(string));
     }
@@ -61,6 +69,10 @@ public abstract class JsonParser {
 
     public Option<Json.JValue> parseOpt(ReadableByteChannel is) {
         return parse(is).toOption();
+    }
+
+    public Option<Json.JValue> parseOpt(byte[] bytes) {
+        return parse(bytes).toOption();
     }
 
     public Option<Json.JValue> parseOpt(InputStream is) {
