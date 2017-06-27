@@ -18,7 +18,7 @@
  [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
 
 
-#Community
+# Community
 
 ## Adopters
 
