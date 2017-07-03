@@ -67,23 +67,23 @@ public abstract class JsonParser {
         });
     }
 
-    public Option<Json.JValue> parseOpt(ReadableByteChannel is) {
+    public final Option<Json.JValue> parseOpt(ReadableByteChannel is) {
         return parse(is).toOption();
     }
 
-    public Option<Json.JValue> parseOpt(byte[] bytes) {
+    public final Option<Json.JValue> parseOpt(byte[] bytes) {
         return parse(bytes).toOption();
     }
 
-    public Option<Json.JValue> parseOpt(InputStream is) {
+    public final Option<Json.JValue> parseOpt(InputStream is) {
         return parse(is).toOption();
     }
 
-    public Option<Json.JValue> parseOpt(String string) {
+    public final Option<Json.JValue> parseOpt(String string) {
         return parse(string).toOption();
     }
 
-    public Option<Json.JValue> parseOpt(Reader reader) {
+    public final Option<Json.JValue> parseOpt(Reader reader) {
         return parse(reader).toOption();
     }
 
