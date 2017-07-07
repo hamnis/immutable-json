@@ -43,4 +43,18 @@ public interface Iso<A, B> {
     static <A> Iso<A, A> identity() {
         return new IdIso<>();
     }
+
+    static <A, B> Iso<A, B> from(Function<A, B> getF, Function<B, A> reverseGetF) {
+        return new Iso<A, B>() {
+            @Override
+            public A reverseGet(B b) {
+                return reverseGetF.apply(b);
+            }
+
+            @Override
+            public B get(A a) {
+                return getF.apply(a);
+            }
+        };
+    }
 }
