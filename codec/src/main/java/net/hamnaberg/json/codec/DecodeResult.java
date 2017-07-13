@@ -97,12 +97,8 @@ public abstract class DecodeResult<A> {
         final ArrayList<A> list = new ArrayList<>();
         final ArrayList<String> errors = new ArrayList<>();
 
-        for (DecodeResult<A> decodeResult : decodeResults) {
-            if (decodeResult.isFailure()) {
-                errors.add(((Failure)decodeResult).message );
-            } else {
-                list.add(decodeResult.unsafeGet());
-            }
+        for (DecodeResult<A> res : decodeResults) {
+            res.consume(errors::add, list::add);
         }
         if (errors.isEmpty()) {
             return DecodeResult.ok(List.ofAll(list));
