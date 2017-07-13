@@ -5,6 +5,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -93,15 +94,21 @@ public abstract class DecodeResult<A> {
         if (decodeResults.isEmpty()) {
             return DecodeResult.ok(List.empty());
         }
-        List<A> list = List.empty();
+        final ArrayList<A> list = new ArrayList<>();
+        final ArrayList<String> errors = new ArrayList<>();
 
         for (DecodeResult<A> decodeResult : decodeResults) {
             if (decodeResult.isFailure()) {
-                return DecodeResult.fail("One or more results failed");
+                errors.add(((Failure)decodeResult).message );
+            } else {
+                list.add(decodeResult.unsafeGet());
             }
-            list = list.prepend(decodeResult.unsafeGet());
         }
-        return DecodeResult.ok(list.reverse());
+        if (errors.isEmpty()) {
+            return DecodeResult.ok(List.ofAll(list));
+        } else {
+            return DecodeResult.fail("One or more results failed: " + List.ofAll(errors).mkString("\n"));
+        }
     }
 
     public static <A> DecodeResult<A> ok(A value) {
