@@ -125,6 +125,10 @@ public abstract class DecodeResult<A> {
                 getOrElse(DecodeResult.fail(String.format("%s not found in %s", name, object)));
     }
 
+    public static <A> DecodeResult<A> decode(Json.JObject object, FieldDecoder<A> decoder) {
+        return decode(object, decoder.name, decoder.decoder);
+    }
+
     public static <A> DecodeResult<A> decode(Json.JObject object, String name, DecodeJson<A> decoder) {
         DecodeResult<A> result = getValue(object, name).flatMap(decoder::fromJson);
         if (result.isFailure()) {
