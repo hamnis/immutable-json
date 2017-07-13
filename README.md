@@ -62,7 +62,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
 
         // create a decoder for our Event
         DecodeJson<Event> decode = Decoders.decode(
-                FieldDecoder.TString("id").tryNarrow(UUID::fromString),
+                Decoders.DUUID.fieldDecoder("id"),
                 FieldDecoder.TList("tags", Decoders.DString).withDefaultValue(List.empty()),
                 FieldDecoder.TString("message"),
                 Event::new
@@ -70,7 +70,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
 
         // create an encoder that will encode our Event into json
         EncodeJson<Event> encode = Encoders.encode(
-                FieldEncoder.typedFieldOf("id", Encoders.EString.contramap(UUID::toString)),
+                Encoders.EUUID.fieldEncoder("id"),
                 FieldEncoder.EList("tags", Encoders.EString),
                 FieldEncoder.EString("message")
         ).contramap(event -> Tuples.of(event.ID, event.tags, event.message));
