@@ -11,33 +11,14 @@ public interface Iso<A, B> {
     }
 
     default Iso<B, A> reverse() {
-        Iso<A, B> that = this;
-        return new Iso<B, A>() {
-            @Override
-            public B reverseGet(A a) {
-                return that.get(a);
-            }
-
-            @Override
-            public A get(B b) {
-                return that.reverseGet(b);
-            }
-        };
+        return from(this::reverseGet, this::get);
     }
 
     default <C> Iso<A, C> compose(Iso<B, C> iso) {
-        Iso<A, B> that = this;
-        return new Iso<A, C>() {
-            @Override
-            public A reverseGet(C c) {
-                return that.reverseGet(iso.reverseGet(c));
-            }
+        Function<B, A> reverseGet = this::reverseGet;
+        Function<A, B> get = this::get;
 
-            @Override
-            public C get(A a) {
-                return iso.get(that.get(a));
-            }
-        };
+        return from(get.andThen(iso::get), reverseGet.compose(iso::reverseGet));
     }
 
     static <A> Iso<A, A> identity() {
