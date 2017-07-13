@@ -29,7 +29,7 @@ public interface DecodeJson<A> {
 
     default <B> DecodeJson<B> tryMap(Function<A, Try<B>> f) {
         return (json) -> this.fromJson(json).map(f).
-                flatMap(t -> t.isSuccess() ? DecodeResult.ok(t.get()) : DecodeResult.fail(t.failed().get().getMessage()));
+                flatMap(tried -> tried.map(DecodeResult::ok).getOrElseGet(tt -> DecodeResult.fail(tt.getMessage())));
     }
 
     default <B> DecodeJson<B> flatMap(Function<A, DecodeJson<B>> f) {
@@ -98,10 +98,7 @@ public interface DecodeJson<A> {
         @Override
         public DecodeResult<A> fromJson(Json.JValue value) {
             DecodeResult<A> res = delegate.fromJson(value);
-            if (res.isFailure()) {
-                return DecodeResult.ok(defaultValue);
-            }
-            return res;
+            return res.fold(ignore -> DecodeResult.ok(defaultValue), DecodeResult::ok);
         }
 
         @Override
