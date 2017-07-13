@@ -6,7 +6,7 @@ def template(arity: Int)= {
   val types = arities.map(i => s"A$i").mkString(", ")
   val params = arities.map(i => s"FieldDecoder<A$i> fd$i").mkString(", ")
   val apply = arities.map(i => s"d$i.flatMap(v$i -> ").mkString("")
-  val extractions = arities.map(i => s"      DecodeResult<A$i> d$i = DecodeResult.decode(object, fd$i.name, fd$i.decoder);").mkString("\n")
+  val extractions = arities.map(i => s"      DecodeResult<A$i> d$i = DecodeResult.decode(object, fd$i);").mkString("\n")
   val endParams = arities.map(_ => ")").mkString
   val values = arities.map(i => s"v$i").mkString(", ")
 
