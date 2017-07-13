@@ -63,9 +63,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
         // create a decoder for our Event
         DecodeJson<Event> decode = Decoders.decode(
                 FieldDecoder.TString("id").tryNarrow(UUID::fromString),
-                FieldDecoder.TJArray("tags")
-                        .mapToList(jValue -> jValue.asString().getOrElse(""))
-                        .withDefaultValue(List.empty()),
+                FieldDecoder.TList("tags", Decoders.DString).withDefaultValue(List.empty()),
                 FieldDecoder.TString("message"),
                 Event::new
         );
