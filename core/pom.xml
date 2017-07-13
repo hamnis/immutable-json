@@ -33,6 +33,11 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>immutable-json-codec</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>immutable-json-pointer</artifactId>
       <scope>test</scope>
     </dependency>

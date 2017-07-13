@@ -3,12 +3,15 @@ package net.hamnaberg.json.io;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
+import net.hamnaberg.json.codec.DecodeJson;
+import net.hamnaberg.json.codec.DecodeResult;
 
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class JsonParser {
 
@@ -85,6 +88,30 @@ public abstract class JsonParser {
 
     public final Option<Json.JValue> parseOpt(Reader reader) {
         return parse(reader).toOption();
+    }
+
+    public final <A> DecodeResult<A> decode(ReadableByteChannel is, DecodeJson<A> decoder) {
+        return decode(parse(is), decoder);
+    }
+
+    public final <A> DecodeResult<A> decode(byte[] bytes, DecodeJson<A> decoder) {
+        return decode(parse(bytes), decoder);
+    }
+
+    public final <A> DecodeResult<A> decode(InputStream is, DecodeJson<A> decoder) {
+        return decode(parse(is), decoder);
+    }
+
+    public final <A> DecodeResult<A> decode(String string, DecodeJson<A> decoder) {
+        return decode(parse(string), decoder);
+    }
+
+    public final <A> DecodeResult<A> decode(Reader reader, DecodeJson<A> decoder) {
+        return decode(parse(reader), decoder);
+    }
+
+    public final <A> DecodeResult<A> decode(Try<Json.JValue> parsed, DecodeJson<A> decoder) {
+        return parsed.map(decoder::fromJson).getOrElseGet(t -> DecodeResult.fail(t.getMessage()));
     }
 
     protected abstract Try<Json.JValue> parseImpl(Reader reader);
