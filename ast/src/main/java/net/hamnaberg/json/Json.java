@@ -366,17 +366,14 @@ public abstract class Json {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             JString jString = (JString) o;
-
-            return value.equals(jString.value);
+            return Objects.equals(value, jString.value);
         }
 
         @Override
         public int hashCode() {
-            return value.hashCode();
+            return Objects.hash(value);
         }
-
 
         @Override
         public String toString() {
@@ -411,16 +408,13 @@ public abstract class Json {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             JBoolean jBoolean = (JBoolean) o;
-
             return value == jBoolean.value;
-
         }
 
         @Override
         public int hashCode() {
-            return (value ? 1 : 0);
+            return Objects.hash(value);
         }
 
         @Override
@@ -485,20 +479,18 @@ public abstract class Json {
             this.value = Objects.requireNonNull(value, "Number may not be null");
         }
 
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             JNumber jNumber = (JNumber) o;
-
-            return value.equals(jNumber.value);
-
+            return Objects.equals(value, jNumber.value);
         }
 
         @Override
         public int hashCode() {
-            return value.hashCode();
+            return Objects.hash(value);
         }
 
         @Override
@@ -546,16 +538,13 @@ public abstract class Json {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
-            JArray jArray = (JArray) o;
-
-            return value.equals(jArray.value);
-
+            JArray jValues = (JArray) o;
+            return Objects.equals(value, jValues.value);
         }
 
         @Override
         public int hashCode() {
-            return value.hashCode();
+            return Objects.hash(value);
         }
 
         @Override
@@ -696,16 +685,13 @@ public abstract class Json {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
-            JObject jObject = (JObject) o;
-
-            return value.toJavaMap().equals(jObject.value.toJavaMap());
-
+            JObject tuple2s = (JObject) o;
+            return Objects.equals(value, tuple2s.value);
         }
 
         @Override
         public int hashCode() {
-            return value.hashCode();
+            return Objects.hash(value);
         }
 
         @Override
