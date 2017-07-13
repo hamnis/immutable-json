@@ -43,6 +43,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>immutable-json-codec</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
       <version>1.1</version>
