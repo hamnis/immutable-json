@@ -136,9 +136,7 @@ public abstract class DecodeResult<A> {
         DecodeResult<A> result = getValue(object, name).flatMap(decoder::fromJson);
         if (result.isFailure()) {
             Option<A> defaultValue = decoder.defaultValue();
-            if (defaultValue.isDefined()) {
-                result = DecodeResult.ok(defaultValue.get());
-            }
+            return defaultValue.map(DecodeResult::ok).getOrElse(result);
         }
         return result;
     }
