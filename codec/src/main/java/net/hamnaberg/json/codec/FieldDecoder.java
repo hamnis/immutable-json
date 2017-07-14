@@ -33,7 +33,10 @@ public abstract class FieldDecoder<A> {
     public <B> FieldDecoder<B> narrow(Function<A, Try<B>> f) {
         return typedFieldOf(
                 name,
-                json -> decoder.tryMap(f).fromJson(json).fold(s -> DecodeResult.fail("Decode for " + name + " failed with: " + s), DecodeResult::ok),
+                json -> decoder.tryMap(f).fromJson(json).fold(
+                        err -> DecodeResult.fail(String.format("Decode for '%s' failed with %s", name, err)),
+                        DecodeResult::ok
+                ),
                 Option.none()
         );
     }
