@@ -31,7 +31,11 @@ public abstract class FieldDecoder<A> {
     }
 
     public <B> FieldDecoder<B> narrow(Function<A, Try<B>> f) {
-        return typedFieldOf(name, json -> decoder.fromJson(json).flatMap(a -> DecodeResult.fromOption(f.apply(a).toOption())), Option.none());
+        return typedFieldOf(
+                name,
+                json -> decoder.tryMap(f).fromJson(json).fold(s -> DecodeResult.fail("Decode for " + name + " failed with: " + s), DecodeResult::ok),
+                Option.none()
+        );
     }
 
     public <B> FieldDecoder<B> tryNarrow(Function<A, B> f) {
