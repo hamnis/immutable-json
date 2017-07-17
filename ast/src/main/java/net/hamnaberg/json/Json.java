@@ -654,6 +654,43 @@ public abstract class Json {
             return append(Json.jBoolean(toAdd));
         }
 
+
+        public JArray prepend(JValue toAdd) {
+            return new JArray(value.prepend(toAdd));
+        }
+
+        public JArray prepend(String toAdd) {
+            return prepend(Json.jString(toAdd));
+        }
+
+        public JArray prepend(BigDecimal toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(Number toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(int toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(long toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(double toAdd) {
+            return prepend(Json.jNumber(toAdd));
+        }
+
+        public JArray prepend(boolean toAdd) {
+            return prepend(Json.jBoolean(toAdd));
+        }
+
+        public JArray reverse() {
+            return new JArray(value.reverse());
+        }
+
         public JArray insert(int index, JValue toAdd) {
             return new JArray(value.insert(index, toAdd));
         }
