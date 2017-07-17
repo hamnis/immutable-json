@@ -1,5 +1,6 @@
 package net.hamnaberg.json.codec;
 
+import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
@@ -21,6 +22,16 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
 
     default <B> JsonCodec<B> tryNarrow(Function<A, B> f, Function<B, A> g) {
         return narrow(a -> Try.of(() -> f.apply(a)), g);
+    }
+
+    @Override
+    default JsonCodec<Option<A>> option() {
+        return Codecs.OptionCodec(this);
+    }
+
+    @Override
+    default JsonCodec<List<A>> list() {
+        return Codecs.listCodec(this);
     }
 
     /**
