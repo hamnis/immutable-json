@@ -62,6 +62,14 @@ public interface DecodeJson<A> {
         };
     }
 
+    default DecodeJson<Option<A>> option() {
+        return Decoders.OptionDecoder(this);
+    }
+
+    default DecodeJson<List<A>> list() {
+        return Decoders.listDecoder(this);
+    }
+
     default FieldDecoder<A> fieldDecoder(String name) {
         return FieldDecoder.typedFieldOf(name, this);
     }
