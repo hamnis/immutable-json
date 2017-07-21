@@ -2,8 +2,9 @@ package net.hamnaberg.json.codec;
 
 import io.vavr.*;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
+import io.vavr.collection.Vector;
 import io.vavr.control.Option;
-import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.util.*;
 
@@ -45,7 +46,19 @@ public abstract class Encoders {
         return value -> Json.jArray(value.map(encoder::toJson));
     }
 
+    public static <A> EncodeJson<Set<A>> setEncoder(EncodeJson<A> encoder) {
+        return listEncoder(encoder).contramap(List::ofAll);
+    }
+
+    public static <A> EncodeJson<Vector<A>> vectorEncoder(EncodeJson<A> encoder) {
+        return listEncoder(encoder).contramap(List::ofAll);
+    }
+
     public static <A> EncodeJson<java.util.List<A>> javaListEncoder(EncodeJson<A> encoder) {
+        return listEncoder(encoder).contramap(List::ofAll);
+    }
+
+    public static <A> EncodeJson<java.util.Set<A>> javaSetEncoder(EncodeJson<A> encoder) {
         return listEncoder(encoder).contramap(List::ofAll);
     }
 

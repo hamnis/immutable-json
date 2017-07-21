@@ -2,6 +2,8 @@ package net.hamnaberg.json.codec;
 
 import io.vavr.*;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
+import io.vavr.collection.Vector;
 import io.vavr.control.Option;
 
 import net.hamnaberg.json.Json;
@@ -10,9 +12,7 @@ import net.hamnaberg.json.util.*;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 
@@ -99,28 +99,59 @@ public abstract class Codecs {
     }
 
     public static <A> JsonCodec<List<A>> listCodec(JsonCodec<A> codec) {
-        DecodeJson<List<A>> decodeJson = value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(codec::fromJson));
         return new DefaultJsonCodec<>(
-                decodeJson.withDefaultValue(List.empty()),
-                value -> Json.jArray(value.map(codec::toJson)),
-                String.format("ListCodec(%s)", codec.toString())
+                Decoders.listDecoder(codec),
+                Encoders.listEncoder(codec),
+                String.format("List(%s)", codec.toString())
+        );
+    }
+
+    public static <A> JsonCodec<Set<A>> setCodec(JsonCodec<A> codec) {
+        return new DefaultJsonCodec<>(
+                Decoders.setDecoder(codec),
+                Encoders.setEncoder(codec),
+                String.format("Set(%s)", codec.toString())
+        );
+    }
+
+    public static <A> JsonCodec<Vector<A>> vectorCodec(JsonCodec<A> codec) {
+        return new DefaultJsonCodec<>(
+                Decoders.vectorDecoder(codec),
+                Encoders.vectorEncoder(codec),
+                String.format("Vector(%s)", codec.toString())
+        );
+    }
+
+    public static <A> JsonCodec<java.util.Set<A>> javaSetCodec(JsonCodec<A> codec) {
+        return new DefaultJsonCodec<>(
+                Decoders.javaSetDecoder(codec),
+                Encoders.javaSetEncoder(codec),
+                String.format("javaSet(%s)", codec.toString())
         );
     }
 
     public static <A> JsonCodec<java.util.List<A>> javaListCodec(JsonCodec<A> codec) {
-        JsonCodec<java.util.List<A>> listCodec = listCodec(codec).xmap(List::toJavaList, List::ofAll);
-        return JsonCodec.lift(listCodec.withDefaultValue(Collections.emptyList()), listCodec);
+        return new DefaultJsonCodec<>(
+                Decoders.javaListDecoder(codec),
+                Encoders.javaListEncoder(codec),
+                String.format("javaList(%s)", codec.toString())
+        );
     }
 
     public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
-        DecodeJson<Option<A>> decoder = value -> value.isNull() ? DecodeResult.ok(Option.none()) : DecodeResult.ok(codec.fromJson(value).toOption());
-        EncodeJson<Option<A>> encoder = value -> value.map(codec::toJson).getOrElse(Json.jNull());
-        return JsonCodec.lift(decoder.withDefaultValue(Option.none()), encoder);
+        return new DefaultJsonCodec<>(
+                Decoders.OptionDecoder(codec),
+                Encoders.OptionEncoder(codec),
+                String.format("Option(%s)", codec.toString())
+        );
     }
 
-    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> underlying) {
-        JsonCodec<Optional<A>> codec = OptionCodec(underlying).xmap(Option::toJavaOptional, Option::ofOptional);
-        return JsonCodec.lift(codec.withDefaultValue(Optional.empty()), codec);
+    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> codec) {
+        return new DefaultJsonCodec<>(
+                Decoders.optionalDecoder(codec),
+                Encoders.OptionalEncoder(codec),
+                String.format("Optional(%s)", codec.toString())
+        );
     }
 
     public static <A> JsonCodec<A> objectCodec(Function<Json.JObject, DecodeResult<A>> decoder, Function<A, Json.JObject> encoder) {

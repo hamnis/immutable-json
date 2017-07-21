@@ -1,13 +1,59 @@
 package net.hamnaberg.json.codec;
 
 import io.vavr.*;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
+import io.vavr.collection.Vector;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class CodecsTest {
 
+    @Test
+    public void collectionTests() {
+        List<Integer> expectedList = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3);
+        Set<Integer> expectedSet = expectedList.toSet();
+        Json.JArray jsonList = Json.jArray(expectedList.map(Json::jNumber));
+
+        assertEquals(expectedList, Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(jsonList, Codecs.listCodec(Codecs.CInt).toJson(expectedList));
+
+        assertEquals(expectedList.toVector(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(jsonList, Codecs.vectorCodec(Codecs.CInt).toJson(expectedList.toVector()));
+
+        assertEquals(expectedList.toJavaList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(jsonList, Codecs.javaListCodec(Codecs.CInt).toJson(expectedList.toJavaList()));
+
+        assertEquals(expectedSet, Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(expectedSet.toJavaSet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+    }
+
+    @Test
+    public void collectionDefaultTest() {
+        Json.JArray jsonList = Json.jEmptyArray();
+        Json.JObject notJsonList = Json.jEmptyObject();
+
+        assertEquals(List.empty(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(List.empty(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+
+        assertEquals(Vector.empty(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(Vector.empty(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+
+        assertEquals(Collections.emptyList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(Collections.emptyList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+
+        assertEquals(HashSet.empty(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(HashSet.empty(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+
+        assertEquals(Collections.emptySet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(Collections.emptySet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+    }
 
     @Test
     public void codec3() throws Exception {

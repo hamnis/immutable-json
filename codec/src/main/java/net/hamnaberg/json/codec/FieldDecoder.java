@@ -7,7 +7,7 @@ import io.vavr.control.Try;
 import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class FieldDecoder<A> {
+public final class FieldDecoder<A> {
     public final String name;
     public final DecodeJson<A> decoder;
 
@@ -86,10 +86,10 @@ public abstract class FieldDecoder<A> {
     }
 
     public static <B> FieldDecoder<B> typedFieldOf(String name, DecodeJson<B> decoder) {
-        return new FieldDecoder<B>(name, decoder) {};
+        return new FieldDecoder<B>(name, decoder);
     }
 
     public static <B> FieldDecoder<B> typedFieldOf(String name, DecodeJson<B> decoder, Option<B> defaultValue) {
-        return new FieldDecoder<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder)) {};
+        return new FieldDecoder<B>(name, defaultValue.map(decoder::withDefaultValue).getOrElse(decoder));
     }
 }

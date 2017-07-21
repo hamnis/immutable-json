@@ -1,7 +1,10 @@
 package net.hamnaberg.json.codec;
 
 import io.vavr.*;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
+import io.vavr.collection.Vector;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
@@ -14,6 +17,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -43,11 +47,24 @@ public abstract class Decoders {
     }
 
     public static <A> DecodeJson<List<A>> listDecoder(DecodeJson<A> decoder) {
-        return value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(decoder::fromJson));
+        DecodeJson<List<A>> outer = value -> DecodeResult.sequence(value.asJsonArrayOrEmpty().mapToList(decoder::fromJson));
+        return outer.withDefaultValue(List.empty());
+    }
+
+    public static <A> DecodeJson<Set<A>> setDecoder(DecodeJson<A> decoder) {
+        return listDecoder(decoder).map(List::toSet).withDefaultValue(HashSet.empty());
+    }
+
+    public static <A> DecodeJson<Vector<A>> vectorDecoder(DecodeJson<A> decoder) {
+        return listDecoder(decoder).map(List::toVector).withDefaultValue(Vector.empty());
     }
 
     public static <A> DecodeJson<java.util.List<A>> javaListDecoder(DecodeJson<A> decoder) {
-        return listDecoder(decoder).map(List::toJavaList);
+        return listDecoder(decoder).map(List::toJavaList).withDefaultValue(Collections.emptyList());
+    }
+
+    public static <A> DecodeJson<java.util.Set<A>> javaSetDecoder(DecodeJson<A> decoder) {
+        return listDecoder(decoder).map(List::toSet).map(Set::toJavaSet).withDefaultValue(Collections.emptySet());
     }
 
     public static <A> DecodeJson<Option<A>> OptionDecoder(DecodeJson<A> decoder) {
