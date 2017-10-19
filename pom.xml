@@ -37,6 +37,7 @@
     <module>native</module>
     <module>jackson</module>
     <module>javax-json</module>
+    <module>jawn</module>
   </modules>
 
   <scm>
