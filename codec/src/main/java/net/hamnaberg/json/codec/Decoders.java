@@ -10,10 +10,10 @@ import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.util.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,12 +26,13 @@ public abstract class Decoders {
     private Decoders(){}
 
     public static final DecodeJson<Json.JValue> DIdentity = DecodeResult::ok;
-    public static final DecodeJson<String> DString = value -> DecodeResult.fromOption(value.asString());
-    public static final DecodeJson<Number> DNumber = value -> DecodeResult.fromOption(value.asBigDecimal().map(v -> (Number) v));
-    public static final DecodeJson<Long> DLong = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong));
-    public static final DecodeJson<Integer> DInt = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt));
-    public static final DecodeJson<Double> DDouble = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble));
-    public static final DecodeJson<Boolean> DBoolean = value -> DecodeResult.fromOption(value.asBoolean());
+    public static final DecodeJson<String> DString = value -> DecodeResult.fromOption(value.asString(), () -> String.format("%s is not a JString", value.getClass().getSimpleName()));
+    public static final DecodeJson<BigDecimal> DBigDecimal = value -> DecodeResult.fromOption(value.asBigDecimal(), () -> String.format("%s is not a JNumber", value.getClass().getSimpleName()));
+    public static final DecodeJson<Number> DNumber = DBigDecimal.map(bd -> (Number) bd);
+    public static final DecodeJson<Long> DLong = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asLong), () -> String.format("%s is not a JNumber", value.getClass().getSimpleName()));
+    public static final DecodeJson<Integer> DInt = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asInt), () -> String.format("%s is not a JNumber", value.getClass().getSimpleName()));
+    public static final DecodeJson<Double> DDouble = value -> DecodeResult.fromOption(value.asJsonNumber().map(Json.JNumber::asDouble), () -> String.format("%s is not a JNumber", value.getClass().getSimpleName()));
+    public static final DecodeJson<Boolean> DBoolean = value -> DecodeResult.fromOption(value.asBoolean(), () -> String.format("%s is not a JBoolean", value.getClass().getSimpleName()));
     public static final DecodeJson<UUID> DUUID = DString.tryMap(s -> Try.of(() -> UUID.fromString(s)));
     public static final DecodeJson<URI> DURI = DString.tryMap(s -> Try.of(() -> URI.create(s)));
     public static final DecodeJson<URL> DURL = DURI.tryMap(uri -> Try.of(uri::toURL));

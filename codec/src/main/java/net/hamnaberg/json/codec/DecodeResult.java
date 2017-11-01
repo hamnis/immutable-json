@@ -112,7 +112,11 @@ public abstract class DecodeResult<A> {
     }
 
     public static <A> DecodeResult<A> fromOption(Option<A> value) {
-        return value.map(DecodeResult::ok).getOrElse(fail("No value found"));
+        return fromOption(value, () -> "No value found");
+    }
+
+    public static <A> DecodeResult<A> fromOption(Option<A> value, Supplier<String> error) {
+        return value.map(DecodeResult::ok).getOrElse(fail(error.get()));
     }
 
     @SuppressWarnings("unchecked")
@@ -125,7 +129,7 @@ public abstract class DecodeResult<A> {
         return object.
                 get(name).
                 map(DecodeResult::ok).
-                getOrElse(DecodeResult.fail(String.format("%s not found in %s", name, object)));
+                getOrElse(DecodeResult.fail(String.format("'%s' not found in %s", name, object.nospaces())));
     }
 
     public static <A> DecodeResult<A> decode(Json.JObject object, FieldDecoder<A> decoder) {
@@ -136,7 +140,13 @@ public abstract class DecodeResult<A> {
         DecodeResult<A> result = getValue(object, name).flatMap(decoder::fromJson);
         if (result.isFailure()) {
             Option<A> defaultValue = decoder.defaultValue();
-            return defaultValue.map(DecodeResult::ok).getOrElse(result);
+            result = defaultValue.map(DecodeResult::ok).getOrElse(result);
+            if (result.isFailure()) {
+                result = result.fold(
+                        err -> DecodeResult.fail(err.contains(String.format("'%s' not found", name)) ? err : String.format("'%s' failed with message: '%s'", name, err)),
+                        DecodeResult::ok
+                );
+            }
         }
         return result;
     }
