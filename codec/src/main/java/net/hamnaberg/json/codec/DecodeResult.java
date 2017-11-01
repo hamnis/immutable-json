@@ -64,22 +64,6 @@ public abstract class DecodeResult<A> {
 
     public abstract <B> B fold(Function<String, B> failFunction, Function<A, B> okFunction);
 
-    @Deprecated
-    /**
-     * @deprecated Replaced by {@link #fold(Function, Function)}
-     */
-    public final <B> B oldFold(Function<Ok<A>, B> okFunction, Function<Failure, B> failFunction) {
-        return fold(s -> failFunction.apply(new Failure(s)), v -> okFunction.apply(new Ok<>(v)));
-    }
-
-    @Deprecated
-    /**
-     * @deprecated Replaced by {@link #consume(Consumer, Consumer)}
-     */
-    public final void foldUnit(Consumer<Ok<A>> okFunction, Consumer<Failure> failFunction) {
-        consume(msg -> failFunction.accept(new Failure(msg)), value -> okFunction.accept(new Ok<>(value)));
-    }
-
     public abstract void consume(Consumer<String> failFunction, Consumer<A> okFunction);
 
     public boolean isOk() {
