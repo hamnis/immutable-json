@@ -24,7 +24,7 @@ private[jawn] object IJFacade extends Facade[Json.JValue] {
   final override def singleContext(): FContext[Json.JValue] = new FContext[Json.JValue] {
     var value: Json.JValue = _
 
-    override def add(s: String): Unit = add(jstring(s))
+    override def add(s: CharSequence): Unit = add(jstring(s))
 
     override def add(v: Json.JValue): Unit = value = v
 
@@ -36,7 +36,7 @@ private[jawn] object IJFacade extends Facade[Json.JValue] {
   final override def arrayContext(): FContext[Json.JValue] = new FContext[Json.JValue] {
     val list = collection.mutable.ArrayBuffer[Json.JValue]()
 
-    override def add(s: String): Unit = add(jstring(s))
+    override def add(s: CharSequence): Unit = add(jstring(s))
 
     override def add(v: Json.JValue): Unit = list += v
 
@@ -50,8 +50,8 @@ private[jawn] object IJFacade extends Facade[Json.JValue] {
     var key: String = _
     val map = collection.mutable.HashMap[String, Json.JValue]()
 
-    override def add(s: String): Unit = {
-      if (key == null) key = s
+    override def add(s: CharSequence): Unit = {
+      if (key == null) key = s.toString
       else {
         map(key) = jstring(s)
         key = null
@@ -74,9 +74,8 @@ private[jawn] object IJFacade extends Facade[Json.JValue] {
 
   final override def jtrue(): Json.JValue = Json.jBoolean(true)
 
-  final override def jnum(s: String): Json.JValue = Json.jNumber(BigDecimal(s))
 
-  final override def jint(s: String): Json.JValue = Json.jNumber(BigDecimal(s))
+  final override def jnum(s: CharSequence, decIndex: Int, expIndex: Int) = Json.jNumber(BigDecimal(s.toString))
 
-  final override def jstring(s: String): Json.JValue = Json.jString(s)
+  final override def jstring(s: CharSequence): Json.JValue = Json.jString(s.toString)
 }
