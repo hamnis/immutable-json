@@ -62,7 +62,7 @@
     <dependency>
       <groupId>org.javafp</groupId>
       <artifactId>parsecj</artifactId>
-      <version>0.2</version>
+      <version>0.5</version>
       <exclusions>
         <exclusion>
           <groupId>org.openjdk.jmh</groupId>

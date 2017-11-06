@@ -26,6 +26,7 @@ package net.hamnaberg.json.nativeparser;
 import io.vavr.Tuple2;
 import org.javafp.data.*;
 import org.javafp.parsecj.*;
+import org.javafp.parsecj.input.Input;
 
 import java.math.BigDecimal;
 
@@ -116,7 +117,7 @@ class Grammar {
                             tok(chr(','))
                     )
             ).bind(l ->
-                    retn(jArray(IList.toList(l)).asJValue())
+                    retn(jArray(IList.of(l)).asJValue())
             ).label("array");
 
     private static final Parser<Character, Tuple2<String, JValue>> jfield =
@@ -154,6 +155,6 @@ class Grammar {
     private static final Parser<Character, JValue> parser = wspaces.then(jvalue);
 
     static Reply<Character, JValue> parse(String str) {
-        return parser.parse(State.of(str));
+        return parser.parse(Input.of(str));
     }
 }
