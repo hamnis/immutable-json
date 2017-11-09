@@ -32,11 +32,11 @@ public final class ObjectMapper {
     }
 
     public Integer integer(String name) {
-        return o.getAsInteger(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsInteger(name));
     }
 
     public Long lng(String name) {
-        return o.getAsLong(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsLong(name));
     }
 
     public Option<Long> lngOpt(String name) {
@@ -48,7 +48,7 @@ public final class ObjectMapper {
     }
 
     public String string(String name) {
-        return o.getAsString(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsString(name));
     }
 
     public Option<String> stringOpt(String name) {
@@ -56,7 +56,7 @@ public final class ObjectMapper {
     }
 
     public Double dble(String name) {
-        return o.getAsDouble(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsDouble(name));
     }
 
     public Option<Double> dbleOpt(String name) {
@@ -64,7 +64,7 @@ public final class ObjectMapper {
     }
 
     public Boolean bool(String name) {
-        return o.getAsBoolean(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsBoolean(name));
     }
 
     public Option<Boolean> boolOpt(String name) {
@@ -84,12 +84,12 @@ public final class ObjectMapper {
     }
 
     public <A> A decode(String name, DecodeJson<A> decoder) {
-        Json.JValue value = o.get(name).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        Json.JValue value = getOrElseThrow(name, o.get(name));
         return decoder.fromJsonUnsafe(value);
     }
 
     public <A> A object(String name, Function<ObjectMapper, A> f) {
-        return o.getAsObject(name).map(obj -> f.apply(new ObjectMapper(obj))).getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
+        return getOrElseThrow(name, o.getAsObject(name).map(obj -> f.apply(new ObjectMapper(obj))));
     }
 
     public <A> Option<A> objectOpt(String name, Function<ObjectMapper, A> f) {
@@ -97,6 +97,10 @@ public final class ObjectMapper {
     }
 
     public ObjectMapper downField(String name) {
-        return o.getAsObject(name).map(ObjectMapper::new).getOrElseThrow(() -> new NoSuchElementException("Missing " + name));
+        return getOrElseThrow(name, o.getAsObject(name).map(ObjectMapper::new));
+    }
+
+    private <A> A getOrElseThrow(String name, Option<A> value) {
+        return value.getOrElseThrow(() -> new NoSuchElementException("Missing " + name ));
     }
 }
