@@ -1,6 +1,7 @@
 package net.hamnaberg.json.extract;
 
 import io.vavr.collection.List;
+import io.vavr.collection.Vector;
 import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.codec.DecodeJson;
@@ -15,20 +16,24 @@ public final class ObjectMapper {
         this.o = o;
     }
 
-    public static <A> Option<A> mapObject(Json.JValue v, Function<ObjectMapper, A> f) {
-        return v.asJsonObject().flatMap(ob -> Option.of(f.apply(new ObjectMapper(ob))));
+    public static ObjectMapper wrap(Json.JObject value) {
+        return new ObjectMapper(value);
     }
 
-    public static <A> List<A> mapObjectArray(Json.JValue v, Function<ObjectMapper, A> f) {
-        return v.asJsonArrayOrEmpty().getListAsObjects().map(ob -> f.apply(new ObjectMapper(ob)));
+    public static <A> Option<A> mapObject(Json.JValue object, Function<ObjectMapper, A> f) {
+        return object.asJsonObject().flatMap(ob -> Option.of(f.apply(wrap(ob))));
     }
 
-    public static <A> List<A> mapNamedObjectArray(String name, Json.JValue v, Function<ObjectMapper, A> f) {
-        return v.asJsonObject().map(o -> o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(new ObjectMapper(e)))).getOrElse(List.empty());
+    public static <A> List<A> mapObjectArray(Json.JValue array, Function<ObjectMapper, A> f) {
+        return array.asJsonArrayOrEmpty().getListAsObjects().map(ob -> f.apply(wrap(ob)));
     }
 
-    public static <A> Option<A> mapObject(Json.JObject v, Function<ObjectMapper, A> f) {
-        return Option.of(f.apply(new ObjectMapper(v)));
+    public static <A> List<A> mapNamedObjectArray(Json.JValue object, String name, Function<ObjectMapper, A> f) {
+        return object.asJsonObject().map(o -> o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(wrap(e)))).getOrElse(List.empty());
+    }
+
+    public static <A> Option<A> mapObject(Json.JObject object, Function<ObjectMapper, A> f) {
+        return Option.of(f.apply(wrap(object)));
     }
 
     public Integer integer(String name) {
@@ -72,11 +77,15 @@ public final class ObjectMapper {
     }
 
     public <A> List<A> list(String name, Function<ObjectMapper, A> f) {
-        return o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(new ObjectMapper(e)));
+        return o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(wrap(e)));
+    }
+
+    public <A> Vector<A> vector(String name, Function<ObjectMapper, A> f) {
+        return list(name, f).toVector();
     }
 
     public <A> A[] array(String name, Function<ObjectMapper, A> f, Class<A> type) {
-        return o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(new ObjectMapper(e))).toJavaArray(type);
+        return o.getAsArrayOrEmpty(name).getListAsObjects().map(e -> f.apply(wrap(e))).toJavaArray(type);
     }
 
     public List<String> stringList(String name) {
@@ -84,16 +93,15 @@ public final class ObjectMapper {
     }
 
     public <A> A decode(String name, DecodeJson<A> decoder) {
-        Json.JValue value = getOrElseThrow(name, o.get(name));
-        return decoder.fromJsonUnsafe(value);
-    }
-
-    public <A> A object(String name, Function<ObjectMapper, A> f) {
-        return getOrElseThrow(name, o.getAsObject(name).map(obj -> f.apply(new ObjectMapper(obj))));
+        return decoder.fromJsonUnsafe(getOrElseThrow(name, o.get(name)));
     }
 
     public <A> Option<A> objectOpt(String name, Function<ObjectMapper, A> f) {
-        return o.getAsObject(name).flatMap(obj -> obj.keySet().isEmpty() ?  Option.none() : Option.of(f.apply(new ObjectMapper(obj))));
+        return o.getAsObject(name).filter(j -> !j.isEmpty()).flatMap(obj -> Option.of(f.apply(wrap(obj))));
+    }
+
+    public <A> A object(String name, Function<ObjectMapper, A> f) {
+        return getOrElseThrow(name, objectOpt(name, f));
     }
 
     public ObjectMapper downField(String name) {
