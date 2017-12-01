@@ -47,9 +47,6 @@ public abstract class Json {
     }
 
     public static JNumber jNumber(Number n) {
-        if (n instanceof BigDecimal) {
-            return new JNumber((BigDecimal) n);
-        }
         return new JNumber(new BigDecimal(n.toString()));
     }
 
