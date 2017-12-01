@@ -4,6 +4,7 @@ jdk:
 - oraclejdk8
 after_success:
 - '[[ $TRAVIS_BRANCH == "master" ]] && {  mvn -q --settings .travis-settings.xml -DskipTests deploy; };'
+- bash <(curl -s https://codecov.io/bash)
 env:
   global:
   - secure: 14vy75RA+qF/DAYGXhF7ZXoZz5tG88UoJ6EZCQ0CbyYvgz07VmVJ4/E/D8BXqtUYYVN18EQQpfGp3XMJ3pVtJHZr9YiMslyvj8qOY4s2bMdAKV5XZtWWnOUrk2r/SiTNpz02qnXogHqTKUcOvr6WhELomwkV7oIFQg+95mZgfWZM1mN3HZ3IUua2V2rDRnxEQm3L7Mr+Af/KwaTIyKux+sqzQo3FRm6KN0cFh7NLTmvGqEyq82xWKriUmLjj8pgkNbft1BVN7VouxPxqdf20uQfqmf4OdQ71bi36lpReI4y8va2PCLWkACTFgE/KONE4FpMVDiS+p9T8Fse9W3zDp7XP6sUZd9caz0iZ8jVZ5IAlpMXfvnY55wXKWYhmuxQkDbA5Eq/hXuRILFqWIXDvpLP2QIWjygwro6Y1BgZPNgMs8PmV1Tg6+9JdKYe0EOCVGWaN3sRzXPOLUYQrZAed3fkKfZheiLwQgl6L4r9wTkdxOP1xv4KVWMleYoTCP11Q6Est3Zwv8pzghr9OUlhHDuyRyQ+8zFB6XnFhAoDfutSMj1FqMd4t/vJpFEkBDGJyxMjey/bNakJQMWl4ZPQ/slojtcoSyhQIOkK752+wbYiXhz8kq5LNa3jk22fHZb+a6DRIPaP95sVKWK3AMzpmyUCldws0EvuaS5wHhsu7D0U=
