@@ -91,7 +91,15 @@ public interface DecodeJson<A> {
     }
 
     static <A> DecodeJson<A> successful(A value) {
-        return ignore -> DecodeResult.ok(value);
+        return result(DecodeResult.ok(value));
+    }
+
+    static <A> DecodeJson<A> failure(String message) {
+        return result(DecodeResult.fail(message));
+    }
+
+    static <A> DecodeJson<A> result(DecodeResult<A> value) {
+        return ignore -> value;
     }
 
     class DecodeJsonWithDefault<A> implements DecodeJson<A> {
