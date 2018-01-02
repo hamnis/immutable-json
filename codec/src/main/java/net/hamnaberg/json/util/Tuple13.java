@@ -34,7 +34,15 @@ public final class Tuple13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         this._13 = _13;
     }
 
+    @Deprecated
+    /**
+    * @deprecated Use {@link #apply(F13) instead}
+    */
     public <B> B transform(F13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, B> f) {
+        return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13);
+    }
+
+    public <B> B apply(F13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, B> f) {
         return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13);
     }
 
@@ -57,3 +65,4 @@ public final class Tuple13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         return toList().hashCode();
     }
 }
+    

@@ -42,7 +42,15 @@ public final class Tuple17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         this._17 = _17;
     }
 
+    @Deprecated
+    /**
+    * @deprecated Use {@link #apply(F17) instead}
+    */
     public <B> B transform(F17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, B> f) {
+        return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17);
+    }
+
+    public <B> B apply(F17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, B> f) {
         return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17);
     }
 
@@ -65,3 +73,4 @@ public final class Tuple17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         return toList().hashCode();
     }
 }
+    

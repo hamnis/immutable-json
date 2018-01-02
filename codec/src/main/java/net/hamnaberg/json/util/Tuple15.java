@@ -38,7 +38,15 @@ public final class Tuple15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         this._15 = _15;
     }
 
+    @Deprecated
+    /**
+    * @deprecated Use {@link #apply(F15) instead}
+    */
     public <B> B transform(F15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, B> f) {
+        return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15);
+    }
+
+    public <B> B apply(F15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, B> f) {
         return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15);
     }
 
@@ -61,3 +69,4 @@ public final class Tuple15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         return toList().hashCode();
     }
 }
+    

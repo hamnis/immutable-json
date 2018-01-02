@@ -25,7 +25,15 @@ def applyTemplate(arity: Int) = {
      |$assignment
      |    }
      |
+     |    @Deprecated
+     |    /**
+     |    * @deprecated Use {@link #apply(F$arity) instead}
+     |    */
      |    public <B> B transform(F$arity<$types, B> f) {
+     |        return f.apply($fieldsNames);
+     |    }
+     |
+     |    public <B> B apply(F$arity<$types, B> f) {
      |        return f.apply($fieldsNames);
      |    }
      |

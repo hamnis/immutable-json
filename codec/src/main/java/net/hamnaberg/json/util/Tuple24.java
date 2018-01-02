@@ -56,7 +56,15 @@ public final class Tuple24<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         this._24 = _24;
     }
 
+    @Deprecated
+    /**
+    * @deprecated Use {@link #apply(F24) instead}
+    */
     public <B> B transform(F24<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, B> f) {
+        return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24);
+    }
+
+    public <B> B apply(F24<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, B> f) {
         return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24);
     }
 
@@ -79,3 +87,4 @@ public final class Tuple24<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A1
         return toList().hashCode();
     }
 }
+    

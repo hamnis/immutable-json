@@ -26,7 +26,15 @@ public final class Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9> {
         this._9 = _9;
     }
 
+    @Deprecated
+    /**
+    * @deprecated Use {@link #apply(F9) instead}
+    */
     public <B> B transform(F9<A1, A2, A3, A4, A5, A6, A7, A8, A9, B> f) {
+        return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9);
+    }
+
+    public <B> B apply(F9<A1, A2, A3, A4, A5, A6, A7, A8, A9, B> f) {
         return f.apply(_1, _2, _3, _4, _5, _6, _7, _8, _9);
     }
 
@@ -49,3 +57,4 @@ public final class Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9> {
         return toList().hashCode();
     }
 }
+    
