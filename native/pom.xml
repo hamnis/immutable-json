@@ -50,7 +50,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.2</version>
+      <version>2.9.3</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -62,7 +62,7 @@
     <dependency>
       <groupId>org.javafp</groupId>
       <artifactId>parsecj</artifactId>
-      <version>0.5</version>
+      <version>0.6</version>
       <exclusions>
         <exclusion>
           <groupId>org.openjdk.jmh</groupId>
