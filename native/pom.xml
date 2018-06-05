@@ -60,16 +60,11 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.javafp</groupId>
-      <artifactId>parsecj</artifactId>
-      <version>0.6</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjdk.jmh</groupId>
-          <artifactId>jmh-core</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.jparsec</groupId>
+      <artifactId>jparsec</artifactId>
+      <version>3.0</version>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -79,44 +74,16 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Automatic-Module-Name>net.hamnaberg.json.nativeparser</Automatic-Module-Name>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-              <artifactSet>
-                <includes>
-                  <include>org.javafp:*</include>
-                  <include>${project.groupId}:${project.artifactId}</include>
-                </includes>
-                <excludes>
-                  <exclude>${project.groupId}:immutable-json-core</exclude>
-                  <exclude>${project.groupId}:immutable-json-ast</exclude>
-                </excludes>
-              </artifactSet>
-              <relocations>
-                <relocation>
-                  <pattern>org.javafp</pattern>
-                  <shadedPattern>net.hamnaberg.json.internal.org.javafp</shadedPattern>
-                </relocation>
-              </relocations>
-              <createDependencyReducedPom>true</createDependencyReducedPom>
-              <createSourcesJar>true</createSourcesJar>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>net.hamnaberg.json.nativeparser</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>
