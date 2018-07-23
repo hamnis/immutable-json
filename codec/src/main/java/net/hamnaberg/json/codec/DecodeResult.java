@@ -42,6 +42,10 @@ public abstract class DecodeResult<A> {
         return fold(ignore -> orElse.get(), Function.identity());
     }
 
+    public final DecodeResult<A> orElse(DecodeResult<A> orThis) {
+        return isOk() ? this : orThis;
+    }
+
     public abstract <X extends Throwable> A getOrElseThrow(Function<String, X> exProvider) throws X;
 
     public final A unsafeGet() {
