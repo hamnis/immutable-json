@@ -35,29 +35,21 @@ public class ADTCodecTest {
 
     private JsonCodec<Account.Checking> checkingCodec = JsonCodec.lift((c) -> {
         Json.JObject obj = c.asJsonObjectOrEmpty();
-        if (obj.getAsString("type").exists("checking"::equals)) {
+        if (isType(obj, Account.Checking.class)) {
             return DecodeResult.fromOption(obj.getAsBigDecimal("amount")).map(Account.Checking::new);
         }
         return DecodeResult.fail("Not a checking account");
-    }, it -> Json.jObject(
-            HashMap.of(
-                    "amount", Json.jNumber(it.amount),
-                    "type", Json.jString("checking")
-            )
-    ));
+    }, it -> jsonOf(Account.Checking.class, it.amount)
+    );
 
     private JsonCodec<Account.Standard> standardCodec = JsonCodec.lift((c) -> {
         Json.JObject obj = c.asJsonObjectOrEmpty();
-        if (obj.getAsString("type").exists("standard"::equals)) {
+        if (isType(obj, Account.Standard.class)) {
             return DecodeResult.fromOption(obj.getAsBigDecimal("amount")).map(Account.Standard::new);
         }
         return DecodeResult.fail("Not a standard account");
-    }, it -> Json.jObject(
-            HashMap.of(
-                    "amount", Json.jNumber(it.amount),
-                    "type", Json.jString("standard")
-            )
-    ));
+    }, it -> jsonOf(Account.Standard.class, it.amount)
+    );
 
 
     private final ADTCodec<Account> adtCodec = new ADTCodec<>(Account.class, HashMap.of(
@@ -68,20 +60,14 @@ public class ADTCodecTest {
 
     @Test
     public void testStandardDecode() {
-        DecodeResult<Account> result = adtCodec.fromJson(Json.jObject(HashMap.of(
-                "type", Json.jString("standard"),
-                "amount", Json.jNumber(0)
-        )));
+        DecodeResult<Account> result = adtCodec.fromJson(jsonOf(Account.Standard.class, BigDecimal.valueOf(0)));
         assertTrue(result.unsafeGet() instanceof Account.Standard);
         assertEquals(result.unsafeGet().amount, BigDecimal.ZERO);
     }
 
     @Test
     public void testCheckingDecode() {
-        DecodeResult<Account> result = adtCodec.fromJson(Json.jObject(HashMap.of(
-                "type", Json.jString("checking"),
-                "amount", Json.jNumber(0)
-        )));
+        DecodeResult<Account> result = adtCodec.fromJson(jsonOf(Account.Checking.class, BigDecimal.valueOf(0)));
         assertTrue(result.unsafeGet() instanceof Account.Checking);
         assertEquals(result.unsafeGet().amount, BigDecimal.ZERO);
     }
@@ -98,21 +84,27 @@ public class ADTCodecTest {
 
     @Test
     public void encodeStandard() {
-        Json.JObject expected = Json.jObject(HashMap.of(
-                "type", Json.jString("standard"),
-                "amount", Json.jNumber(123)
-        ));
+        Json.JObject expected = jsonOf(Account.Standard.class, BigDecimal.valueOf(123));
         Json.JValue json = adtCodec.toJson(new Account.Standard(BigDecimal.valueOf(123L)));
         assertEquals("Unexpected json", expected, json);
     }
 
     @Test
     public void encodeChecking() {
-        Json.JObject expected = Json.jObject(HashMap.of(
-                "type", Json.jString("checking"),
-                "amount", Json.jNumber(123)
-        ));
+        Json.JObject expected = jsonOf(Account.Checking.class, BigDecimal.valueOf(123));
+
         Json.JValue json = adtCodec.toJson(new Account.Checking(BigDecimal.valueOf(123L)));
         assertEquals("Unexpected json", expected, json);
+    }
+
+    private Json.JObject jsonOf(Class<? extends Account> type, BigDecimal amount) {
+        return Json.jObject(HashMap.of(
+                "type", Json.jString(type.getSimpleName()),
+                "amount", Json.jNumber(amount)
+        ));
+    }
+
+    private boolean isType(Json.JObject obj, Class<?> clazz) {
+        return obj.getAsString("type").exists(clazz.getSimpleName()::equals);
     }
 }
