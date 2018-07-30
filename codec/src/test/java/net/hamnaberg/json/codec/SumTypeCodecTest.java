@@ -91,7 +91,7 @@ public class SumTypeCodecTest {
 
     private Json.JObject jsonOf(Class<? extends Account> type, BigDecimal amount) {
         return Json.jObject(HashMap.of(
-                "type", Json.jString(type.getSimpleName()),
+                "type", Json.jString(type.getSimpleName().toLowerCase()),
                 "amount", Json.jNumber(amount)
         ));
     }
