@@ -5,16 +5,16 @@ import net.hamnaberg.json.Json;
 
 import java.util.function.BiPredicate;
 
-public class ADTCodec<T> implements JsonCodec<T> {
+public class SumTypeCodec<T> implements JsonCodec<T> {
     private final Class<T> mainType;
     private final BiPredicate<Class<?>, Json.JObject> discriminator;
     private final Map<Class<?>, JsonCodec<? extends T>> subtypes;
 
-    public ADTCodec(Class<T> mainType, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
+    public SumTypeCodec(Class<T> mainType, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
         this(mainType, (type, obj) -> obj.getAsString("type").exists(type.getSimpleName()::equals) ,subtypes);
     }
 
-    public ADTCodec(Class<T> type, BiPredicate<Class<?>, Json.JObject> discriminator, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
+    public SumTypeCodec(Class<T> type, BiPredicate<Class<?>, Json.JObject> discriminator, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
         this.mainType = type;
         this.discriminator = discriminator;
         this.subtypes = subtypes;

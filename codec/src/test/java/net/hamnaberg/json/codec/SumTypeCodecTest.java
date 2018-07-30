@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ADTCodecTest {
+public class SumTypeCodecTest {
 
 
     public static abstract class Account {
@@ -44,7 +44,7 @@ public class ADTCodecTest {
     );
 
 
-    private final ADTCodec<Account> adtCodec = new ADTCodec<>(Account.class, HashMap.of(
+    private final SumTypeCodec<Account> sumTypeCodec = new SumTypeCodec<>(Account.class, HashMap.of(
             Account.Checking.class, checkingCodec,
             Account.Standard.class, standardCodec
     ));
@@ -52,21 +52,21 @@ public class ADTCodecTest {
 
     @Test
     public void testStandardDecode() {
-        DecodeResult<Account> result = adtCodec.fromJson(jsonOf(Account.Standard.class, BigDecimal.valueOf(0)));
+        DecodeResult<Account> result = sumTypeCodec.fromJson(jsonOf(Account.Standard.class, BigDecimal.valueOf(0)));
         assertTrue(result.unsafeGet() instanceof Account.Standard);
         assertEquals(result.unsafeGet().amount, BigDecimal.ZERO);
     }
 
     @Test
     public void testCheckingDecode() {
-        DecodeResult<Account> result = adtCodec.fromJson(jsonOf(Account.Checking.class, BigDecimal.valueOf(0)));
+        DecodeResult<Account> result = sumTypeCodec.fromJson(jsonOf(Account.Checking.class, BigDecimal.valueOf(0)));
         assertTrue(result.unsafeGet() instanceof Account.Checking);
         assertEquals(result.unsafeGet().amount, BigDecimal.ZERO);
     }
 
     @Test
     public void testBothFail() {
-        DecodeResult<Account> result = adtCodec.fromJson(Json.jObject(HashMap.of(
+        DecodeResult<Account> result = sumTypeCodec.fromJson(Json.jObject(HashMap.of(
                 "type", Json.jString("unknown"),
                 "amount", Json.jNumber(123)
         )));
@@ -77,7 +77,7 @@ public class ADTCodecTest {
     @Test
     public void encodeStandard() {
         Json.JObject expected = jsonOf(Account.Standard.class, BigDecimal.valueOf(123));
-        Json.JValue json = adtCodec.toJson(new Account.Standard(BigDecimal.valueOf(123L)));
+        Json.JValue json = sumTypeCodec.toJson(new Account.Standard(BigDecimal.valueOf(123L)));
         assertEquals("Unexpected json", expected, json);
     }
 
@@ -85,7 +85,7 @@ public class ADTCodecTest {
     public void encodeChecking() {
         Json.JObject expected = jsonOf(Account.Checking.class, BigDecimal.valueOf(123));
 
-        Json.JValue json = adtCodec.toJson(new Account.Checking(BigDecimal.valueOf(123L)));
+        Json.JValue json = sumTypeCodec.toJson(new Account.Checking(BigDecimal.valueOf(123L)));
         assertEquals("Unexpected json", expected, json);
     }
 
