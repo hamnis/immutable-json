@@ -4,14 +4,23 @@ import io.vavr.collection.Map;
 import net.hamnaberg.json.Json;
 
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
-public class SumTypeCodec<T> implements JsonCodec<T> {
+public final class SumTypeCodec<T> implements JsonCodec<T> {
     private final Class<T> mainType;
     private final BiPredicate<Class<?>, Json.JObject> discriminator;
     private final Map<Class<?>, JsonCodec<? extends T>> subtypes;
 
     public SumTypeCodec(Class<T> mainType, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
-        this(mainType, (type, obj) -> obj.getAsString("type").exists(type.getSimpleName()::equals) ,subtypes);
+        this(mainType, c -> c.getSimpleName().toLowerCase(), subtypes);
+    }
+
+    public SumTypeCodec(Class<T> mainType, Function<Class<?>, String> nameF, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
+        this(mainType, "type", nameF, subtypes);
+    }
+
+    public SumTypeCodec(Class<T> mainType, String discriminatorField, Function<Class<?>, String> nameF, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
+        this(mainType, (type, obj) -> obj.getAsString(discriminatorField).exists(nameF.apply(type)::equals), subtypes);
     }
 
     public SumTypeCodec(Class<T> type, BiPredicate<Class<?>, Json.JObject> discriminator, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
