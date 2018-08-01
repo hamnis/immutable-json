@@ -12,34 +12,34 @@ import static org.junit.Assert.assertTrue;
 public class SumTypeCodecTest {
 
 
-    public static abstract class Account {
-        public final BigDecimal amount;
+    static abstract class Account {
+        final BigDecimal amount;
 
         private Account(BigDecimal amount) {
             this.amount = amount;
         }
 
-        public static class Checking extends Account {
+        static class Checking extends Account {
 
-            public Checking(BigDecimal amount) {
+            Checking(BigDecimal amount) {
                 super(amount);
             }
         }
 
-        public static class Standard extends Account {
-            public Standard(BigDecimal amount) {
+        static class Standard extends Account {
+            Standard(BigDecimal amount) {
                 super(amount);
             }
         }
     }
 
     private JsonCodec<Account.Checking> checkingCodec = JsonCodec.lift(
-            c -> DecodeResult.decode(c.asJsonObjectOrEmpty(), "amount", Decoders.DBigDecimal.map(Account.Checking::new)),
+            Decoders.decode(FieldDecoder.typedFieldOf("amount", Decoders.DBigDecimal), Account.Checking::new),
             it -> jsonOf(Account.Checking.class, it.amount)
     );
 
     private JsonCodec<Account.Standard> standardCodec = JsonCodec.lift(
-            c -> DecodeResult.decode(c.asJsonObjectOrEmpty(), "amount", Decoders.DBigDecimal.map(Account.Standard::new)),
+            Decoders.decode(FieldDecoder.typedFieldOf("amount", Decoders.DBigDecimal), Account.Standard::new),
             it -> jsonOf(Account.Standard.class, it.amount)
     );
 
@@ -66,10 +66,10 @@ public class SumTypeCodecTest {
 
     @Test
     public void testBothFail() {
-        DecodeResult<Account> result = sumTypeCodec.fromJson(Json.jObject(HashMap.of(
+        DecodeResult<Account> result = sumTypeCodec.fromJson(Json.jObject(
                 "type", Json.jString("unknown"),
                 "amount", Json.jNumber(123)
-        )));
+        ));
         assertTrue(result.isFailure());
     }
 
@@ -90,9 +90,9 @@ public class SumTypeCodecTest {
     }
 
     private Json.JObject jsonOf(Class<? extends Account> type, BigDecimal amount) {
-        return Json.jObject(HashMap.of(
+        return Json.jObject(
                 "type", Json.jString(type.getSimpleName().toLowerCase()),
                 "amount", Json.jNumber(amount)
-        ));
+        );
     }
 }

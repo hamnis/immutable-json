@@ -129,6 +129,159 @@ public abstract class Json {
         return new JObject(LinkedHashMap.ofEntries(value));
     }
 
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5,
+            String k6, JValue v6) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5),
+                tuple(k6, v6)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5,
+            String k6, JValue v6,
+            String k7, JValue v7) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5),
+                tuple(k6, v6),
+                tuple(k7, v7)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5,
+            String k6, JValue v6,
+            String k7, JValue v7,
+            String k8, JValue v8) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5),
+                tuple(k6, v6),
+                tuple(k7, v7),
+                tuple(k8, v8)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5,
+            String k6, JValue v6,
+            String k7, JValue v7,
+            String k8, JValue v8,
+            String k9, JValue v9) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5),
+                tuple(k6, v6),
+                tuple(k7, v7),
+                tuple(k8, v8),
+                tuple(k9, v9)
+        );
+    }
+
+    public static JObject jObject(
+            String k1, JValue v1,
+            String k2, JValue v2,
+            String k3, JValue v3,
+            String k4, JValue v4,
+            String k5, JValue v5,
+            String k6, JValue v6,
+            String k7, JValue v7,
+            String k8, JValue v8,
+            String k9, JValue v9,
+            String k10, JValue v10) {
+        return jObject(
+                tuple(k1, v1),
+                tuple(k2, v2),
+                tuple(k3, v3),
+                tuple(k4, v4),
+                tuple(k5, v5),
+                tuple(k6, v6),
+                tuple(k7, v7),
+                tuple(k8, v8),
+                tuple(k9, v9),
+                tuple(k10, v10)
+        );
+    }
+
     public static JObject jObject(java.util.Map<String, JValue> value) {
         return new JObject(LinkedHashMap.ofAll(value));
     }
