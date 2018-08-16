@@ -31,6 +31,7 @@ public abstract class JsonParserAbstractTest {
         value = JsonPointer.compile("/collection/href").select(parsed);
         assertTrue(value.isDefined());
         assertEquals(Json.jString("http://example.org/friends/"), value.get());
+        assertEquals(Integer.valueOf(3), JsonPointer.compile("/collection/items/0/data").select(parsed).map(v -> v.asJsonArrayOrEmpty().size()).getOrElse(0));
     }
 
     protected abstract JsonParser getParser();
