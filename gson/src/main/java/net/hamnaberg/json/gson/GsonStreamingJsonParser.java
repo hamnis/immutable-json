@@ -10,6 +10,7 @@ import net.hamnaberg.json.io.JsonParser;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class GsonStreamingJsonParser extends JsonParser {
             case STRING:
                 return Json.jString(reader.nextString());
             case NUMBER:
-                return Json.jNumber(reader.nextDouble());
+                return Json.jNumber(new BigDecimal(reader.nextString()));
             case BOOLEAN:
                 return Json.jBoolean(reader.nextBoolean());
             case NULL:

@@ -29,6 +29,11 @@
             "name": "email",
             "value": "jdoe@example.org",
             "prompt": "Email"
+          },
+          {
+            "name": "number",
+            "value": 123456,
+            "prompt": "Number"
           }
         ],
         "links": [
