@@ -38,6 +38,7 @@
     <module>jackson</module>
     <module>javax-json</module>
     <module>jawn</module>
+    <module>gson</module>
   </modules>
 
   <scm>
