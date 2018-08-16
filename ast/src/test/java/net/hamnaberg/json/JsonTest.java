@@ -176,6 +176,120 @@ public class JsonTest {
         assertEquals(object, read);
     }
 
+    @Test
+    public void jObjectConstructors() {
+        Json.JObject object = Json.jObject(
+                "foo", Json.jString("2")
+        );
+
+        assertEquals(object.size(), 1);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2)
+        );
+
+        assertEquals(object.size(), 2);
+
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3)
+        );
+
+        assertEquals(object.size(), 3);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4)
+        );
+
+        assertEquals(object.size(), 4);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5)
+        );
+
+
+        assertEquals(object.size(), 5);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5),
+                "6", Json.jNumber(6)
+        );
+
+        assertEquals(object.size(), 6);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5),
+                "6", Json.jNumber(6),
+                "7", Json.jNumber(7)
+        );
+
+
+        assertEquals(object.size(), 7);
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5),
+                "6", Json.jNumber(6),
+                "7", Json.jNumber(7),
+                "8", Json.jNumber(8)
+        );
+
+
+        assertEquals(object.size(), 8);
+
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5),
+                "6", Json.jNumber(6),
+                "7", Json.jNumber(7),
+                "8", Json.jNumber(8),
+                "9", Json.jString("9")
+        );
+
+        assertEquals(object.size(), 9);
+
+
+        object = Json.jObject(
+                "1", Json.jNumber(1),
+                "2", Json.jNumber(2),
+                "3", Json.jNumber(3),
+                "4", Json.jNumber(4),
+                "5", Json.jNumber(5),
+                "6", Json.jNumber(6),
+                "7", Json.jNumber(7),
+                "8", Json.jNumber(8),
+                "9", Json.jString("9"),
+                "10", Json.jBoolean(true)
+        );
+
+        assertEquals(object.size(), 10);
+    }
+
     private List<Json.JValue> jsonRange(int start, int end) {
         ArrayList<Json.JValue> list = new ArrayList<>();
         for (int i = start; i <= end; i++) {
