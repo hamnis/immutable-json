@@ -47,24 +47,6 @@
       <artifactId>immutable-json-codec</artifactId>
       <optional>true</optional>
     </dependency>
-    <!--<dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.9.6</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.9.6</version>
-    </dependency>-->
-
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -84,7 +66,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Automatic-Module-Name>net.hamnaberg.json.jackson</Automatic-Module-Name>
+              <Automatic-Module-Name>net.hamnaberg.json.gson</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
