@@ -155,7 +155,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.6.1</version>
+          <version>3.8.0</version>
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
@@ -168,7 +168,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -201,35 +201,9 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.revapi</groupId>
-        <artifactId>revapi-maven-plugin</artifactId>
-        <version>0.9.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.revapi</groupId>
-            <artifactId>revapi-java</artifactId>
-            <version>0.14.1</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <oldVersion>5.1.0</oldVersion>
-          <analysisConfigurationFiles>
-            <file>src/revapi/revapi-conf.json</file>
-          </analysisConfigurationFiles>
-          <failOnMissingConfigurationFiles>false</failOnMissingConfigurationFiles>
-        </configuration>
-        <!--<executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>-->
-      </plugin>
-      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.9</version>
+        <version>0.8.2</version>
         <executions>
           <execution>
             <goals>
@@ -262,7 +236,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.0.0-M1</version>
+            <version>3.0.0-M2</version>
             <executions>
               <execution>
                 <goals>
@@ -287,7 +261,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.0.0-M1</version>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>aggregate-javadoc</id>
