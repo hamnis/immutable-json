@@ -1,18 +1,19 @@
 package net.hamnaberg.json.pointer;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class JsonPointer {
     private final List<Ref> path;
 
     public static JsonPointer compile(String pattern) {
         if (pattern == null || pattern.trim().isEmpty()) {
-            return new JsonPointer(List.empty());
+            return new JsonPointer(List.of());
         }
         return new JsonPointer(new JsonPointerParser().parse(pattern));
     }
@@ -24,20 +25,20 @@ public final class JsonPointer {
     @Override
     public String toString() {
         if (path.isEmpty()) return "";
-        return path.map(ref -> ref.fold(
+        return path.stream().map(ref -> ref.fold(
                 r -> String.valueOf(r.index),
                 r -> escape(r.name),
                 () -> "-"
-        )).mkString("/", "/", "");
+        )).collect(Collectors.joining("/", "/", ""));
     }
 
     private String escape(String str) {
         return str.replace("~", "~0").replace("/", "~1");
     }
 
-    public Option<Json.JValue> select(Json.JValue value) {
+    public Optional<Json.JValue> select(Json.JValue value) {
         if (path.isEmpty()) {
-            return Option.of(value);
+            return Optional.of(value);
         }
 
         final Iterator<Ref> iterator = path.iterator();
@@ -48,12 +49,12 @@ public final class JsonPointer {
             current = ref.fold(
                     arrayRef -> foldToJson(
                             c,
-                            obj -> obj.get(String.valueOf(arrayRef.index)).getOrElse(obj),
-                            arr -> arr.get(arrayRef.index).getOrElse(arr)
+                            obj -> obj.get(String.valueOf(arrayRef.index)).orElse(obj),
+                            arr -> arr.get(arrayRef.index).orElse(arr)
                     ),
                     propertyRef -> foldToJson(
                             c,
-                            obj -> obj.get(String.valueOf(propertyRef.name)).getOrElse(obj),
+                            obj -> obj.get(String.valueOf(propertyRef.name)).orElse(obj),
                             Json.JValue::asJValue
                     ),
                     () -> {
@@ -61,11 +62,11 @@ public final class JsonPointer {
                     }
             );
             if (!iterator.hasNext() && current != value) {
-                return Option.of(current);
+                return Optional.of(current);
             }
         }
 
-        return Option.none();
+        return Optional.empty();
     }
 
     public Json.JValue add(Json.JValue json, Json.JValue value) {
@@ -83,7 +84,7 @@ public final class JsonPointer {
         }
 
         Iterator<Ref> iterator = path.iterator();
-        return updateImpl(iterator, iterator.next(), json, Option.none());
+        return updateImpl(iterator, iterator.next(), json, Optional.empty());
     }
 
     public Json.JValue replace(Json.JValue json, Json.JValue value) {
@@ -92,23 +93,23 @@ public final class JsonPointer {
         }
 
         Iterator<Ref> iterator = path.iterator();
-        return updateImpl(iterator, iterator.next(), json, Option.of(value));
+        return updateImpl(iterator, iterator.next(), json, Optional.of(value));
     }
 
     public Json.JValue copy(Json.JValue json, JsonPointer from) {
         //TODO: Optimize? we have 3 traversals of the graph
-        Option<Json.JValue> selected = from.select(json);
-        return selected.map(v -> add(json, v)).getOrElse(json);
+        Optional<Json.JValue> selected = from.select(json);
+        return selected.map(v -> add(json, v)).orElse(json);
     }
 
     public Json.JValue move(Json.JValue json, JsonPointer from) {
         //TODO: Optimize? we have 3 traversals of the graph
-        Option<Json.JValue> selected = from.select(json);
-        return selected.map(v -> add(from.remove(json), v)).getOrElse(json);
+        Optional<Json.JValue> selected = from.select(json);
+        return selected.map(v -> add(from.remove(json), v)).orElse(json);
     }
 
     public boolean test(Json.JValue json, Json.JValue value) {
-        return select(json).map(value::equals).getOrElse(false);
+        return select(json).map(value::equals).orElse(false);
     }
 
     private Json.JValue foldToJson(Json.JValue value, Function<Json.JObject, Json.JValue> fObject, Function<Json.JArray, Json.JValue> fArray) {
@@ -122,7 +123,7 @@ public final class JsonPointer {
         );
     }
 
-    private Json.JValue updateImpl(Iterator<Ref> path, Ref ref, Json.JValue context, Option<Json.JValue> updateValue) {
+    private Json.JValue updateImpl(Iterator<Ref> path, Ref ref, Json.JValue context, Optional<Json.JValue> updateValue) {
         return ref.fold(
                 arrayRef -> foldToJson(
                         context,
@@ -131,15 +132,15 @@ public final class JsonPointer {
                             int index = arrayRef.index;
                             Json.JArray array = context.asJsonArrayOrEmpty();
                             if (!path.hasNext()) {
-                                if (updateValue.isDefined()) {
-                                    array.get(index).getOrElseThrow(() -> new IllegalStateException("No value at index: " + index));
+                                if (updateValue.isPresent()) {
+                                    array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
                                     return array.replace(index, updateValue.get());
                                 }
                                 else {
                                     return array.remove(index);
                                 }
                             } else {
-                                Json.JValue value = array.get(index).getOrElseThrow(() -> new IllegalStateException("No value at index: " + index));
+                                Json.JValue value = array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
                                 return array.replace(index, updateImpl(path, path.next(), value, updateValue));
                             }
                         }
@@ -155,17 +156,12 @@ public final class JsonPointer {
         );
     }
 
-    private Json.JValue replaceObject(Iterator<Ref> path, Json.JValue context, Option<Json.JValue> updateValue, String name) {
+    private Json.JValue replaceObject(Iterator<Ref> path, Json.JValue context, Optional<Json.JValue> updateValue, String name) {
         Json.JObject object = context.asJsonObjectOrEmpty();
         if (!path.hasNext()) {
-            if (updateValue.isDefined()) {
-                return object.put(name, updateValue.get());
-            }
-            else {
-                return object.remove(name);
-            }
+            return updateValue.map(jValue -> object.put(name, jValue)).orElseGet(() -> object.remove(name));
         } else {
-            Json.JValue value = object.get(name).getOrElseThrow(() -> new IllegalStateException("No value with name: " + name));
+            Json.JValue value = object.get(name).orElseThrow(() -> new IllegalStateException("No value with name: " + name));
             return object.put(name, updateImpl(path, path.next(), value, updateValue));
         }
     }
@@ -188,7 +184,7 @@ public final class JsonPointer {
                                     throw new IllegalStateException(String.format("List index %s is out-of-bounds", index));
                                 }
                             } else {
-                                Json.JValue value = arr.get(index).getOrElseThrow(() -> new IllegalStateException(String.format("List index %s is out-of-bounds", index)));
+                                Json.JValue value = arr.get(index).orElseThrow(() -> new IllegalStateException(String.format("List index %s is out-of-bounds", index)));
                                 return arr.replace(index, addImpl(path, path.next(), value, valueToInsert));
                             }
                         }
@@ -217,7 +213,7 @@ public final class JsonPointer {
         if (!path.hasNext()) {
             return object.put(name, valueToInsert);
         } else {
-            Json.JValue value = object.get(name).getOrElseThrow(() -> new IllegalStateException("No value with name: " + name));
+            Json.JValue value = object.get(name).orElseThrow(() -> new IllegalStateException("No value with name: " + name));
             return object.put(name, addImpl(path, path.next(), value, valueToInsert));
         }
     }

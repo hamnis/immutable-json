@@ -1,16 +1,12 @@
 package net.hamnaberg.json.codec.reflection;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.codec.Codecs;
 import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.codec.JsonCodec;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +15,7 @@ public class ReflectionCodecTest {
 
     @Test
     public void personReflection() {
-        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
+        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>() {{
             put("name", Json.jString("Erlend Hamnaberg"));
             put("age", Json.jNumber(34));
             put("address", Json.jObject(
@@ -41,25 +37,24 @@ public class ReflectionCodecTest {
 
     @Test
     public void consultantReflectionWithArrays() {
-        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>() {{
-            put("name", Json.jString("Erlend Hamnaberg"));
-            put("workplaces", Json.jArray(List.of(
-                    Json.jObject(
-                            Json.tuple("street", Json.jString("Ensjøveien")),
-                            Json.tuple("city", Json.jString("Oslo"))
-                    ),
-                    Json.jObject(
-                            Json.tuple("street", Json.jString("Money, Money, Money")),
-                            Json.tuple("city", Json.jString("Oslo"))
-                    ))
-                    )
-            );
-        }});
+        Json.JValue value = Json.jObject(
+                "name", Json.jString("Erlend Hamnaberg"),
+                "workplaces", Json.jArray(List.of(
+                        Json.jObject(
+                                Json.tuple("street", Json.jString("Ensjøveien")),
+                                Json.tuple("city", Json.jString("Oslo"))
+                        ),
+                        Json.jObject(
+                                Json.tuple("street", Json.jString("Money, Money, Money")),
+                                Json.tuple("city", Json.jString("Oslo"))
+                        ))
+                )
+        );
 
         JsonCodec<Address> aCodec = new ReflectionCodec<>(Address.class);
         Map<String, JsonCodec<?>> codecs = Collections.singletonMap("workplaces", Codecs.listCodec(aCodec));
         JsonCodec<Consultant> consultantCodec = new ReflectionCodec<>(Consultant.class, codecs);
-        JsonCodec<Consultant> consultantCodecFactory = new ReflectionCodec<>(Consultant.class, codecs, p -> true, Option.of("create"));
+        JsonCodec<Consultant> consultantCodecFactory = new ReflectionCodec<>(Consultant.class, codecs, p -> true, Optional.of("create"));
 
         Consultant consultant = new Consultant("Erlend Hamnaberg", List.of(new Address("Ensjøveien", "Oslo"), new Address("Money, Money, Money", "Oslo")));
         DecodeResult<Consultant> consultantOpt = consultantCodec.fromJson(value);

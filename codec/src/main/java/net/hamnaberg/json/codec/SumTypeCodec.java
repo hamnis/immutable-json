@@ -1,8 +1,9 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.Map;
 import net.hamnaberg.json.Json;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
@@ -20,7 +21,7 @@ public final class SumTypeCodec<T> implements JsonCodec<T> {
     }
 
     public SumTypeCodec(Class<T> mainType, String discriminatorField, Function<Class<?>, String> nameF, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
-        this(mainType, (type, obj) -> obj.getAsString(discriminatorField).exists(nameF.apply(type)::equals), subtypes);
+        this(mainType, (type, obj) -> obj.getAsString(discriminatorField).filter(nameF.apply(type)::equals).isPresent(), subtypes);
     }
 
     public SumTypeCodec(Class<T> type, BiPredicate<Class<?>, Json.JObject> discriminator, Map<Class<?>, JsonCodec<? extends T>> subtypes) {
@@ -32,8 +33,8 @@ public final class SumTypeCodec<T> implements JsonCodec<T> {
     @Override
     public DecodeResult<T> fromJson(Json.JValue value) {
         Json.JObject object = value.asJsonObjectOrEmpty();
-        DecodeResult<? extends T> result = subtypes.find(tuple -> discriminator.test(tuple._1, object)).
-                map(t -> t._2.fromJson(object)).getOrElse(() -> DecodeResult.fail("Unable to decode any types"));
+        DecodeResult<? extends T> result = subtypes.entrySet().stream().filter(tuple -> discriminator.test(tuple.getKey(), object)).findFirst()
+                .map(t -> t.getValue().fromJson(object)).orElseGet(() -> DecodeResult.fail("Unable to decode any types"));
 
         return result.map(it -> it);
     }
@@ -41,9 +42,8 @@ public final class SumTypeCodec<T> implements JsonCodec<T> {
     @Override
     public Json.JValue toJson(T value) {
         if (mainType.isInstance(value)) {
-            JsonCodec<? extends T> codec = subtypes.
-                    get(value.getClass()).
-                    getOrElseThrow(() -> new IllegalArgumentException(String.format("Not a valid type, %s, available %s", value.getClass(), subtypes.keySet())));
+            JsonCodec<? extends T> codec = Optional.ofNullable(subtypes.get(value.getClass())).
+                    orElseThrow(() -> new IllegalArgumentException(String.format("Not a valid type, %s, available %s", value.getClass(), subtypes.keySet())));
             @SuppressWarnings("unchecked")
             JsonCodec<T> downcast = (JsonCodec<T>)codec;
             return downcast.toJson(value);

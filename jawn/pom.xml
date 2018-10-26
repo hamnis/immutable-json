@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>6.3.0-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: JAWN</name>
   <artifactId>immutable-json-jawn_2.12</artifactId>
@@ -82,17 +82,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>net.hamnaberg.json.jawn</Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
-        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -3,7 +3,7 @@ package net.hamnaberg.json.gson;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import io.vavr.control.Try;
+
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JsonParseException;
 import net.hamnaberg.json.io.JsonParser;
@@ -20,9 +20,10 @@ public class GsonStreamingJsonParser extends JsonParser {
     private Gson gson = new Gson();
 
     @Override
-    protected Try<Json.JValue> parseImpl(Reader dataReader) {
+    protected Json.JValue parseImpl(Reader dataReader) {
         JsonReader jsonReader = gson.newJsonReader(dataReader);
-        return Try.of(() -> {
+
+        try {
             while (jsonReader.hasNext()) {
                 JsonToken token = jsonReader.peek();
                 if (isObject(token)) {
@@ -33,8 +34,10 @@ public class GsonStreamingJsonParser extends JsonParser {
                     return parseScalarValue(token, jsonReader);
                 }
             }
-            throw new JsonParseException("Nothing parsed");
-        });
+        } catch (IOException e) {
+            throw new JsonParseException(e);
+        }
+        throw new JsonParseException("Nothing parsed");
     }
 
     private Json.JValue parseScalarValue(JsonToken token, JsonReader reader) throws IOException {

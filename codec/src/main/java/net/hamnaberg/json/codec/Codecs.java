@@ -1,13 +1,7 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.*;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
-import io.vavr.collection.Vector;
-import io.vavr.control.Option;
-
+import net.hamnaberg.arities.*;
 import net.hamnaberg.json.Json;
-import net.hamnaberg.json.util.*;
 
 import java.net.URI;
 import java.net.URL;
@@ -114,42 +108,10 @@ public abstract class Codecs {
         );
     }
 
-    public static <A> JsonCodec<Vector<A>> vectorCodec(JsonCodec<A> codec) {
-        return new DefaultJsonCodec<>(
-                Decoders.vectorDecoder(codec),
-                Encoders.vectorEncoder(codec),
-                String.format("Vector(%s)", codec.toString())
-        );
-    }
-
-    public static <A> JsonCodec<java.util.Set<A>> javaSetCodec(JsonCodec<A> codec) {
-        return new DefaultJsonCodec<>(
-                Decoders.javaSetDecoder(codec),
-                Encoders.javaSetEncoder(codec),
-                String.format("javaSet(%s)", codec.toString())
-        );
-    }
-
-    public static <A> JsonCodec<java.util.List<A>> javaListCodec(JsonCodec<A> codec) {
-        return new DefaultJsonCodec<>(
-                Decoders.javaListDecoder(codec),
-                Encoders.javaListEncoder(codec),
-                String.format("javaList(%s)", codec.toString())
-        );
-    }
-
-    public static <A> JsonCodec<Option<A>> OptionCodec(JsonCodec<A> codec) {
-        return new DefaultJsonCodec<>(
-                Decoders.OptionDecoder(codec),
-                Encoders.OptionEncoder(codec),
-                String.format("Option(%s)", codec.toString())
-        );
-    }
-
-    public static <A> JsonCodec<Optional<A>> OptionalCodec(JsonCodec<A> codec) {
+    public static <A> JsonCodec<Optional<A>> optionalCodec(JsonCodec<A> codec) {
         return new DefaultJsonCodec<>(
                 Decoders.optionalDecoder(codec),
-                Encoders.OptionalEncoder(codec),
+                Encoders.optionalencoder(codec),
                 String.format("Optional(%s)", codec.toString())
         );
     }

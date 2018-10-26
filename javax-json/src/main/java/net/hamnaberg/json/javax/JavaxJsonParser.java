@@ -1,13 +1,11 @@
 package net.hamnaberg.json.javax;
 
-import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JsonParseException;
 
 import java.io.Reader;
 import java.util.*;
 import javax.json.stream.JsonParser;
-import javax.json.stream.JsonParsingException;
 
 public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
     private final EnumSet<JsonParser.Event> scalarSet =
@@ -20,24 +18,25 @@ public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
             );
 
     @Override
-    protected Try<Json.JValue> parseImpl(Reader reader) {
+    protected Json.JValue parseImpl(Reader reader) {
         JsonParser parser = javax.json.Json.createParser(reader);
-        return Try.of(() -> {
+        try {
             JsonParser.Event event;
 
-            while ((event = parser.next()) != null ) {
+            while ((event = parser.next()) != null) {
                 if (event == JsonParser.Event.START_OBJECT) {
                     return handleObject(parser);
-                }
-                else if (event == JsonParser.Event.START_ARRAY) {
+                } else if (event == JsonParser.Event.START_ARRAY) {
                     return handleArray(parser);
-                }
-                else if (isScalar(event)) {
+                } else if (isScalar(event)) {
                     return handleScalarValue(event, parser);
                 }
             }
-            throw new JsonParseException("Nothing parsed");
-        });
+        } catch (Exception e) {
+            throw new JsonParseException(e);
+        }
+        throw new JsonParseException("Nothing parsed");
+
     }
 
     private Json.JValue handleScalarValue(JsonParser.Event event, JsonParser parser) {

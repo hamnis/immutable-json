@@ -1,8 +1,9 @@
 package net.hamnaberg.json;
 
-import io.vavr.collection.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
+import java.util.List;
 
 import static net.hamnaberg.json.Json.*;
 import static org.junit.Assert.assertThat;

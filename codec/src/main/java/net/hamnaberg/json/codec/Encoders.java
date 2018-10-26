@@ -1,12 +1,7 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.*;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
-import io.vavr.collection.Vector;
-import io.vavr.control.Option;
+import net.hamnaberg.arities.*;
 import net.hamnaberg.json.Json;
-import net.hamnaberg.json.util.*;
 
 import java.net.URI;
 import java.net.URL;
@@ -14,9 +9,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class Encoders {
     private Encoders(){}
@@ -43,36 +41,21 @@ public abstract class Encoders {
     }
 
     public static <A> EncodeJson<List<A>> listEncoder(EncodeJson<A> encoder) {
-        return value -> Json.jArray(value.map(encoder::toJson));
+        return value -> Json.jArray(value.stream().map(encoder::toJson).collect(Collectors.toUnmodifiableList()));
     }
 
     public static <A> EncodeJson<Set<A>> setEncoder(EncodeJson<A> encoder) {
-        return listEncoder(encoder).contramap(List::ofAll);
+        return listEncoder(encoder).contramap(List::copyOf);
     }
 
-    public static <A> EncodeJson<Vector<A>> vectorEncoder(EncodeJson<A> encoder) {
-        return listEncoder(encoder).contramap(List::ofAll);
-    }
-
-    public static <A> EncodeJson<java.util.List<A>> javaListEncoder(EncodeJson<A> encoder) {
-        return listEncoder(encoder).contramap(List::ofAll);
-    }
-
-    public static <A> EncodeJson<java.util.Set<A>> javaSetEncoder(EncodeJson<A> encoder) {
-        return listEncoder(encoder).contramap(List::ofAll);
-    }
-
-    public static <A> EncodeJson<Option<A>> OptionEncoder(EncodeJson<A> encoder) {
-        return value -> value.map(encoder::toJson).getOrElse(Json.jNull());
-    }
-
-    public static <A> EncodeJson<Optional<A>> OptionalEncoder(EncodeJson<A> underlying) {
-        return OptionEncoder(underlying).contramap(Option::ofOptional);
+    public static <A> EncodeJson<Optional<A>> optionalencoder(EncodeJson<A> encoder) {
+        return value -> value.map(encoder::toJson).orElse(Json.jNull());
     }
 
     public static <A> EncodeJson<A> objectEncoder(Function<A, Json.JObject> encoder) {
         return a -> encoder.apply(a).asJValue();
     }
+
     public static <A1, A2> EncodeJson<Tuple2<A1, A2>> encode(FieldEncoder<A1> e1, FieldEncoder<A2> e2) {
         return tuple -> Json.jObject(
                 Json.tuple(e1.name, e1.toJson(tuple._1)),

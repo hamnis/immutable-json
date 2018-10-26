@@ -1,14 +1,6 @@
 package net.hamnaberg.json;
 
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
-
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
-import io.vavr.collection.LinkedHashMap;
-import io.vavr.collection.Map;
-import io.vavr.control.Option;
 import java.util.Map.Entry;
 
 import java.io.Serializable;
@@ -16,7 +8,10 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.Iterator;
 import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public abstract class Json {
     private Json() {
@@ -55,23 +50,25 @@ public abstract class Json {
     }
 
     public static JArray jEmptyArray() {
-        return new JArray(List.empty());
+        return new JArray(List.of());
     }
 
     public static JArray jArray(Iterable<JValue> iterable) {
-        return new JArray(List.ofAll(iterable));
+        Objects.requireNonNull(iterable, "iterable was null");
+        List<JValue> list = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toUnmodifiableList());
+        return new JArray(list);
     }
 
     public static JArray jArray(JValue first, JValue... rest) {
-        return new JArray(List.of(rest).prepend(first));
+        return new JArray(Stream.concat(Stream.of(first), Stream.of(rest)).collect(Collectors.toUnmodifiableList()));
     }
 
     public static JObject jEmptyObject() {
-        return new JObject(LinkedHashMap.empty());
+        return new JObject(Map.of());
     }
 
     public static JObject jObject(String name, JValue value) {
-        return new JObject(LinkedHashMap.of(
+        return new JObject(Map.of(
                 Objects.requireNonNull(name, "Name for entry may not be null"),
                 Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
         ));
@@ -107,26 +104,17 @@ public abstract class Json {
 
     @SafeVarargs
     public static JObject jObject(Entry<String, JValue> first, Entry<String, JValue>... list) {
-        return new JObject(LinkedHashMap.of(first.getKey(), first.getValue()).merge(LinkedHashMap.ofEntries(list)));
+        LinkedHashMap<String, JValue> map = new LinkedHashMap<>(Map.of(first.getKey(), first.getValue()));
+        map.putAll(Map.ofEntries(list));
+        return new JObject(Map.copyOf(map));
     }
 
-    @SafeVarargs
-    public static JObject jObject(Tuple2<String, JValue> first, Tuple2<String, JValue>... list) {
-        return jObject(List.of(list).prepend(first));
-    }
-
-    public static JObject jObject(Iterable<Tuple2<String, JValue>> value) {
+    @SuppressWarnings("unchecked")
+    public static JObject jObject(Iterable<Entry<String, JValue>> value) {
         if (value instanceof JObject) {
             return (JObject) value;
         }
-        return new JObject(LinkedHashMap.ofEntries(value));
-    }
-
-    public static JObject jObject(Map<String, JValue> value) {
-        if (value instanceof LinkedHashMap) {
-            return new JObject(value);
-        }
-        return new JObject(LinkedHashMap.ofEntries(value));
+        return new JObject(Map.ofEntries(StreamSupport.stream(value.spliterator(), false).toArray(Map.Entry[]::new)));
     }
 
     public static JObject jObject(
@@ -282,75 +270,75 @@ public abstract class Json {
         );
     }
 
-    public static JObject jObject(java.util.Map<String, JValue> value) {
-        return new JObject(LinkedHashMap.ofAll(value));
+    public static JObject jObject(Map<String, JValue> value) {
+        return new JObject(Map.copyOf(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, JValue value) {
-        return Tuple.of(
+    public static Map.Entry<String, JValue> tuple(String name, JValue value) {
+        return Map.entry(
                 Objects.requireNonNull(name, "Name for entry may not be null"),
                 Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
         );
     }
 
-    public static Tuple2<String, JValue> tuple(String name, Option<JValue> opt) {
-        return tuple(name, opt.getOrElse(Json::jNull));
+    public static Map.Entry<String, JValue> tuple(String name, Optional<JValue> opt) {
+        return tuple(name, opt.orElseGet(Json::jNull));
     }
 
-    public static <A> Tuple2<String, JValue> tuple(String name, A value, Function<A, Option<JValue>> f) {
+    public static <A> Map.Entry<String, JValue> tuple(String name, A value, Function<A, Optional<JValue>> f) {
         return tuple(name, f.apply(value));
     }
 
-    public static <A> Tuple2<String, JValue> tuple(String name, Option<A> value, Function<A, Option<JValue>> f) {
+    public static <A> Map.Entry<String, JValue> tuple(String name, Optional<A> value, Function<A, Optional<JValue>> f) {
         return tuple(name, value.flatMap(f));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, String value) {
+    public static Map.Entry<String, JValue> tuple(String name, String value) {
         return tuple(name, jString(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, int value) {
+    public static Map.Entry<String, JValue> tuple(String name, int value) {
         return tuple(name, jNumber(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, double value) {
+    public static Map.Entry<String, JValue> tuple(String name, double value) {
         return tuple(name, jNumber(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, long value) {
+    public static Map.Entry<String, JValue> tuple(String name, long value) {
         return tuple(name, jNumber(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, BigDecimal value) {
+    public static Map.Entry<String, JValue> tuple(String name, BigDecimal value) {
         return tuple(name, jNumber(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, Number value) {
+    public static Map.Entry<String, JValue> tuple(String name, Number value) {
         return tuple(name, jNumber(value));
     }
 
-    public static Tuple2<String, JValue> tuple(String name, boolean value) {
+    public static Map.Entry<String, JValue> tuple(String name, boolean value) {
         return tuple(name, jBoolean(value));
     }
 
-    public static Tuple2<String, JValue> nullableTuple(String name, String value) {
-        return tuple(name, Option.of(value).map(Json::jString));
+    public static Map.Entry<String, JValue> nullableTuple(String name, String value) {
+        return tuple(name, Optional.ofNullable(value).map(Json::jString));
     }
 
-    public static Tuple2<String, JValue> nullableTuple(String name, BigDecimal value) {
-        return tuple(name, Option.of(value).map(Json::jNumber));
+    public static Map.Entry<String, JValue> nullableTuple(String name, BigDecimal value) {
+        return tuple(name, Optional.ofNullable(value).map(Json::jNumber));
     }
 
-    public static Tuple2<String, JValue> nullableTuple(String name, Number value) {
-        return tuple(name, Option.of(value).map(Json::jNumber));
+    public static Map.Entry<String, JValue> nullableTuple(String name, Number value) {
+        return tuple(name, Optional.ofNullable(value).map(Json::jNumber));
     }
 
-    public static Tuple2<String, JValue> nullableTuple(String name, JValue value) {
-        return tuple(name, Option.of(value));
+    public static Map.Entry<String, JValue> nullableTuple(String name, JValue value) {
+        return tuple(name, Optional.ofNullable(value));
     }
 
-    private static <A, B> Function<A, Option<B>> emptyOption() {
-        return (ignore) -> Option.none();
+    private static <A, B> Function<A, Optional<B>> emptyOption() {
+        return (ignore) -> Optional.empty();
     }
 
     public static abstract class JValue implements Serializable {
@@ -384,57 +372,57 @@ public abstract class Json {
                                       Consumer<JArray> fArray,
                                       Runnable fNull);
 
-        public final Option<JArray> asJsonArray() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Option::of, Option::none);
+        public final Optional<JArray> asJsonArray() {
+            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::of, Optional::empty);
         }
 
         public final JArray asJsonArrayOrEmpty() {
-            return asJsonArray().getOrElse(jEmptyArray());
+            return asJsonArray().orElse(jEmptyArray());
         }
 
-        public final Option<JObject> asJsonObject() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Option::of, Json.emptyOption(), Option::none);
+        public final Optional<JObject> asJsonObject() {
+            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::of, Json.emptyOption(), Optional::empty);
         }
 
         public final JObject asJsonObjectOrEmpty() {
-            return asJsonObject().getOrElse(jEmptyObject());
+            return asJsonObject().orElse(jEmptyObject());
         }
 
-        public final Option<JBoolean> asJsonBoolean() {
-            return fold(Json.emptyOption(), Option::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Option::none);
+        public final Optional<JBoolean> asJsonBoolean() {
+            return fold(Json.emptyOption(), Optional::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::empty);
         }
 
-        public final Option<Boolean> asBoolean() {
+        public final Optional<Boolean> asBoolean() {
             return asJsonBoolean().map(j -> j.value);
         }
 
-        public final Option<JNull> asJsonNull() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), () -> Option.of(jNull()));
+        public final Optional<JNull> asJsonNull() {
+            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), () -> Optional.of(jNull()));
         }
 
-        public final Option<JString> asJsonString() {
-            return fold(Option::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Option::none);
+        public final Optional<JString> asJsonString() {
+            return fold(Optional::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::empty);
         }
 
-        public final Option<String> asString() {
+        public final Optional<String> asString() {
             return asJsonString().map(j -> j.value);
         }
 
-        public final Option<JNumber> asJsonNumber() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Option::of, Json.emptyOption(), Json.emptyOption(), Option::none);
+        public final Optional<JNumber> asJsonNumber() {
+            return fold(Json.emptyOption(), Json.emptyOption(), Optional::of, Json.emptyOption(), Json.emptyOption(), Optional::empty);
         }
 
-        public final Option<BigDecimal> asBigDecimal() {
+        public final Optional<BigDecimal> asBigDecimal() {
             return asJsonNumber().map(j -> j.value);
         }
 
 
-        public final boolean isObject() { return asJsonObject().isDefined(); }
-        public final boolean isArray() { return asJsonArray().isDefined(); }
-        public final boolean isString() { return asJsonString().isDefined(); }
-        public final boolean isNull() { return asJsonNull().isDefined(); }
-        public final boolean isBoolean() { return asJsonBoolean().isDefined(); }
-        public final boolean isNumber() { return asJsonNumber().isDefined(); }
+        public final boolean isObject() { return asJsonObject().isPresent(); }
+        public final boolean isArray() { return asJsonArray().isPresent(); }
+        public final boolean isString() { return asJsonString().isPresent(); }
+        public final boolean isNull() { return asJsonNull().isPresent(); }
+        public final boolean isBoolean() { return asJsonBoolean().isPresent(); }
+        public final boolean isNumber() { return asJsonNumber().isPresent(); }
 
         public final boolean isScalar() {
             return fold(j -> true, j -> true, j -> true, j -> false, j -> false, () -> true);
@@ -444,14 +432,14 @@ public abstract class Json {
             return f.apply(this);
         }
 
-        public final Option<String> scalarToString() {
+        public final Optional<String> scalarToString() {
             return fold(
-                    j -> Option.some(j.value),
-                    j -> Option.some(String.valueOf(j.value)),
-                    j -> Option.some(j.value.toString()),
+                    j -> Optional.of(j.value),
+                    j -> Optional.of(String.valueOf(j.value)),
+                    j -> Optional.of(j.value.toString()),
                     emptyOption(),
                     emptyOption(),
-                    () -> Option.some("null")
+                    () -> Optional.of("null")
             );
         }
 
@@ -467,16 +455,16 @@ public abstract class Json {
          * from this JSON.
          */
         public final JValue deepmerge(JValue value) {
-            Option<JObject> first = asJsonObject();
-            Option<JObject> second = value.asJsonObject();
+            Optional<JObject> first = asJsonObject();
+            Optional<JObject> second = value.asJsonObject();
 
-            if (first.isDefined() && second.isDefined()) {
+            if (first.isPresent() && second.isPresent()) {
                 return second.get().stream().reduce(first.get(), (obj, kv) -> {
-                    Option<JValue> v1 = obj.get(kv._1);
-                    if (v1.isDefined()) {
-                        return obj.put(kv._1, v1.get().deepmerge(kv._2));
+                    Optional<JValue> v1 = obj.get(kv.getKey());
+                    if (v1.isPresent()) {
+                        return obj.put(kv.getKey(), v1.get().deepmerge(kv.getValue()));
                     } else {
-                        return obj.put(kv._1, kv._2);
+                        return obj.put(kv.getKey(), kv.getValue());
                     }
                 }, JObject::concat);
             } else {
@@ -724,15 +712,15 @@ public abstract class Json {
         }
 
         public Stream<JValue> stream() {
-            return value.toJavaStream();
+            return value.stream();
         }
 
-        public Option<JValue> get(int index) {
-            return index < value.size() ? Option.of(value.get(index)) : Option.none();
+        public Optional<JValue> get(int index) {
+            return index < value.size() ? Optional.of(value.get(index)) : Optional.empty();
         }
 
-        public Option<JValue> headOption() {
-            return value.headOption();
+        public Optional<JValue> headOption() {
+            return value.stream().findFirst();
         }
 
         public List<JObject> getListAsObjects() {
@@ -747,12 +735,12 @@ public abstract class Json {
             return mapOpt(JValue::asBigDecimal);
         }
 
-        public <A> List<A> mapOpt(Function<JValue, Option<A>> f) {
-            return this.value.flatMap(f);
+        public <A> List<A> mapOpt(Function<JValue, Optional<A>> f) {
+            return this.value.stream().flatMap(f.andThen(Optional::stream)).collect(Collectors.toUnmodifiableList());
         }
 
         public <A> List<A> mapToList(Function<JValue, A> f) {
-            return value.map(f);
+            return value.stream().map(f).collect(Collectors.toUnmodifiableList());
         }
 
         public JArray map(Function<JValue, JValue> f) {
@@ -765,7 +753,7 @@ public abstract class Json {
         }
 
         public <A> List<A> flatMapToList(Function<JValue, List<A>> f) {
-            return value.flatMap(f);
+            return value.stream().flatMap(f.andThen(List::stream)).collect(Collectors.toUnmodifiableList());
         }
 
         public int size() {
@@ -773,7 +761,8 @@ public abstract class Json {
         }
 
         public JArray append(JValue toAdd) {
-            return new JArray(value.append(toAdd));
+            List<JValue> list = Stream.concat(value.stream(), Stream.of(toAdd)).collect(Collectors.toUnmodifiableList());
+            return new JArray(list);
         }
 
         public JArray append(String toAdd) {
@@ -806,7 +795,8 @@ public abstract class Json {
 
 
         public JArray prepend(JValue toAdd) {
-            return new JArray(value.prepend(toAdd));
+            List<JValue> list = Stream.concat(Stream.of(toAdd), value.stream()).collect(Collectors.toUnmodifiableList());
+            return new JArray(list);
         }
 
         public JArray prepend(String toAdd) {
@@ -838,30 +828,45 @@ public abstract class Json {
         }
 
         public JArray reverse() {
-            return new JArray(value.reverse());
+            List<JValue> value = new ArrayList<>(this.value);
+            Collections.reverse(value);
+            return new JArray(Collections.unmodifiableList(value));
         }
 
         public JArray insert(int index, JValue toAdd) {
-            return new JArray(value.insert(index, toAdd));
+            if (index <= this.value.size()) {
+                List<JValue> value = new ArrayList<>(this.value);
+                value.add(index, toAdd);
+                return new JArray(Collections.unmodifiableList(value));
+            }
+            return this;
         }
 
         public JArray replace(int index, JValue toAdd) {
-            List<JValue> before = value.slice(0, index);
-            List<JValue> rest = value.slice(index + 1, value.length());
-            List<JValue> added = rest.prepend(toAdd).prependAll(before);
-            return new JArray(added);
+            if (index < this.value.size()) {
+                List<JValue> value = new ArrayList<>(this.value);
+                value.set(index, toAdd);
+                return new JArray(Collections.unmodifiableList(value));
+            }
+            return this;
         }
 
         public JArray remove(int index) {
-            return new JArray(value.removeAt(index));
+            if (index < this.value.size()) {
+                List<JValue> value = new ArrayList<>(this.value);
+                value.remove(index);
+                return new JArray(Collections.unmodifiableList(value));
+            }
+            return this;
         }
 
         public JArray concat(JArray other) {
-            return new JArray(other.value.prependAll(this.value));
+            return new JArray(Stream.concat(this.value.stream(), other.stream()).collect(Collectors.toUnmodifiableList()));
         }
     }
 
-    public static final class JObject extends JValue implements Iterable<Tuple2<String, JValue>> {
+    public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
+        public static final Collector<Entry<String, JValue>, ?, Map<String, JValue>> MapCollector = Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue);
         public final Map<String, JValue> value;
 
         private JObject(Map<String, JValue> value) {
@@ -902,68 +907,70 @@ public abstract class Json {
             return value;
         }
 
-        public Option<JValue> get(String name) {
-            return value.get(name);
+        public Optional<JValue> get(String name) {
+            return Optional.ofNullable(value.get(name));
         }
 
-        public <A> Option<A> getAs(String name, Function<JValue, Option<A>> f) {
+        public <A> Optional<A> getAs(String name, Function<JValue, Optional<A>> f) {
             return get(name).flatMap(f);
         }
 
-        public Option<String> getAsString(String name) {
+        public Optional<String> getAsString(String name) {
             return getAs(name, JValue::asString);
         }
 
         public String getAsStringOrEmpty(String name) {
-            return getAsString(name).getOrElse("");
+            return getAsString(name).orElse("");
         }
 
-        public Option<JNumber> getAsNumber(String name) {
+        public Optional<JNumber> getAsNumber(String name) {
             return getAs(name, JValue::asJsonNumber);
         }
 
-        public Option<BigDecimal> getAsBigDecimal(String name) {
+        public Optional<BigDecimal> getAsBigDecimal(String name) {
             return getAsNumber(name).map(JNumber::getValue);
         }
 
-        public Option<Integer> getAsInteger(String name) {
+        public Optional<Integer> getAsInteger(String name) {
             return getAsNumber(name).map(JNumber::asInt);
         }
 
-        public Option<Double> getAsDouble(String name) {
+        public Optional<Double> getAsDouble(String name) {
             return getAsNumber(name).map(JNumber::asDouble);
         }
 
-        public Option<Long> getAsLong(String name) {
+        public Optional<Long> getAsLong(String name) {
             return getAsNumber(name).map(JNumber::asLong);
         }
 
-        public Option<Boolean> getAsBoolean(String name) {
+        public Optional<Boolean> getAsBoolean(String name) {
             return getAs(name, JValue::asBoolean);
         }
 
-        public Option<Json.JArray> getAsArray(String name) {
+        public Optional<Json.JArray> getAsArray(String name) {
             return getAs(name, JValue::asJsonArray);
         }
 
         public Json.JArray getAsArrayOrEmpty(String name) {
-            return getAsArray(name).getOrElse(Json.jEmptyArray());
+            return getAsArray(name).orElse(Json.jEmptyArray());
         }
 
-        public Option<Json.JObject> getAsObject(String name) {
+        public Optional<Json.JObject> getAsObject(String name) {
             return getAs(name, JValue::asJsonObject);
         }
 
         public Json.JObject getAsObjectOrEmpty(String name) {
-            return getAsObject(name).getOrElse(Json.jEmptyObject());
+            return getAsObject(name).orElse(Json.jEmptyObject());
         }
 
         public Json.JObject filter(BiPredicate<String, JValue> predicate) {
-            return Json.jObject(value.filter(e -> predicate.test(e._1, e._2)));
+            Map<String, JValue> collect = value.entrySet().stream().filter(e -> predicate.test(e.getKey(), e.getValue())).collect(MapCollector);
+            return new Json.JObject(collect);
         }
 
         public Json.JObject filterKeys(Predicate<String> predicate) {
-            return Json.jObject(value.filter(t -> predicate.test(t._1)));
+            Map<String, JValue> collect = value.entrySet().stream().filter(e -> predicate.test(e.getKey())).collect(MapCollector);
+            return new Json.JObject(collect);
         }
 
         public Json.JObject filterNot(BiPredicate<String, JValue> predicate) {
@@ -975,7 +982,7 @@ public abstract class Json {
         }
 
         public boolean containsKey(String key) {
-            return get(key).isDefined();
+            return get(key).isPresent();
         }
 
         public boolean containsValue(JValue value) {
@@ -983,7 +990,7 @@ public abstract class Json {
         }
 
         public List<JValue> values() {
-            return List.ofAll(value.values());
+            return List.copyOf(value.values());
         }
 
         public void forEach(BiConsumer<String, JValue> f) {
@@ -991,15 +998,17 @@ public abstract class Json {
         }
 
         public <B> List<B> mapToList(BiFunction<String, JValue, B> f) {
-            return value.map(e -> f.apply(e._1, e._2)).toList();
+            return value.entrySet().stream().map(
+                    e -> f.apply(e.getKey(), e.getValue())
+            ).collect(Collectors.toUnmodifiableList());
         }
 
         public <B> List<B> mapValues(Function<JValue, B> f) {
-            return values().map(f).toList();
+            return values().stream().map(f).collect(Collectors.toUnmodifiableList());
         }
 
         public JValue getOrDefault(String key, JValue defaultValue) {
-            return get(key).getOrElse(defaultValue);
+            return get(key).orElse(defaultValue);
         }
 
         public int size() {
@@ -1011,19 +1020,22 @@ public abstract class Json {
         }
 
         @Override
-        public Iterator<Tuple2<String, JValue>> iterator() {
-            return value.iterator();
+        public Iterator<Map.Entry<String, JValue>> iterator() {
+            return value.entrySet().iterator();
         }
 
-        public Stream<Tuple2<String, JValue>> stream() {
-            return value.toJavaStream();
+        public Stream<Map.Entry<String, JValue>> stream() {
+            return value.entrySet().stream();
         }
 
         public JObject put(String name, JValue value) {
-            return new JObject(this.value.put(
-                    Objects.requireNonNull(name, "Name in JObject.put may not be null"),
-                    Objects.requireNonNull(value, String.format("Value for name %s JObject.put may not be null", name))
-            ));
+            Objects.requireNonNull(name, "Name in JObject.put may not be null");
+            Objects.requireNonNull(value, String.format("Value for name %s JObject.put may not be null", name));
+
+            Map<String, JValue> map = new LinkedHashMap<>(this.value);
+            map.put(name, value);
+
+            return jObject(map);
         }
 
         public JObject put(String name, String value) {
@@ -1058,14 +1070,16 @@ public abstract class Json {
             if (other.isEmpty()) return this;
             if (this == other) return this;
 
-            java.util.Map<String, JValue> copy = this.value.toJavaMap();
-            copy.putAll(other.value.toJavaMap());
+            Map<String, JValue> copy = new LinkedHashMap<>(this.value);
+            copy.putAll(other.value);
             return jObject(copy);
         }
 
         public JObject remove(String name) {
             if (containsKey(name)) {
-                return new JObject(this.value.remove(name));
+                Map<String, JValue> copy = new LinkedHashMap<>(this.value);
+                copy.remove(name);
+                return jObject(copy);
             }
             return this;
         }

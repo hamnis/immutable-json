@@ -1,7 +1,5 @@
 package net.hamnaberg.json.codec.reflection;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.codec.Codecs;
 import net.hamnaberg.json.codec.DecodeResult;
 import net.hamnaberg.json.Json;
@@ -13,6 +11,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class ReflectionCodec<A> implements JsonCodec<A> {
     private final Class<A> type;
@@ -42,28 +41,28 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
     }
 
     public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs) {
-        this(type, codecs, (p) -> true, Option.none());
+        this(type, codecs, (p) -> true, Optional.empty());
     }
 
     public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate) {
-        this(type, codecs, predicate, Option.none());
+        this(type, codecs, predicate, Optional.empty());
     }
 
-    public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate, Option<String> factoryMethod) {
+    public ReflectionCodec(Class<A> type, Map<String, JsonCodec<?>> codecs, Predicate<Param> predicate, Optional<String> factoryMethod) {
         this.type = type;
         this.codecs = codecs;
-        this.fields = getFields(type).filter(predicate);
-        this.factory = factoryMethod.map(n -> Factory.factory(type, n, fields)).getOrElse(Factory.constructor(type, fields));
+        this.fields = getFields(type).stream().filter(predicate).collect(Collectors.toUnmodifiableList());
+        this.factory = factoryMethod.map(n -> Factory.factory(type, n, fields)).orElse(Factory.constructor(type, fields));
     }
 
     @Override
     public Json.JValue toJson(A value) {
         Map<String, Json.JValue> map = new LinkedHashMap<>();
         for (Param field : fields) {
-            Option<JsonCodec<Object>> codec = getCodec(field);
-            Option<Object> optValue = field.get(value);
-            Option<Json.JValue> opt = optValue.flatMap(o -> codec.map(c -> c.toJson(o)));
-            opt.forEach(v -> map.put(field.getName(), v));
+            Optional<JsonCodec<Object>> codec = getCodec(field);
+            Optional<Object> optValue = field.get(value);
+            Optional<Json.JValue> opt = optValue.flatMap(o -> codec.map(c -> c.toJson(o)));
+            opt.ifPresent(v -> map.put(field.getName(), v));
         }
         return map.isEmpty() ? Json.jNull() : Json.jObject(map);
     }
@@ -74,7 +73,7 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         ArrayList<Object> arguments = new ArrayList<>();
 
         for (Param field : fields) {
-            JsonCodec<Object> codec = getCodec(field).getOrElseThrow(() -> {
+            JsonCodec<Object> codec = getCodec(field).orElseThrow(() -> {
                 throw new NoSuchElementException("Missing codec for " + field.getName());
             });
             DecodeResult<Object> result = DecodeResult.decode(object, field.getName(), codec);
@@ -82,15 +81,15 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
         }
 
         try {
-            return DecodeResult.ok(this.factory.invoke(List.ofAll(arguments)));
+            return DecodeResult.ok(this.factory.invoke(List.copyOf(arguments)));
         } catch (Exception e) {
             return DecodeResult.fail(e.getMessage());
         }
     }
 
     @SuppressWarnings("unchecked")
-    private Option<JsonCodec<Object>> getCodec(Param field) {
-        return Option.of(
+    private Optional<JsonCodec<Object>> getCodec(Param field) {
+        return Optional.ofNullable(
                 (JsonCodec<Object>) codecs.getOrDefault(field.getName(), defaultCodecs.get(field.getType()))
         );
     }
@@ -125,6 +124,6 @@ public final class ReflectionCodec<A> implements JsonCodec<A> {
                 }
             }
         }
-        return List.ofAll(fields);
+        return List.copyOf(fields);
     }
 }

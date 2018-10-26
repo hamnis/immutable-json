@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>6.3.0-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: Codec</name>
   <artifactId>immutable-json-codec</artifactId>
@@ -35,25 +35,9 @@
       <artifactId>immutable-json-ast</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.vavr</groupId>
-      <artifactId>vavr</artifactId>
+      <groupId>net.hamnaberg</groupId>
+      <artifactId>arities</artifactId>
+      <version>0.2.0</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>net.hamnaberg.json.codec</Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>

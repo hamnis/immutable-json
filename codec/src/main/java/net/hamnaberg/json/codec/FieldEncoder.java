@@ -1,9 +1,8 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -53,16 +52,8 @@ public final class FieldEncoder<A> {
         return typedFieldOf(name, Encoders.listEncoder(encoder));
     }
 
-    public static <A> FieldEncoder<java.util.List<A>> EJavaList(String name, EncodeJson<A> encoder) {
-        return typedFieldOf(name, Encoders.javaListEncoder(encoder));
-    }
-
-    public static <B> FieldEncoder<Option<B>> EOptional(String name, EncodeJson<B> encoder) {
-        return typedFieldOf(name, Encoders.OptionEncoder(encoder));
-    }
-
-    public static <B> FieldEncoder<Optional<B>> EJavaOptional(String name, EncodeJson<B> encoder) {
-        return typedFieldOf(name, Encoders.OptionalEncoder(encoder));
+    public static <B> FieldEncoder<Optional<B>> EOptional(String name, EncodeJson<B> encoder) {
+        return typedFieldOf(name, Encoders.optionalencoder(encoder));
     }
 
     public static <B> FieldEncoder<B> typedFieldOf(String name, EncodeJson<B> encoder) {

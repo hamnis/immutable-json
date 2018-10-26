@@ -1,9 +1,9 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface EncodeJson<A> {
@@ -22,8 +22,8 @@ public interface EncodeJson<A> {
         return FieldEncoder.typedFieldOf(name, this);
     }
 
-    default EncodeJson<Option<A>> option() {
-        return Encoders.OptionEncoder(this);
+    default EncodeJson<Optional<A>> option() {
+        return Encoders.optionalencoder(this);
     }
 
     default EncodeJson<List<A>> list() {

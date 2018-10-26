@@ -32,7 +32,7 @@ public class MergePatchTests {
             Json.JValue patch = object.get("patch").get();
             Json.JValue result = object.get("result").get();
             return new Object[]{ document, patch, result};
-        }).toJavaList();
+        });
     }
 
     public MergePatchTests(Json.JValue document, Json.JValue patch, Json.JValue result) {

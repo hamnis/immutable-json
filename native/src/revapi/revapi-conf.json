@@ -1,9 +1,0 @@
-{
-  "revapi": {
-    "semver": {
-      "ignore": {
-        "enabled": true
-      }
-    }
-  }
-}

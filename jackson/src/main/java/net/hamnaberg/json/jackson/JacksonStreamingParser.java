@@ -2,7 +2,6 @@ package net.hamnaberg.json.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
-import io.vavr.control.Try;
 import net.hamnaberg.json.*;
 import net.hamnaberg.json.io.JsonParseException;
 import net.hamnaberg.json.io.JsonParser;
@@ -16,8 +15,8 @@ public final class JacksonStreamingParser extends JsonParser {
     private final JsonFactory factory = new JsonFactory();
 
     @Override
-    protected Try<Json.JValue> parseImpl(Reader reader) {
-        return Try.of(() -> {
+    protected Json.JValue parseImpl(Reader reader) {
+        try {
             com.fasterxml.jackson.core.JsonParser parser = factory.createParser(reader);
             JsonToken token;
             while ((token = parser.nextToken()) != null ) {
@@ -31,8 +30,10 @@ public final class JacksonStreamingParser extends JsonParser {
                     return handleScalarValue(parser);
                 }
             }
-            throw new JsonParseException("Nothing parsed");
-        });
+        } catch (Exception e) {
+            throw new JsonParseException(e);
+        }
+        throw new JsonParseException("Nothing parsed");
     }
 
     private Json.JObject handleObject(com.fasterxml.jackson.core.JsonParser parser) throws Exception {

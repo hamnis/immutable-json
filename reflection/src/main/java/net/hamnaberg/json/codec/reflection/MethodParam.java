@@ -1,8 +1,7 @@
 package net.hamnaberg.json.codec.reflection;
 
-import io.vavr.control.Option;
-
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 class MethodParam implements Param {
     public final String name;
@@ -14,11 +13,11 @@ class MethodParam implements Param {
     }
 
     @Override
-    public Option<Object> get(Object value) {
+    public Optional<Object> get(Object value) {
         try {
-            return Option.of(method.invoke(value));
+            return Optional.ofNullable(method.invoke(value));
         } catch (Exception e) {
-            return Option.none();
+            return Optional.empty();
         }
     }
 

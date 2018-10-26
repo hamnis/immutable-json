@@ -1,10 +1,12 @@
 package net.hamnaberg.json.patch;
 
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.pointer.JsonPointer;
 
@@ -18,7 +20,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     private final List<Operation> operations;
 
     public JsonPatch() {
-        this(List.empty());
+        this(List.of());
     }
 
     private JsonPatch(List<Operation> operations) {
@@ -30,7 +32,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch add(JsonPointer path, Json.JValue value) {
-        return op(Operation.Op.Add, Option.none(), path, Option.of(value));
+        return op(Operation.Op.Add, Optional.empty(), path, Optional.of(value));
     }
 
     public JsonPatch remove(String path) {
@@ -38,7 +40,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch remove(JsonPointer path) {
-        return op(Operation.Op.Remove, Option.none(), path, Option.none());
+        return op(Operation.Op.Remove, Optional.empty(), path, Optional.empty());
     }
 
     public JsonPatch replace(String path, Json.JValue value) {
@@ -46,7 +48,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch replace(JsonPointer path, Json.JValue value) {
-        return op(Operation.Op.Replace, Option.none(), path, Option.of(value));
+        return op(Operation.Op.Replace, Optional.empty(), path, Optional.of(value));
     }
 
     public JsonPatch test(String path, Json.JValue value) {
@@ -54,7 +56,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch test(JsonPointer path, Json.JValue value) {
-        return op(Operation.Op.Test, Option.none(), path, Option.of(value));
+        return op(Operation.Op.Test, Optional.empty(), path, Optional.of(value));
     }
 
     public JsonPatch copy(String from, String path) {
@@ -62,7 +64,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch copy(JsonPointer from, JsonPointer path) {
-        return op(Operation.Op.Copy, Option.of(from), path, Option.none());
+        return op(Operation.Op.Copy, Optional.of(from), path, Optional.empty());
     }
 
     public JsonPatch move(String from, String path) {
@@ -70,11 +72,12 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public JsonPatch move(JsonPointer from, JsonPointer path) {
-        return op(Operation.Op.Move, Option.of(from), path, Option.none());
+        return op(Operation.Op.Move, Optional.of(from), path, Optional.empty());
     }
 
-    private JsonPatch op(Operation.Op op, Option<JsonPointer> from, JsonPointer path, Option<Json.JValue> value) {
-        return new JsonPatch(this.operations.append(new Operation(op, from, path, value)));
+    private JsonPatch op(Operation.Op op, Optional<JsonPointer> from, JsonPointer path, Optional<Json.JValue> value) {
+        List<Operation> ops = Stream.concat(this.operations.stream(), Stream.of(new Operation(op, from, path, value))).collect(Collectors.toUnmodifiableList());
+        return new JsonPatch(ops);
     }
 
     public Json.JValue apply(final Json.JValue json) {
@@ -82,22 +85,22 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
         for (Operation op : operations) {
             switch (op.op) {
                 case Add:
-                    modified = op.path.add(modified, op.value.getOrElseThrow(() -> new IllegalStateException("Missing value")));
+                    modified = op.path.add(modified, op.value.orElseThrow(() -> new IllegalStateException("Missing value")));
                     break;
                 case Remove:
                     modified = op.path.remove(modified);
                     break;
                 case Replace:
-                    modified = op.path.replace(modified, op.value.getOrElseThrow(() -> new IllegalStateException("Missing value")));
+                    modified = op.path.replace(modified, op.value.orElseThrow(() -> new IllegalStateException("Missing value")));
                     break;
                 case Move:
-                    modified = op.path.move(json, op.from.getOrElseThrow(() -> new IllegalStateException("Missing from")));
+                    modified = op.path.move(json, op.from.orElseThrow(() -> new IllegalStateException("Missing from")));
                     break;
                 case Copy:
-                    modified = op.path.copy(json, op.from.getOrElseThrow(() -> new IllegalStateException("Missing from")));
+                    modified = op.path.copy(json, op.from.orElseThrow(() -> new IllegalStateException("Missing from")));
                     break;
                 case Test:
-                    modified = op.path.test(json, op.value.getOrElseThrow(() -> new IllegalStateException("Missing value"))) ? modified : modified;
+                    modified = op.path.test(json, op.value.orElseThrow(() -> new IllegalStateException("Missing value"))) ? modified : modified;
                     break;
             }
         }
@@ -105,7 +108,7 @@ public final class JsonPatch implements Function<Json.JValue, Json.JValue> {
     }
 
     public Json.JArray toJson() {
-        return Json.jArray(this.operations.map(Operation::toJson));
+        return Json.jArray(this.operations.stream().map(Operation::toJson).collect(Collectors.toUnmodifiableList()));
     }
 }
 

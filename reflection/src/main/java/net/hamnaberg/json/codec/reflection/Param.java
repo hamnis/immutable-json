@@ -1,9 +1,10 @@
 package net.hamnaberg.json.codec.reflection;
 
-import io.vavr.control.Option;
+
+import java.util.Optional;
 
 public interface Param {
-    Option<Object> get(Object value);
+    Optional<Object> get(Object value);
 
     String getName();
 
