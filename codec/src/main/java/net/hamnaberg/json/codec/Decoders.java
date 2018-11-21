@@ -187,18 +187,18 @@ public abstract class Decoders {
 
     public static <TT, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11> DecodeJson<TT> decode(FieldDecoder<A1> fd1, FieldDecoder<A2> fd2, FieldDecoder<A3> fd3, FieldDecoder<A4> fd4, FieldDecoder<A5> fd5, FieldDecoder<A6> fd6, FieldDecoder<A7> fd7, FieldDecoder<A8> fd8, FieldDecoder<A9> fd9, FieldDecoder<A10> fd10, FieldDecoder<A11> fd11, Function11<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, TT> func) {
         return (value) -> {
-            Json.JObject object = value.asJsonObjectOrEmpty();
-            DecodeResult<A1> d1 = DecodeResult.decode(object, fd1);
-            DecodeResult<A2> d2 = DecodeResult.decode(object, fd2);
-            DecodeResult<A3> d3 = DecodeResult.decode(object, fd3);
-            DecodeResult<A4> d4 = DecodeResult.decode(object, fd4);
-            DecodeResult<A5> d5 = DecodeResult.decode(object, fd5);
-            DecodeResult<A6> d6 = DecodeResult.decode(object, fd6);
-            DecodeResult<A7> d7 = DecodeResult.decode(object, fd7);
-            DecodeResult<A8> d8 = DecodeResult.decode(object, fd8);
-            DecodeResult<A9> d9 = DecodeResult.decode(object, fd9);
-            DecodeResult<A10> d10 = DecodeResult.decode(object, fd10);
-            DecodeResult<A11> d11 = DecodeResult.decode(object, fd11);
+            var object = value.asJsonObjectOrEmpty();
+            var d1 = DecodeResult.decode(object, fd1);
+            var d2 = DecodeResult.decode(object, fd2);
+            var d3 = DecodeResult.decode(object, fd3);
+            var d4 = DecodeResult.decode(object, fd4);
+            var d5 = DecodeResult.decode(object, fd5);
+            var d6 = DecodeResult.decode(object, fd6);
+            var d7 = DecodeResult.decode(object, fd7);
+            var d8 = DecodeResult.decode(object, fd8);
+            var d9 = DecodeResult.decode(object, fd9);
+            var d10 = DecodeResult.decode(object, fd10);
+            var d11 = DecodeResult.decode(object, fd11);
             return d1.flatMap(v1 -> d2.flatMap(v2 -> d3.flatMap(v3 -> d4.flatMap(v4 -> d5.flatMap(v5 -> d6.flatMap(v6 -> d7.flatMap(v7 -> d8.flatMap(v8 -> d9.flatMap(v9 -> d10.flatMap(v10 -> d11.flatMap(v11 ->  DecodeResult.ok(func.apply(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11)))))))))))));
         };
     }
