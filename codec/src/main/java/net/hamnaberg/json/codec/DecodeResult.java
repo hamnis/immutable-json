@@ -132,7 +132,7 @@ public abstract class DecodeResult<A> {
         return object.
                 get(name).
                 map(DecodeResult::ok).
-                orElse(DecodeResult.fail(String.format("'%s' not found in %s", name, object.nospaces())));
+                orElseGet(() -> DecodeResult.fail(String.format("'%s' not found in %s", name, object.nospaces())));
     }
 
     public static <A> DecodeResult<A> decode(Json.JObject object, FieldDecoder<A> decoder) {
