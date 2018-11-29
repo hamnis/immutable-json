@@ -159,16 +159,12 @@ public class JsonTest {
                 Json.tuple("meh", false),
                 Json.tuple("mmm", Json.jNull())
         );
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream stream = new ObjectOutputStream(bos);
-
-        stream.writeObject(object);
-
-        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
-        Json.JObject read = (Json.JObject) is.readObject();
-
-        assertEquals(object, read);
+        assertSerializable(object);
+        assertSerializable(Json.jString("Hello World"));
+        assertSerializable(Json.jNumber(42));
+        assertSerializable(Json.jNull());
+        assertSerializable(Json.jArray(Json.jString("One"), Json.jNumber(2)));
+        assertSerializable(Json.jBoolean(true));
     }
 
     @Test
@@ -300,5 +296,17 @@ public class JsonTest {
         } catch (NullPointerException e) {
             assertEquals(message, e.getMessage());
         }
+    }
+
+    private void assertSerializable(Json.JValue input) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream stream = new ObjectOutputStream(bos);
+
+        stream.writeObject(input);
+
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+        Json.JValue read = (Json.JValue) is.readObject();
+
+        assertEquals(input, read);
     }
 }
