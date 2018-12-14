@@ -2,13 +2,10 @@
 
  This project attempts to build and AST ( Abstract Syntactic Tree )
  for Json and provide a useful way to work with that tree.
-
- If you want to program in functional style in Java, you want
- your data types to be immutable and efficient.
-
- Unfortunately there are no default immutable collections in Java, so we try to use [Vavr](http://www.vavr.io/) where appropriate.
- Vavr only has tuples and functions up to arity 8. We have increased the tuple and function arity to 27. 
- Have a look in the `net.hamnaberg.json.util` in the `codec` package. 
+ 
+ ## Note
+Starting with version 7, we require JDK11.
+Vavr has been dropped as a dependency.
 
 
 ## Status
@@ -35,7 +32,6 @@ Are you using immutable-json? Please consider opening a pull request to list you
 # Usage
 
 A short example showing encoding/decoding of a few different types.
-Note the `List` type is from `io.vavr.collection` to have an immutable List type.
 Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple constructors up to `Tuple27`
 
 
@@ -63,7 +59,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
         // create a decoder for our Event
         DecodeJson<Event> decode = Decoders.decode(
                 Decoders.DUUID.fieldDecoder("id"),
-                FieldDecoder.TList("tags", Decoders.DString).withDefaultValue(List.empty()),
+                FieldDecoder.TList("tags", Decoders.DString).withDefaultValue(Collections.emptyList()),
                 FieldDecoder.TString("message"),
                 Event::new
         );
@@ -97,55 +93,55 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
 <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-gson</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>6.2.0</version>
+   <version>7.0.0</version>
  </dependency>
  ```
 
@@ -156,43 +152,43 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-native</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
   </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>6.3.0-SNAPSHOT</version>
+   <version>7.1.0-SNAPSHOT</version>
  </dependency>
   ```
 
