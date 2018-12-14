@@ -1,9 +1,10 @@
 package net.hamnaberg.json.pointer;
 
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -19,8 +20,8 @@ public class JsonPointerTest {
     @Test
     public void findRel() throws Exception {
         JsonPointer p = JsonPointer.compile("/collection/links/0/rel");
-        Option<Json.JValue> value = p.select(json);
-        assertEquals(Option.of(Json.jString("feed")), value);
+        Optional<Json.JValue> value = p.select(json);
+        assertEquals(Optional.of(Json.jString("feed")), value);
     }
 
     @Test

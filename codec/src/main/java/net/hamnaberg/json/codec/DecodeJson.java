@@ -1,22 +1,23 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
-import io.vavr.collection.List;
-import io.vavr.control.Either;
-import io.vavr.control.Option;
-import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public interface DecodeJson<A> {
     DecodeResult<A> fromJson(Json.JValue value);
 
-    default Option<A> defaultValue() {
-        return Option.none();
+    default Optional<A> defaultValue() {
+        return Optional.empty();
     }
 
     default A fromJsonUnsafe(Json.JValue value) {
@@ -27,9 +28,8 @@ public interface DecodeJson<A> {
         return (json) -> this.fromJson(json).map(f);
     }
 
-    default <B> DecodeJson<B> tryMap(Function<A, Try<B>> f) {
-        return (json) -> this.fromJson(json).map(f).
-                flatMap(tried -> tried.map(DecodeResult::ok).getOrElseGet(tt -> DecodeResult.fail(tt.getMessage())));
+    default <B> DecodeJson<B> tryMap(Function<A, Callable<B>> f) {
+        return json -> this.fromJson(json).map(f).flatMap(DecodeResult::fromCallable);
     }
 
     default <B> DecodeJson<B> flatMap(Function<A, DecodeJson<B>> f) {
@@ -50,20 +50,16 @@ public interface DecodeJson<A> {
         return value -> fromJson(value).fold(aFail -> orElse.fromJson(value).fold(bFail -> DecodeResult.fail(aFail + " " + bFail), DecodeResult::ok), DecodeResult::ok);
     }
 
-    default <L> DecodeJson<Either<L, A>> either(DecodeJson<L> left) {
-        return either(left, this);
-    }
-
-    default <B> DecodeJson<Tuple2<A, B>> and(DecodeJson<B> next) {
+    default <B> DecodeJson<Map.Entry<A, B>> and(DecodeJson<B> next) {
         return value -> {
             DecodeResult<A> aRes = fromJson(value);
             DecodeResult<B> bRes = next.fromJson(value);
-            return aRes.flatMap(a -> bRes.map(b -> Tuple.of(a, b)));
+            return aRes.flatMap(a -> bRes.map(b -> Map.entry(a, b)));
         };
     }
 
-    default DecodeJson<Option<A>> option() {
-        return Decoders.OptionDecoder(this);
+    default DecodeJson<Optional<A>> option() {
+        return Decoders.optionalDecoder(this);
     }
 
     default DecodeJson<List<A>> list() {
@@ -83,11 +79,17 @@ public interface DecodeJson<A> {
     }
 
     static <A> DecodeJson<List<A>> sequence(List<DecodeJson<A>> toSequence) {
-        return value -> DecodeResult.sequence(toSequence.map(d -> d.fromJson(value)));
+        return value -> DecodeResult.sequence(
+                toSequence.stream().map(d -> d.fromJson(value)).collect(Collectors.toUnmodifiableList())
+        );
     }
 
-    static <L, R> DecodeJson<Either<L, R>> either(DecodeJson<L> left, DecodeJson<R> right) {
-        return right.<Either<L, R>>map(Either::right).or(left.map(Either::left));
+    static <T, A, R> DecodeJson<R> sequence(final Iterable<DecodeJson<T>> results, final Collector<T, A, R> collector) {
+        return value ->
+                DecodeResult.sequence(
+                        () -> StreamSupport.stream(results.spliterator(), false).map(d -> d.fromJson(value)).iterator(),
+                        collector
+                );
     }
 
     static <A> DecodeJson<A> successful(A value) {
@@ -118,8 +120,8 @@ public interface DecodeJson<A> {
         }
 
         @Override
-        public Option<A> defaultValue() {
-            return Option.some(defaultValue);
+        public Optional<A> defaultValue() {
+            return Optional.of(defaultValue);
         }
 
         @Override

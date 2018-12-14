@@ -1,37 +1,27 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.*;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
-import io.vavr.collection.Vector;
+import net.hamnaberg.arities.*;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public class CodecsTest {
 
     @Test
     public void collectionTests() {
         List<Integer> expectedList = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3);
-        Set<Integer> expectedSet = expectedList.toSet();
-        Json.JArray jsonList = Json.jArray(expectedList.map(Json::jNumber));
+        Set<Integer> expectedSet = Set.copyOf(expectedList);
+        Json.JArray jsonList = Json.jArray(expectedList.stream().map(Json::jNumber).collect(Collectors.toList()));
 
         assertEquals(expectedList, Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
         assertEquals(jsonList, Codecs.listCodec(Codecs.CInt).toJson(expectedList));
 
-        assertEquals(expectedList.toVector(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(jsonList, Codecs.vectorCodec(Codecs.CInt).toJson(expectedList.toVector()));
-
-        assertEquals(expectedList.toJavaList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(jsonList, Codecs.javaListCodec(Codecs.CInt).toJson(expectedList.toJavaList()));
-
         assertEquals(expectedSet, Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(expectedSet.toJavaSet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
     }
 
     @Test
@@ -39,20 +29,11 @@ public class CodecsTest {
         Json.JArray jsonList = Json.jEmptyArray();
         Json.JObject notJsonList = Json.jEmptyObject();
 
-        assertEquals(List.empty(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(List.empty(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+        assertEquals(List.of(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(List.of(), Codecs.listCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
 
-        assertEquals(Vector.empty(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(Vector.empty(), Codecs.vectorCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
-
-        assertEquals(Collections.emptyList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(Collections.emptyList(), Codecs.javaListCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
-
-        assertEquals(HashSet.empty(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(HashSet.empty(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
-
-        assertEquals(Collections.emptySet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
-        assertEquals(Collections.emptySet(), Codecs.javaSetCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
+        assertEquals(Set.of(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(jsonList));
+        assertEquals(Set.of(), Codecs.setCodec(Codecs.CInt).fromJsonUnsafe(notJsonList));
     }
 
     @Test
@@ -70,7 +51,7 @@ public class CodecsTest {
                 Json.tuple("3", Json.jNumber(11))
         );
 
-        Tuple3<String, Integer, Integer> expectedTuple = Tuple.of("Hello", 22, 11);
+        Tuple3<String, Integer, Integer> expectedTuple = Tuples.of("Hello", 22, 11);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));
@@ -93,7 +74,7 @@ public class CodecsTest {
                 Json.tuple("4", Json.jString("Goodbye"))
         );
 
-        Tuple4<String, Integer, Integer, String> expectedTuple = Tuple.of("Hello", 22, 11, "Goodbye");
+        Tuple4<String, Integer, Integer, String> expectedTuple = Tuples.of("Hello", 22, 11, "Goodbye");
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));
@@ -118,7 +99,7 @@ public class CodecsTest {
                 Json.tuple("5", Json.jNumber(400000000L))
         );
 
-        Tuple5<String, Integer, Integer, String, Long> expectedTuple = Tuple.of("Hello", 22, 11, "Goodbye", 400000000L);
+        Tuple5<String, Integer, Integer, String, Long> expectedTuple = Tuples.of("Hello", 22, 11, "Goodbye", 400000000L);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));
@@ -146,7 +127,7 @@ public class CodecsTest {
         );
 
         Tuple6<String, Integer, Integer, String, Long, Boolean> expectedTuple =
-                Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true);
+                Tuples.of("Hello", 22, 11, "Goodbye", 400000000L, true);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));
@@ -176,7 +157,7 @@ public class CodecsTest {
         );
 
         Tuple7<String, Integer, Integer, String, Long, Boolean, String> expectedTuple =
-                Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7");
+                Tuples.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7");
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));
@@ -208,7 +189,7 @@ public class CodecsTest {
         );
 
         Tuple8<String, Integer, Integer, String, Long, Boolean, String, Integer> expectedTuple =
-                Tuple.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7", 333333);
+                Tuples.of("Hello", 22, 11, "Goodbye", 400000000L, true, "Lucky no 7", 333333);
 
         assertEquals(expectedTuple, codec.fromJsonUnsafe(expectedJson));
         assertEquals(expectedJson, codec.toJson(expectedTuple));

@@ -1,10 +1,8 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
-import io.vavr.control.Try;
-import net.hamnaberg.json.Json;
-
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
@@ -16,17 +14,17 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
         return xmap(iso::get, iso::reverseGet);
     }
 
-    default <B> JsonCodec<B> narrow(Function<A, Try<B>> f, Function<B, A> g) {
+    default <B> JsonCodec<B> narrow(Function<A, Callable<B>> f, Function<B, A> g) {
         return JsonCodec.lift(tryMap(f), value -> toJson(g.apply(value)));
     }
 
     default <B> JsonCodec<B> tryNarrow(Function<A, B> f, Function<B, A> g) {
-        return narrow(a -> Try.of(() -> f.apply(a)), g);
+        return narrow(a -> () -> f.apply(a), g);
     }
 
     @Override
-    default JsonCodec<Option<A>> option() {
-        return Codecs.OptionCodec(this);
+    default JsonCodec<Optional<A>> option() {
+        return Codecs.optionalCodec(this);
     }
 
     @Override
@@ -44,10 +42,10 @@ public interface JsonCodec<A> extends EncodeJson<A>, DecodeJson<A> {
     }
 
     static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder) {
-        return lift(decoder, encoder, Option.none());
+        return lift(decoder, encoder, Optional.empty());
     }
 
-    static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder, Option<A> defaultValue) {
-        return new DefaultJsonCodec<>(defaultValue.map(decoder::withDefaultValue).getOrElse(decoder), encoder);
+    static <A> JsonCodec<A> lift(DecodeJson<A> decoder, EncodeJson<A> encoder, Optional<A> defaultValue) {
+        return new DefaultJsonCodec<>(defaultValue.map(decoder::withDefaultValue).orElse(decoder), encoder);
     }
 }

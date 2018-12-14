@@ -1,10 +1,10 @@
 package net.hamnaberg.json;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +17,7 @@ public class JValueTest {
         assertEquals(expected, Json.jNumber(20.0));
         assertTrue(expected.isNumber());
         assertTrue(expected.isScalar());
-        assertEquals("20", expected.scalarToString().getOrElse(""));
+        assertEquals("20", expected.scalarToString().orElse(""));
     }
 
     @Test
@@ -25,7 +25,7 @@ public class JValueTest {
         Json.JString string = Json.jString("Hello");
         assertTrue(string.isString());
         assertTrue(string.isScalar());
-        assertEquals("Hello", string.scalarToString().getOrElse(""));
+        assertEquals("Hello", string.scalarToString().orElse(""));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class JValueTest {
         assertTrue(nullable.isNull());
         assertTrue(nullable.isScalar());
         assertFalse(nullable.isString());
-        assertEquals("null", nullable.scalarToString().getOrElse(""));
+        assertEquals("null", nullable.scalarToString().orElse(""));
     }
 
     @Test
@@ -44,8 +44,8 @@ public class JValueTest {
         assertTrue(tru.value);
         assertFalse(fals.value);
         assertNotEquals(tru, fals);
-        assertEquals("true", tru.scalarToString().getOrElse(""));
-        assertEquals("false", fals.scalarToString().getOrElse(""));
+        assertEquals("true", tru.scalarToString().orElse(""));
+        assertEquals("false", fals.scalarToString().orElse(""));
     }
 
     @Test
@@ -75,13 +75,13 @@ public class JValueTest {
         assertFooObject(Json.jObject(Json.tuple("foo", Json.jNull())));
         assertFooObject(Json.jObject(Json.nullableTuple("foo", Json.jNull())));
         assertFooObject(Json.jObject(Json.nullableTuple("foo", (Json.JValue) null)));
-        assertFooObject(Json.jObject(Json.tuple("foo", Option.of(Json.jString("Hello")))));
+        assertFooObject(Json.jObject(Json.tuple("foo", Optional.of(Json.jString("Hello")))));
     }
 
     private void assertFooObject(Json.JObject object) {
         assertTrue(object.containsKey("foo"));
         assertEquals(object.size(), 1);
-        Json.JValue foo = object.get("foo").getOrElse(Json.jNull());
+        Json.JValue foo = object.get("foo").orElse(Json.jNull());
         assertTrue(foo.isScalar());
         assertFalse(object.isScalar());
         assertTrue(object.isObject());

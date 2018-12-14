@@ -1,17 +1,17 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.List;
-import io.vavr.control.Either;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 public abstract class DecodeResult<A> {
 
@@ -54,16 +54,8 @@ public abstract class DecodeResult<A> {
         }, Function.identity());
     }
 
-    public final Either<String, A> toEither() {
-        return fold(Either::left, Either::right);
-    }
-
-    public final Option<A> toOption() {
-        return fold(ignore -> Option.none(), Option::of);
-    }
-
-    public final Optional<A> toJavaOptional() {
-        return toOption().toJavaOptional();
+    public final Optional<A> toOption() {
+        return fold(ignore -> Optional.empty(), Optional::of);
     }
 
     public abstract <B> B fold(Function<String, B> failFunction, Function<A, B> okFunction);
@@ -80,31 +72,54 @@ public abstract class DecodeResult<A> {
 
     public static <A> DecodeResult<List<A>> sequence(List<DecodeResult<A>> decodeResults) {
         if (decodeResults.isEmpty()) {
-            return DecodeResult.ok(List.empty());
+            return DecodeResult.ok(List.of());
         }
-        final ArrayList<A> list = new ArrayList<>();
-        final ArrayList<String> errors = new ArrayList<>();
+        final List<A> list = new ArrayList<>();
+        final List<String> errors = new ArrayList<>();
 
         for (DecodeResult<A> res : decodeResults) {
             res.consume(errors::add, list::add);
         }
         if (errors.isEmpty()) {
-            return DecodeResult.ok(List.ofAll(list));
+            return DecodeResult.ok(List.copyOf(list));
         } else {
-            return DecodeResult.fail("One or more results failed: " + List.ofAll(errors).mkString("\n"));
+            return DecodeResult.fail("One or more results failed: " + String.join("\n", errors));
         }
+    }
+
+    public static <T, A, R> DecodeResult<R> sequence(final Iterable<DecodeResult<T>> results, final Collector<T, A, R> collector) {
+        A accumulator = collector.supplier().get();
+        for (final DecodeResult<T> t : results) {
+            if (t.isFailure()) {
+                return fail(t.fold(Function.identity(), x -> {
+                    throw new NoSuchElementException();
+                }));
+            }
+            collector.accumulator().accept(accumulator, t.fold(f -> {
+                throw new NoSuchElementException();
+            }, Function.identity()));
+        }
+        return ok(collector.finisher().apply(accumulator));
     }
 
     public static <A> DecodeResult<A> ok(A value) {
         return new Ok<>(value);
     }
 
-    public static <A> DecodeResult<A> fromOption(Option<A> value) {
+    public static <A> DecodeResult<A> fromOption(Optional<A> value) {
         return fromOption(value, () -> "No value found");
     }
 
-    public static <A> DecodeResult<A> fromOption(Option<A> value, Supplier<String> error) {
-        return value.map(DecodeResult::ok).getOrElse(fail(error.get()));
+    public static <A> DecodeResult<A> fromCallable(Callable<A> value) {
+        try {
+            return ok(value.call());
+        } catch (Exception e) {
+            return fail(e.getMessage());
+        }
+    }
+
+    public static <A> DecodeResult<A> fromOption(Optional<A> value, Supplier<String> error) {
+        return value.map(DecodeResult::ok).orElse(fail(error.get()));
     }
 
     @SuppressWarnings("unchecked")
@@ -117,7 +132,7 @@ public abstract class DecodeResult<A> {
         return object.
                 get(name).
                 map(DecodeResult::ok).
-                getOrElse(DecodeResult.fail(String.format("'%s' not found in %s", name, object.nospaces())));
+                orElseGet(() -> DecodeResult.fail(String.format("'%s' not found in %s", name, object.nospaces())));
     }
 
     public static <A> DecodeResult<A> decode(Json.JObject object, FieldDecoder<A> decoder) {
@@ -127,8 +142,8 @@ public abstract class DecodeResult<A> {
     public static <A> DecodeResult<A> decode(Json.JObject object, String name, DecodeJson<A> decoder) {
         DecodeResult<A> result = getValue(object, name).flatMap(decoder::fromJson);
         if (result.isFailure()) {
-            Option<A> defaultValue = decoder.defaultValue();
-            result = defaultValue.map(DecodeResult::ok).getOrElse(result);
+            Optional<A> defaultValue = decoder.defaultValue();
+            result = defaultValue.map(DecodeResult::ok).orElse(result);
             if (result.isFailure()) {
                 result = result.fold(
                         err -> DecodeResult.fail(err.contains(String.format("'%s' not found", name)) ? err : String.format("'%s' failed with message: '%s'", name, err)),

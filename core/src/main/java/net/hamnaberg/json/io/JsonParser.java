@@ -1,7 +1,5 @@
 package net.hamnaberg.json.io;
 
-import io.vavr.control.Option;
-import io.vavr.control.Try;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.codec.DecodeJson;
 import net.hamnaberg.json.codec.DecodeResult;
@@ -10,40 +8,10 @@ import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 
 public abstract class JsonParser {
-
-    public final Try<Json.JValue> parse(ReadableByteChannel channel) {
-        return parse(Channels.newInputStream(channel));
-    }
-
-    public final Try<Json.JValue> parse(InputStream is) {
-        return parse(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
-    }
-
-    public final Try<Json.JValue> parse(byte[] bytes) {
-        return parse(new ByteArrayInputStream(bytes));
-    }
-
-    public final Try<Json.JValue> parse(String string) {
-        return parse(new StringReader(string));
-    }
-
-    public final Try<Json.JValue> parse(Reader reader) {
-        BufferedReader buf;
-        if (reader instanceof BufferedReader) {
-            buf = (BufferedReader) reader;
-        } else {
-            buf = new BufferedReader(reader);
-        }
-        return Try.of(() -> {
-            try (Reader r = buf) {
-                return parseImpl(r);
-            }
-        }).flatMap(Function.identity());
-    }
 
     public final Json.JValue parseUnsafe(ReadableByteChannel channel) {
         return parseUnsafe(Channels.newInputStream(channel));
@@ -62,57 +30,52 @@ public abstract class JsonParser {
     }
 
     public final Json.JValue parseUnsafe(Reader reader) {
-        return parse(reader).getOrElseThrow(e -> {
-            if (!(e instanceof JsonParseException)) {
-                throw new JsonParseException(e);
-            }
-            throw ((JsonParseException)e);
-        });
+        return parseImpl(reader);
     }
 
-    public final Option<Json.JValue> parseOpt(ReadableByteChannel is) {
-        return parse(is).toOption();
+    public final Optional<Json.JValue> parseOpt(ReadableByteChannel channel) {
+        return parseOpt(Channels.newInputStream(channel));
     }
 
-    public final Option<Json.JValue> parseOpt(byte[] bytes) {
-        return parse(bytes).toOption();
+    public final Optional<Json.JValue> parseOpt(byte[] bytes) {
+        return parseOpt(new ByteArrayInputStream(bytes));
     }
 
-    public final Option<Json.JValue> parseOpt(InputStream is) {
-        return parse(is).toOption();
+    public final Optional<Json.JValue> parseOpt(InputStream is) {
+        return parseOpt(new InputStreamReader(is, StandardCharsets.UTF_8));
     }
 
-    public final Option<Json.JValue> parseOpt(String string) {
-        return parse(string).toOption();
+    public final Optional<Json.JValue> parseOpt(String string) {
+        return parseOpt(new StringReader(string));
     }
 
-    public final Option<Json.JValue> parseOpt(Reader reader) {
-        return parse(reader).toOption();
+    public final Optional<Json.JValue> parseOpt(Reader reader) {
+        return DecodeResult.fromCallable(() -> parseImpl(reader)).toOption();
     }
 
     public final <A> DecodeResult<A> decode(ReadableByteChannel is, DecodeJson<A> decoder) {
-        return decode(parse(is), decoder);
+        return decode(() -> parseUnsafe(is), decoder);
     }
 
     public final <A> DecodeResult<A> decode(byte[] bytes, DecodeJson<A> decoder) {
-        return decode(parse(bytes), decoder);
+        return decode(() -> parseUnsafe(bytes), decoder);
     }
 
     public final <A> DecodeResult<A> decode(InputStream is, DecodeJson<A> decoder) {
-        return decode(parse(is), decoder);
+        return decode(() -> parseUnsafe(is), decoder);
     }
 
     public final <A> DecodeResult<A> decode(String string, DecodeJson<A> decoder) {
-        return decode(parse(string), decoder);
+        return decode(() -> parseUnsafe(string), decoder);
     }
 
     public final <A> DecodeResult<A> decode(Reader reader, DecodeJson<A> decoder) {
-        return decode(parse(reader), decoder);
+        return decode(() -> parseUnsafe(reader), decoder);
     }
 
-    public final <A> DecodeResult<A> decode(Try<Json.JValue> parsed, DecodeJson<A> decoder) {
-        return parsed.map(decoder::fromJson).getOrElseGet(t -> DecodeResult.fail(t.getMessage()));
+    public final <A> DecodeResult<A> decode(Callable<Json.JValue> parsed, DecodeJson<A> decoder) {
+        return DecodeResult.fromCallable(parsed).flatMap(decoder::fromJson);
     }
 
-    protected abstract Try<Json.JValue> parseImpl(Reader reader);
+    protected abstract Json.JValue parseImpl(Reader reader);
 }

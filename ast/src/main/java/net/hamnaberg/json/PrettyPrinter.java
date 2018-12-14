@@ -1,8 +1,7 @@
 package net.hamnaberg.json;
 
 
-import io.vavr.Tuple2;
-import io.vavr.collection.Map;
+import java.util.Map;
 
 public final class PrettyPrinter {
     private final static int INDENT_LEVELS = 16;
@@ -82,8 +81,8 @@ public final class PrettyPrinter {
 
         int index = 0;
         Map<String, Json.JValue> map = obj.value;
-        for (Tuple2<String, Json.JValue> entry : map) {
-            if (entry._2.isNull() && dropNullKeys) {
+        for (Map.Entry<String, Json.JValue> entry : map.entrySet()) {
+            if (entry.getValue().isNull() && dropNullKeys) {
                 continue;
             }
 
@@ -91,7 +90,7 @@ public final class PrettyPrinter {
                 state.append(",");
             }
             doIndent(state);
-            writeProperty(entry._1, entry._2, state);
+            writeProperty(entry.getKey(), entry.getValue(), state);
             index++;
         }
 

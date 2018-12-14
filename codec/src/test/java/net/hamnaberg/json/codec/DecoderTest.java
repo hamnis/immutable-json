@@ -1,8 +1,9 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 import static net.hamnaberg.json.Json.*;
 import static net.hamnaberg.json.codec.FieldDecoder.*;
@@ -76,7 +77,7 @@ public class DecoderTest {
         personOpt.forEach(person -> {
             assertEquals("Erlend", person.name);
             assertEquals(35, person.age);
-            assertTrue(person.address.isDefined());
+            assertTrue(person.address.isPresent());
             assertEquals("Ensjøveien 30 A", person.address.get().street);
         });
         person2Opt.forEach(person -> {
@@ -115,9 +116,9 @@ public class DecoderTest {
     public static class Person2 {
         public final String name;
         public final int age;
-        public final Option<Address> address;
+        public final Optional<Address> address;
 
-        public Person2(String name, int age, Option<Address> address) {
+        public Person2(String name, int age, Optional<Address> address) {
             this.name = name;
             this.age = age;
             this.address = address;

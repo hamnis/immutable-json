@@ -1,8 +1,7 @@
 package net.hamnaberg.json.codec.reflection;
 
-import io.vavr.control.Option;
-
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 class FieldParam implements Param {
     private final String name;
@@ -13,11 +12,11 @@ class FieldParam implements Param {
         this.field = field;
     }
 
-    public Option<Object> get(Object value) {
+    public Optional<Object> get(Object value) {
         try {
-            return Option.of(field.get(value));
+            return Optional.ofNullable(field.get(value));
         } catch (IllegalAccessException e) {
-            return Option.none();
+            return Optional.empty();
         }
     }
 

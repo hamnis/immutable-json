@@ -1,11 +1,12 @@
 package net.hamnaberg.json.patch;
 
-import io.vavr.collection.Map;
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.Json.*;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementation of Json Merge Patch as defined by <a href="http://tools.ietf.org/html/rfc7396">RFC7396</a>
@@ -19,8 +20,8 @@ public abstract class MergePatch {
             return obj2;
         }
 
-        JObject object1 = obj1.asJsonObject().getOrElse(Json.jEmptyObject());
-        JObject object2 = obj2.asJsonObject().getOrElse(Json.jEmptyObject());
+        JObject object1 = obj1.asJsonObject().orElse(Json.jEmptyObject());
+        JObject object2 = obj2.asJsonObject().orElse(Json.jEmptyObject());
 
         LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
         object1.forEach((k, v) -> {
@@ -45,23 +46,21 @@ public abstract class MergePatch {
     }
 
     public static JValue patch(JValue target, JValue patchValue) {
-        Option<JObject> maybeTarget = target.asJsonObject();
+        Optional<JObject> maybeTarget = target.asJsonObject();
         if (patchValue.asJsonObject().isEmpty()) {
             return patchValue;
         }
         else {
-            JObject object = maybeTarget.getOrElse(Json.jEmptyObject());
-            JObject patch = patchValue.asJsonObject().getOrElse(Json.jEmptyObject());
+            JObject object = maybeTarget.orElse(Json.jEmptyObject());
+            JObject patch = patchValue.asJsonObject().orElse(Json.jEmptyObject());
 
-            Map<String, JValue> map = object.getValue();
+            Map<String, JValue> map = new LinkedHashMap<>(object.getValue());
 
             patch.forEach((k, v) -> {
-                if (v.asJsonNull().isDefined()) {
-                    if (map.containsKey(k)) {
-                        map.remove(k);
-                    }
+                if (v.asJsonNull().isPresent()) {
+                    map.remove(k);
                 } else if (map.containsKey(k)) {
-                    map.put(k, patch(map.apply(k), v));
+                    map.put(k, patch(map.get(k), v));
                 } else {
                     map.put(k, patch(Json.jEmptyObject(), v));
                 }

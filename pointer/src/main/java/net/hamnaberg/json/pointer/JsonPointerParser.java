@@ -1,9 +1,9 @@
 package net.hamnaberg.json.pointer;
 
 
-import io.vavr.collection.List;
-
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class JsonPointerParser {
     List<Ref> parse(String s) {
@@ -24,11 +24,11 @@ class JsonPointerParser {
                 path.add(new PropertyRef(p));
             }
         }
-        return List.ofAll(path);
+        return List.copyOf(path);
     }
 
     private List<String> clean(String[] split) {
-        return List.of(split).map(this::unescape);
+        return List.of(split).stream().map(this::unescape).collect(Collectors.toUnmodifiableList());
     }
 
     private String unescape(String str) {

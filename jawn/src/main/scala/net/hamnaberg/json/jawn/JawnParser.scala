@@ -3,17 +3,17 @@ package net.hamnaberg.json.jawn
 import java.io.{BufferedReader, Reader}
 import java.util.stream.Collectors
 
-import io.vavr.control.Try
 import jawn.{FContext, Facade, Parser}
 import net.hamnaberg.json.Json
-import net.hamnaberg.json.io.JsonParser
+import net.hamnaberg.json.io.{JsonParseException, JsonParser}
 
 class JawnParser extends JsonParser {
   private implicit val facade = IJFacade
 
-  override protected def parseImpl(reader: Reader): Try[Json.JValue] = {
+  override protected def parseImpl(reader: Reader): Json.JValue = {
     val str = reader.asInstanceOf[BufferedReader].lines().collect(Collectors.joining("\n"))
-    Parser.parseFromString(str).fold(Try.failure(_), Try.success(_))
+
+    Parser.parseFromString(str).fold(e => throw new JsonParseException(e), identity)
   }
 }
 

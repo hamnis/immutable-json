@@ -1,15 +1,10 @@
 package net.hamnaberg.json;
 
-import io.vavr.collection.LinkedHashMap;
-import io.vavr.collection.List;
-import io.vavr.control.Option;
 import org.junit.Test;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Supplier;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -72,10 +67,10 @@ public class JsonTest {
         assertEquals(Json.jBoolean(true), allTheThings.headOption().get());
         Json.JArray empty = Json.jEmptyArray();
         Json.JArray notEmpty = empty.append(Json.jString("Hello"));
-        assertEquals(Option.none(), empty.headOption());
+        assertEquals(Optional.empty(), empty.headOption());
         assertEquals(0, empty.size());
         assertEquals(1, notEmpty.size());
-        assertEquals(Option.of(Json.jString("Hello")), notEmpty.headOption());
+        assertEquals(Optional.of(Json.jString("Hello")), notEmpty.headOption());
         assertEquals(1, notEmpty.getListAsStrings().size());
         assertEquals(0, notEmpty.getListAsObjects().size());
         assertEquals(0, notEmpty.getListAsBigDecimals().size());
@@ -91,10 +86,10 @@ public class JsonTest {
     @Test
     public void jObject() throws Exception {
         Json.JObject single = Json.jObject("k", Json.jNumber(23));
-        assertEquals(single, Json.jObject(LinkedHashMap.of("k", Json.jNumber(23))));
+        assertEquals(single, Json.jObject(Map.of("k", Json.jNumber(23))));
         assertEquals(1, single.size());
         assertEquals(1, single.values().size());
-        assertEquals(List.of(Json.jNumber(23)), List.ofAll(single.values()));
+        assertEquals(List.of(Json.jNumber(23)), single.values());
         assertTrue(Json.jEmptyObject().isEmpty());
         assertFalse(Json.jEmptyObject().containsKey("Hello"));
         assertTrue(single.containsKey("k"));
@@ -119,7 +114,7 @@ public class JsonTest {
     public void nullTests() {
         testNullPointer(() -> Json.jNumber(null), "Number may not be null");
         testNullPointer(() -> Json.jString(null), "String may not be null");
-        testNullPointer(() -> Json.jArray(null), "elements is null");
+        testNullPointer(() -> Json.jArray(null), "iterable was null");
         testNullPointer(() -> Json.jObject(null, 1), "Name for entry may not be null");
         testNullPointer(() -> Json.jObject("meh", (Json.JValue) null), "Value for named entry 'meh' may not be null");
     }
@@ -127,7 +122,7 @@ public class JsonTest {
     @Test
     public void deepMerge() {
         Json.JValue merged = Json.jString("Hello").deepmerge(Json.jString("Bye"));
-        assertEquals("Bye", merged.asString().getOrElse((String)null));
+        assertEquals("Bye", merged.asString().orElse((String)null));
 
         Json.JObject entry = Json.jObject(
                 Json.tuple("k1", Json.jString("k1")),
@@ -164,16 +159,12 @@ public class JsonTest {
                 Json.tuple("meh", false),
                 Json.tuple("mmm", Json.jNull())
         );
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream stream = new ObjectOutputStream(bos);
-
-        stream.writeObject(object);
-
-        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
-        Json.JObject read = (Json.JObject) is.readObject();
-
-        assertEquals(object, read);
+        assertSerializable(object);
+        assertSerializable(Json.jString("Hello World"));
+        assertSerializable(Json.jNumber(42));
+        assertSerializable(Json.jNull());
+        assertSerializable(Json.jArray(Json.jString("One"), Json.jNumber(2)));
+        assertSerializable(Json.jBoolean(true));
     }
 
     @Test
@@ -295,7 +286,7 @@ public class JsonTest {
         for (int i = start; i <= end; i++) {
             list.add(Json.jNumber(i));
         }
-        return List.ofAll(list);
+        return List.copyOf(list);
     }
 
     private void testNullPointer(Runnable r, String message) {
@@ -305,5 +296,17 @@ public class JsonTest {
         } catch (NullPointerException e) {
             assertEquals(message, e.getMessage());
         }
+    }
+
+    private void assertSerializable(Json.JValue input) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream stream = new ObjectOutputStream(bos);
+
+        stream.writeObject(input);
+
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+        Json.JValue read = (Json.JValue) is.readObject();
+
+        assertEquals(input, read);
     }
 }

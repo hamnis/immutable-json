@@ -1,12 +1,12 @@
 package net.hamnaberg.json.patch;
 
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.pointer.JsonPointer;
 
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 class Operation {
     enum Op {
@@ -34,17 +34,17 @@ class Operation {
     }
 
     public final Op op;
-    public final Option<JsonPointer> from;
+    public final Optional<JsonPointer> from;
     public final JsonPointer path;
-    public final Option<Json.JValue> value;
+    public final Optional<Json.JValue> value;
 
-    public Operation(Op op, Option<JsonPointer> from, JsonPointer path, Option<Json.JValue> value) {
+    public Operation(Op op, Optional<JsonPointer> from, JsonPointer path, Optional<Json.JValue> value) {
         this.op = op;
         this.from = from;
         this.path = path;
         this.value = value;
         if (EnumSet.of(Op.Add, Op.Replace, Op.Test).contains(op)) {
-            if (!value.isDefined()) {
+            if (!value.isPresent()) {
                 throw new IllegalArgumentException(String.format("Op '%s' requires a value", op.value));
             }
         }
@@ -62,9 +62,9 @@ class Operation {
     public Json.JObject toJson() {
         Map<String, Json.JValue> map = new LinkedHashMap<>();
         map.put("op", Json.jString(op.value));
-        from.forEach(v -> map.put("from", Json.jString(v.toString())));
+        from.ifPresent(v -> map.put("from", Json.jString(v.toString())));
         map.put("path", Json.jString(path.toString()));
-        value.forEach(v -> map.put("value", v));
+        value.ifPresent(v -> map.put("value", v));
         return Json.jObject(map);
     }
 }

@@ -1,10 +1,10 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.collection.HashMap;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -44,7 +44,7 @@ public class SumTypeCodecTest {
     );
 
 
-    private final SumTypeCodec<Account> sumTypeCodec = new SumTypeCodec<>(Account.class, HashMap.of(
+    private final SumTypeCodec<Account> sumTypeCodec = new SumTypeCodec<>(Account.class, Map.of(
             Account.Checking.class, checkingCodec,
             Account.Standard.class, standardCodec
     ));

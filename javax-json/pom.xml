@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>6.3.0-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: javax.json</name>
   <artifactId>immutable-json-javax</artifactId>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
-      <version>1.1.2</version>
+      <version>1.1.4</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -62,16 +62,14 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>net.hamnaberg.json.javax</Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
+          <compilerArgs>
+            <arg>--patch-module</arg>
+            <arg>immutable.json.core=${settings.localRepository}/net/hamnaberg/json/immutable-json-core/${project.version}/immutable-json-core-${project.version}-tests.jar</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

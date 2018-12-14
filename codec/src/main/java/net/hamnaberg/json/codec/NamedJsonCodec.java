@@ -1,9 +1,10 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.control.Option;
 import net.hamnaberg.json.Json;
 
-public class NamedJsonCodec<A> implements JsonCodec<A> {
+import java.util.Optional;
+
+public final class NamedJsonCodec<A> implements JsonCodec<A> {
     public final String name;
     final JsonCodec<A> codec;
 
@@ -38,7 +39,7 @@ public class NamedJsonCodec<A> implements JsonCodec<A> {
     }
 
     @Override
-    public Option<A> defaultValue() {
+    public Optional<A> defaultValue() {
         return codec.defaultValue();
     }
 

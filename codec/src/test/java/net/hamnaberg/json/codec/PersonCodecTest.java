@@ -1,14 +1,13 @@
 package net.hamnaberg.json.codec;
 
-import io.vavr.Tuple2;
-import io.vavr.Tuple3;
-import io.vavr.control.Option;
+import net.hamnaberg.arities.Tuple2;
+import net.hamnaberg.arities.Tuple3;
 import net.hamnaberg.json.Json;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -73,9 +72,9 @@ public class PersonCodecTest {
     private static class Person2 {
         public final String name;
         public final int age;
-        public final Option<Address> address;
+        public final Optional<Address> address;
 
-        public Person2(String name, int age, Option<Address> address) {
+        public Person2(String name, int age, Optional<Address> address) {
             this.name = name;
             this.age = age;
             this.address = address;
@@ -98,7 +97,7 @@ public class PersonCodecTest {
         }
 
 
-        public Tuple3<String, Integer, Option<Address>> tupled() {
+        public Tuple3<String, Integer, Optional<Address>> tupled() {
             return new Tuple3<>(name, age, address);
         }
     }
@@ -117,16 +116,16 @@ public class PersonCodecTest {
         }
     }
 
-    private enum Person2Iso implements Iso<Person2, Tuple3<String, Integer, Option<Address>>> {
+    private enum Person2Iso implements Iso<Person2, Tuple3<String, Integer, Optional<Address>>> {
         INSTANCE;
 
         @Override
-        public Person2 reverseGet(Tuple3<String, Integer, Option<Address>> t) {
+        public Person2 reverseGet(Tuple3<String, Integer, Optional<Address>> t) {
             return new Person2(t._1, t._2, t._3);
         }
 
         @Override
-        public Tuple3<String, Integer, Option<Address>> get(Person2 t) {
+        public Tuple3<String, Integer, Optional<Address>> get(Person2 t) {
             return new Tuple3<>(t.name, t.age, t.address);
         }
     }
@@ -148,14 +147,14 @@ public class PersonCodecTest {
 
     @Test
     public void personCreate() {
-        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
-                put("name", Json.jString("Erlend Hamnaberg"));
-                put("age", Json.jNumber(34));
-                put("address", Json.jObject(
+        Json.JValue value = Json.jObject(
+                "name", Json.jString("Erlend Hamnaberg"),
+                "age", Json.jNumber(34),
+                "address", Json.jObject(
                         Json.tuple("street", Json.jString("Ensjøveien")),
                         Json.tuple("city", Json.jString("Oslo"))
-                ));
-        }});
+                )
+        );
 
         JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.CString), NamedJsonCodec.of("city", Codecs.CString));
         JsonCodec<Person> personCodec = Codecs.codec(PersonIso.INSTANCE, NamedJsonCodec.of("name", Codecs.CString), NamedJsonCodec.of("age", Codecs.CInt), NamedJsonCodec.of("address", aCodec));
@@ -171,26 +170,26 @@ public class PersonCodecTest {
 
     @Test
     public void person2() {
-        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
-            put("name", Json.jString("Erlend Hamnaberg"));
-            put("age", Json.jNumber(34));
-            put("address", Json.jObject(
+        Json.JValue value = Json.jObject(
+            "name", Json.jString("Erlend Hamnaberg"),
+            "age", Json.jNumber(34),
+            "address", Json.jObject(
                     Json.tuple("street", Json.jString("Ensjøveien")),
                     Json.tuple("city", Json.jString("Oslo"))
-            ));
-        }});
+            )
+        );
 
-        Json.JValue optValue = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
-                put("name", Json.jString("Erlend Hamnaberg"));
-                put("age", Json.jNumber(34));
-        }});
+        Json.JValue optValue = Json.jObject(
+                "name", Json.jString("Erlend Hamnaberg"),
+                "age", Json.jNumber(34)
+        );
         Json.JValue optValueEqual = optValue.asJsonObjectOrEmpty().put("address", Json.jNull());
 
         JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, NamedJsonCodec.of("street", Codecs.CString), NamedJsonCodec.of("city", Codecs.CString));
-        JsonCodec<Person2> personCodec = Codecs.codec(Person2Iso.INSTANCE, NamedJsonCodec.of("name", Codecs.CString), NamedJsonCodec.of("age", Codecs.CInt), NamedJsonCodec.of("address", Codecs.OptionCodec(aCodec)));
+        JsonCodec<Person2> personCodec = Codecs.codec(Person2Iso.INSTANCE, NamedJsonCodec.of("name", Codecs.CString), NamedJsonCodec.of("age", Codecs.CInt), NamedJsonCodec.of("address", Codecs.optionalCodec(aCodec)));
 
-        Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
-        Person2 person2 = new Person2("Erlend Hamnaberg", 34, Option.none());
+        Person2 person = new Person2("Erlend Hamnaberg", 34, Optional.of(new Address("Ensjøveien", "Oslo")));
+        Person2 person2 = new Person2("Erlend Hamnaberg", 34, Optional.empty());
 
         DecodeResult<Person2> personOpt = personCodec.fromJson(value);
         assertTrue(personOpt.isOk());
@@ -210,21 +209,21 @@ public class PersonCodecTest {
 
     @Test
     public void personAsTuple() {
-        Json.JValue value = Json.jObject(new LinkedHashMap<String, Json.JValue>(){{
-            put("name", Json.jString("Erlend Hamnaberg"));
-            put("age", Json.jNumber(34));
-            put("address", Json.jObject(
+        Json.JValue value = Json.jObject(
+            "name", Json.jString("Erlend Hamnaberg"),
+            "age", Json.jNumber(34),
+            "address", Json.jObject(
                     Json.tuple("street", Json.jString("Ensjøveien")),
                     Json.tuple("city", Json.jString("Oslo"))
-            ));
-        }});
+            )
+        );
 
         JsonCodec<Address> aCodec = Codecs.codec(AddressIso.INSTANCE, Codecs.CString.field("street"), Codecs.CString.field("city"));
-        JsonCodec<Tuple3<String, Integer, Option<Address>>> personCodec = Codecs.codec(Iso.identity(), Codecs.CString.field("name"), Codecs.CInt.field("age"), Codecs.OptionCodec(aCodec).field("address"));
+        JsonCodec<Tuple3<String, Integer, Optional<Address>>> personCodec = Codecs.codec(Iso.identity(), Codecs.CString.field("name"), Codecs.CInt.field("age"), Codecs.optionalCodec(aCodec).field("address"));
 
-        Person2 person = new Person2("Erlend Hamnaberg", 34, Option.some(new Address("Ensjøveien", "Oslo")));
+        Person2 person = new Person2("Erlend Hamnaberg", 34, Optional.of(new Address("Ensjøveien", "Oslo")));
 
-        DecodeResult<Tuple3<String, Integer, Option<Address>>> personOpt = personCodec.fromJson(value);
+        DecodeResult<Tuple3<String, Integer, Optional<Address>>> personOpt = personCodec.fromJson(value);
         assertTrue(personOpt.isOk());
         assertEquals(person.tupled(), personOpt.unsafeGet());
 
