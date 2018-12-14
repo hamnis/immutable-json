@@ -172,6 +172,17 @@
             <forkCount>0</forkCount>
           </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.0.1</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>7.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -258,19 +269,6 @@
                     </requireProperty>
                   </rules>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.0.1</version>
-            <executions>
-              <execution>
-                <id>aggregate-javadoc</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>aggregate-jar</goal>
-                </goals>
               </execution>
             </executions>
           </plugin>
