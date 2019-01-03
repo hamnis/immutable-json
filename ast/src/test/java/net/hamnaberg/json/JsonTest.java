@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -170,17 +171,17 @@ public class JsonTest {
     @Test
     public void jObjectConstructors() {
         Json.JObject object = Json.jObject(
-                "foo", Json.jString("2")
+                "1", Json.jString("2")
         );
 
-        assertEquals(object.size(), 1);
+        assertObject(object, 1);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
                 "2", Json.jNumber(2)
         );
 
-        assertEquals(object.size(), 2);
+        assertObject(object, 2);
 
 
         object = Json.jObject(
@@ -189,7 +190,7 @@ public class JsonTest {
                 "3", Json.jNumber(3)
         );
 
-        assertEquals(object.size(), 3);
+        assertObject(object, 3);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
@@ -198,7 +199,7 @@ public class JsonTest {
                 "4", Json.jNumber(4)
         );
 
-        assertEquals(object.size(), 4);
+        assertObject(object, 4);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
@@ -209,7 +210,7 @@ public class JsonTest {
         );
 
 
-        assertEquals(object.size(), 5);
+        assertObject(object, 5);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
@@ -220,7 +221,7 @@ public class JsonTest {
                 "6", Json.jNumber(6)
         );
 
-        assertEquals(object.size(), 6);
+        assertObject(object, 6);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
@@ -233,7 +234,7 @@ public class JsonTest {
         );
 
 
-        assertEquals(object.size(), 7);
+        assertObject(object, 7);
 
         object = Json.jObject(
                 "1", Json.jNumber(1),
@@ -247,7 +248,7 @@ public class JsonTest {
         );
 
 
-        assertEquals(object.size(), 8);
+        assertObject(object, 8);
 
 
         object = Json.jObject(
@@ -262,7 +263,7 @@ public class JsonTest {
                 "9", Json.jString("9")
         );
 
-        assertEquals(object.size(), 9);
+        assertObject(object, 9);
 
 
         object = Json.jObject(
@@ -277,8 +278,14 @@ public class JsonTest {
                 "9", Json.jString("9"),
                 "10", Json.jBoolean(true)
         );
+        assertObject(object, 10);
+    }
 
-        assertEquals(object.size(), 10);
+    private void assertObject(Json.JObject object, int size) {
+        assertEquals(object.size(), size);
+        List<String> expectedKeys = jsonRange(1, size).stream().map(a -> a.asBigDecimal().get().toString()).collect(Collectors.toList());
+        ArrayList<String> keys = new ArrayList<>(object.keySet());
+        assertEquals(expectedKeys, keys);
     }
 
     private List<Json.JValue> jsonRange(int start, int end) {

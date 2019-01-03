@@ -105,16 +105,17 @@ public abstract class Json {
     @SafeVarargs
     public static JObject jObject(Entry<String, JValue> first, Entry<String, JValue>... list) {
         LinkedHashMap<String, JValue> map = new LinkedHashMap<>(Map.of(first.getKey(), first.getValue()));
-        map.putAll(Map.ofEntries(list));
-        return new JObject(Map.copyOf(map));
+        for (Entry<String, JValue> kv : list) {
+            map.put(kv.getKey(), kv.getValue());
+        }
+        return new JObject(map);
     }
 
-    @SuppressWarnings("unchecked")
     public static JObject jObject(Iterable<Entry<String, JValue>> value) {
         if (value instanceof JObject) {
             return (JObject) value;
         }
-        return new JObject(Map.ofEntries(StreamSupport.stream(value.spliterator(), false).toArray(Map.Entry[]::new)));
+        return new JObject(copyOf(value));
     }
 
     public static JObject jObject(
@@ -271,7 +272,7 @@ public abstract class Json {
     }
 
     public static JObject jObject(Map<String, JValue> value) {
-        return new JObject(Map.copyOf(value));
+        return jObject(value.entrySet());
     }
 
     public static Map.Entry<String, JValue> tuple(String name, JValue value) {
@@ -335,6 +336,14 @@ public abstract class Json {
 
     public static Map.Entry<String, JValue> nullableTuple(String name, JValue value) {
         return tuple(name, Optional.ofNullable(value));
+    }
+
+    private static LinkedHashMap<String, JValue> copyOf(Iterable<Entry<String, JValue>> value) {
+        LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
+        for (Entry<String, JValue> kv : value) {
+            map.put(kv.getKey(), kv.getValue());
+        }
+        return map;
     }
 
     private static <A, B> Function<A, Optional<B>> emptyOption() {
