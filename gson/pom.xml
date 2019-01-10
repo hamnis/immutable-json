@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>7.0.1</version>
+    <version>7.1.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: GSON parser</name>
   <artifactId>immutable-json-gson</artifactId>
