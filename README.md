@@ -93,55 +93,49 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>7.0.0</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-native</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
 <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-gson</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>7.0.0</version>
+   <version>7.0.1</version>
  </dependency>
  ```
 
