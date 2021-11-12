@@ -69,6 +69,7 @@
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
+<!--
   <build>
     <plugins>
       <plugin>
@@ -76,11 +77,12 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <compilerArgs>
-            <arg>--patch-module</arg>
+            <arg>&#45;&#45;patch-module</arg>
             <arg>immutable.json.core=${settings.localRepository}/net/hamnaberg/json/immutable-json-core/${project.version}/immutable-json-core-${project.version}-tests.jar</arg>
           </compilerArgs>
         </configuration>
       </plugin>
     </plugins>
   </build>
+-->
 </project>
