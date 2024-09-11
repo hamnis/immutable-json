@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>7.2.0-SNAPSHOT</version>
+    <version>8.0.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: Jackson parser</name>
   <artifactId>immutable-json-jackson</artifactId>
@@ -65,24 +65,13 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
-<!--
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <compilerArgs>
-            <arg>&#45;&#45;patch-module</arg>
-            <arg>immutable.json.core=${settings.localRepository}/net/hamnaberg/json/immutable-json-core/${project.version}/immutable-json-core-${project.version}-tests.jar</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
--->
 </project>

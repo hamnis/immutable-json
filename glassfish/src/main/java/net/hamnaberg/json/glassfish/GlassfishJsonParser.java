@@ -1,13 +1,14 @@
-package net.hamnaberg.json.javax;
+package net.hamnaberg.json.glassfish;
 
 import net.hamnaberg.json.Json;
 import net.hamnaberg.json.io.JsonParseException;
 
 import java.io.Reader;
 import java.util.*;
-import javax.json.stream.JsonParser;
 
-public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
+import jakarta.json.stream.JsonParser;
+
+public final class GlassfishJsonParser extends net.hamnaberg.json.io.JsonParser {
     private final EnumSet<JsonParser.Event> scalarSet =
             EnumSet.of(
                     JsonParser.Event.VALUE_STRING,
@@ -19,7 +20,7 @@ public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
 
     @Override
     protected Json.JValue parseImpl(Reader reader) {
-        JsonParser parser = javax.json.Json.createParser(reader);
+        JsonParser parser = jakarta.json.Json.createParser(reader);
         try {
             JsonParser.Event event;
 
@@ -63,14 +64,12 @@ public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
     private Json.JArray handleArray(JsonParser parser) {
         JsonParser.Event event;
         List<Json.JValue> list = new ArrayList<>();
-        while((event = parser.next())!= JsonParser.Event.END_ARRAY) {
+        while ((event = parser.next()) != JsonParser.Event.END_ARRAY) {
             if (isScalar(event)) {
                 list.add(handleScalarValue(event, parser));
-            }
-            else if (event == JsonParser.Event.START_OBJECT) {
+            } else if (event == JsonParser.Event.START_OBJECT) {
                 list.add(handleObject(parser));
-            }
-            else if (event == JsonParser.Event.START_ARRAY) {
+            } else if (event == JsonParser.Event.START_ARRAY) {
                 list.add(handleArray(parser));
             }
         }
@@ -81,7 +80,7 @@ public final class JavaxJsonParser extends net.hamnaberg.json.io.JsonParser {
         Map<String, Json.JValue> map = new LinkedHashMap<>();
         JsonParser.Event event;
         String name = null;
-        while((event = parser.next()) != JsonParser.Event.END_OBJECT) {
+        while ((event = parser.next()) != JsonParser.Event.END_OBJECT) {
             if (event == JsonParser.Event.KEY_NAME) {
                 name = parser.getString();
             }

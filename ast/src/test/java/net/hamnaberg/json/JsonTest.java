@@ -23,7 +23,7 @@ public class JsonTest {
     public void jNumber() {
         Json.JNumber n1 = Json.jNumber(1);
         assertEquals(n1, Json.jNumber(1L));
-        assertEquals(n1, Json.jNumber(new Long(1L)));
+        assertEquals(n1, Json.jNumber(Long.valueOf(1L)));
         assertEquals(n1, Json.jNumber(new BigDecimal(1)));
         assertEquals(1, n1.asInt());
         assertEquals(1L, n1.asLong());
