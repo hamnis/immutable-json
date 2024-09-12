@@ -1,12 +1,9 @@
 package net.hamnaberg.json;
 
 
-import java.util.Map.Entry;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.Iterator;
 import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -100,15 +97,15 @@ public abstract class Json {
     }
 
     @SafeVarargs
-    public static JObject jObject(Entry<String, JValue> first, Entry<String, JValue>... list) {
+    public static JObject jObject(Map.Entry<String, JValue> first, Map.Entry<String, JValue>... list) {
         LinkedHashMap<String, JValue> map = new LinkedHashMap<>(Map.of(first.getKey(), first.getValue()));
-        for (Entry<String, JValue> kv : list) {
+        for (Map.Entry<String, JValue> kv : list) {
             map.put(kv.getKey(), kv.getValue());
         }
         return new JObject(map);
     }
 
-    public static JObject jObject(Iterable<Entry<String, JValue>> value) {
+    public static JObject jObject(Iterable<Map.Entry<String, JValue>> value) {
         if (value instanceof JObject) {
             return (JObject) value;
         }
@@ -215,9 +212,9 @@ public abstract class Json {
         return tuple(name, Optional.ofNullable(value));
     }
 
-    private static LinkedHashMap<String, JValue> copyOf(Iterable<Entry<String, JValue>> value) {
+    private static LinkedHashMap<String, JValue> copyOf(Iterable<Map.Entry<String, JValue>> value) {
         LinkedHashMap<String, JValue> map = new LinkedHashMap<>();
-        for (Entry<String, JValue> kv : value) {
+        for (Map.Entry<String, JValue> kv : value) {
             map.put(kv.getKey(), kv.getValue());
         }
         return map;
@@ -702,7 +699,7 @@ public abstract class Json {
     }
 
     public record JObject(Map<String, JValue> value) implements JValue, Iterable<Map.Entry<String, JValue>> {
-        public static final Collector<Entry<String, JValue>, ?, Map<String, JValue>> MapCollector = Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue);
+        public static final Collector<Map.Entry<String, JValue>, ?, Map<String, JValue>> MapCollector = Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue);
 
         public JObject(Map<String, JValue> value) {
             this.value = Objects.requireNonNull(value, "You may not supply a null Map to JObject");
@@ -831,11 +828,11 @@ public abstract class Json {
         }
 
         public <B> List<B> mapToList(BiFunction<String, JValue, B> f) {
-            return value.entrySet().stream().map(e -> f.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableList());
+            return value.entrySet().stream().map(e -> f.apply(e.getKey(), e.getValue())).toList();
         }
 
         public <B> List<B> mapValues(Function<JValue, B> f) {
-            return values().stream().map(f).collect(Collectors.toUnmodifiableList());
+            return values().stream().map(f).toList();
         }
 
         public JValue getOrDefault(String key, JValue defaultValue) {
