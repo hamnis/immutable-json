@@ -8,13 +8,11 @@ public final class PrettyPrinter {
 
     private final int charsPerLevel;
     private final boolean spaceafterColon;
-    private final char[] indents;
     private final boolean dropNullKeys;
 
     public PrettyPrinter(int charsPerLevel, boolean spaceAfterColon, boolean dropNullKeys) {
         this.spaceafterColon = spaceAfterColon;
         this.charsPerLevel = charsPerLevel;
-        this.indents = newIndent(charsPerLevel);
         this.dropNullKeys = dropNullKeys;
     }
 
@@ -38,27 +36,6 @@ public final class PrettyPrinter {
         return new PrettyPrinter(charsPerLevel, spaceafterColon, choice);
     }
 
-    private static char[] newIndent(int level) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <= level; i++) {
-            sb.append(" ");
-        }
-        String indent = sb.toString();
-
-        char[] indents = new char[indent.length() * INDENT_LEVELS];
-        int offset = 0;
-        for (int i = 0; i < INDENT_LEVELS; i++) {
-            indent.getChars(0, indent.length(), indents, offset);
-            offset += indent.length();
-        }
-        return indents;
-    }
-
-    private void writeStartObject(PrinterState state) {
-        state.append("{");
-        state.levelUp();
-    }
-
     public String writeString(Json.JValue value) {
         PrinterState state = new PrinterState();
         writeValue(value, state);
@@ -66,138 +43,9 @@ public final class PrettyPrinter {
     }
 
     private void writeValue(Json.JValue value, PrinterState state) {
-        value.foldUnit(
-                js -> state.append(escape(js.value)),
-                jb -> state.append(jb.value),
-                jn -> state.append(jn.value.toString()),
-                obj -> writeObject(obj, state),
-                arr -> writeArray(arr, state),
-                () -> state.append("null")
-        );
+        value.foldUnit(new PrinterStateFolder(state, charsPerLevel));
     }
 
-    private void writeObject(Json.JObject obj, PrinterState state) {
-        writeStartObject(state);
-
-        int index = 0;
-        Map<String, Json.JValue> map = obj.value;
-        for (Map.Entry<String, Json.JValue> entry : map.entrySet()) {
-            if (entry.getValue().isNull() && dropNullKeys) {
-                continue;
-            }
-
-            if (index > 0) {
-                state.append(",");
-            }
-            doIndent(state);
-            writeProperty(entry.getKey(), entry.getValue(), state);
-            index++;
-        }
-
-        writeEndObject(state);
-    }
-
-    private void writeProperty(String name, Json.JValue value, PrinterState state) {
-        state.append(escape(name)).append(":");
-        if (spaceafterColon) {
-            state.append(" ");
-        }
-        writeValue(value, state);
-    }
-
-    private void writeEndObject(PrinterState state) {
-        state.levelDown();
-        doIndent(state);
-        state.append("}");
-    }
-
-    private void writeStartArray(PrinterState state) {
-        state.append("[");
-        state.levelUp();
-    }
-
-    private void writeArray(Json.JArray arr, PrinterState state) {
-        writeStartArray(state);
-
-        int length = arr.size();
-        for (int i = 0; i < length; i++) {
-            Json.JValue v = arr.getValue().get(i);
-            if (i > 0) {
-                state.append(",");
-            }
-            doIndent(state);
-            writeValue(v, state);
-        }
-
-        writeEndArray(state);
-    }
-
-    private void writeEndArray(PrinterState state) {
-        state.levelDown();
-        doIndent(state);
-        state.append("]");
-    }
-
-    private String escape(String js) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('\"');
-
-        for (int i = 0; i < js.length(); ++i) {
-            char c = js.charAt(i);
-            if (c >= 32 && c <= 1114111 && c != 34 && c != 92) {
-                sb.append(c);
-            } else {
-                switch (c) {
-                    case '\b':
-                        sb.append('\\');
-                        sb.append('b');
-                        break;
-                    case '\t':
-                        sb.append('\\');
-                        sb.append('t');
-                        break;
-                    case '\n':
-                        sb.append('\\');
-                        sb.append('n');
-                        break;
-                    case '\f':
-                        sb.append('\\');
-                        sb.append('f');
-                        break;
-                    case '\r':
-                        sb.append('\\');
-                        sb.append('r');
-                        break;
-                    case '\"':
-                    case '\\':
-                        sb.append('\\');
-                        sb.append(c);
-                        break;
-                    default:
-                        String hex = "000" + Integer.toHexString(c);
-                        sb.append("\\u").append(hex.substring(hex.length() - 4));
-                }
-            }
-        }
-
-        sb.append('\"');
-        return sb.toString();
-    }
-
-    private void doIndent(PrinterState state) {
-        if (charsPerLevel > 0) {
-            state.append("\n");
-        }
-        int level = state.getLevel();
-        if (level > 0) {
-            level *= charsPerLevel;
-            while (level > indents.length) {
-                state.append(indents, 0, indents.length);
-                level -= indents.length;
-            }
-            state.append(indents, 0, level);
-        }
-    }
 
     private class PrinterState {
         private int level = 0;
@@ -233,6 +81,179 @@ public final class PrettyPrinter {
         @Override
         public String toString() {
             return sb.toString();
+        }
+    }
+
+    private class PrinterStateFolder implements Json.VoidFolder {
+        private final PrinterState state;
+        private final char[] indents;
+
+        private static char[] newIndent(int level) {
+            String indent = " ".repeat(Math.max(0, level + 1));
+
+            char[] indents = new char[indent.length() * INDENT_LEVELS];
+            int offset = 0;
+            for (int i = 0; i < INDENT_LEVELS; i++) {
+                indent.getChars(0, indent.length(), indents, offset);
+                offset += indent.length();
+            }
+            return indents;
+        }
+
+        public PrinterStateFolder(PrinterState state, int charsPerLevel) {
+            this.state = state;
+            this.indents = newIndent(charsPerLevel);
+        }
+
+        @Override
+        public void onNull() {
+            state.append("null");
+        }
+
+        @Override
+        public void onBoolean(Json.JBoolean b) {
+            state.append(b.value());
+        }
+
+        @Override
+        public void onNumber(Json.JNumber n) {
+            state.append(n.value().toString());
+        }
+
+        @Override
+        public void onString(Json.JString s) {
+            state.append(escape(s.value()));
+        }
+
+        @Override
+        public void onArray(Json.JArray a) {
+            writeStartArray(state);
+
+            int length = a.size();
+            for (int i = 0; i < length; i++) {
+                Json.JValue v = a.getValue().get(i);
+                if (i > 0) {
+                    state.append(",");
+                }
+                doIndent(state);
+                writeValue(v, state);
+            }
+
+            writeEndArray(state);
+        }
+
+        @Override
+        public void onObject(Json.JObject o) {
+            writeStartObject(state);
+
+            int index = 0;
+            Map<String, Json.JValue> map = o.value();
+            for (Map.Entry<String, Json.JValue> entry : map.entrySet()) {
+                if (entry.getValue().isNull() && dropNullKeys) {
+                    continue;
+                }
+
+                if (index > 0) {
+                    state.append(",");
+                }
+                doIndent(state);
+                writeProperty(entry.getKey(), entry.getValue(), state);
+                index++;
+            }
+
+            writeEndObject(state);
+        }
+
+        private void writeProperty(String name, Json.JValue value, PrinterState state) {
+            state.append(escape(name)).append(":");
+            if (spaceafterColon) {
+                state.append(" ");
+            }
+            writeValue(value, state);
+        }
+
+        private void writeStartObject(PrinterState state) {
+            state.append("{");
+            state.levelUp();
+        }
+
+
+        private void writeEndObject(PrinterState state) {
+            state.levelDown();
+            doIndent(state);
+            state.append("}");
+        }
+
+        private void writeStartArray(PrinterState state) {
+            state.append("[");
+            state.levelUp();
+        }
+
+        private void writeEndArray(PrinterState state) {
+            state.levelDown();
+            doIndent(state);
+            state.append("]");
+        }
+
+        private String escape(String js) {
+            StringBuilder sb = new StringBuilder();
+            sb.append('\"');
+
+            for (int i = 0; i < js.length(); ++i) {
+                char c = js.charAt(i);
+                if (c >= 32 && c <= 1114111 && c != 34 && c != 92) {
+                    sb.append(c);
+                } else {
+                    switch (c) {
+                        case '\b':
+                            sb.append('\\');
+                            sb.append('b');
+                            break;
+                        case '\t':
+                            sb.append('\\');
+                            sb.append('t');
+                            break;
+                        case '\n':
+                            sb.append('\\');
+                            sb.append('n');
+                            break;
+                        case '\f':
+                            sb.append('\\');
+                            sb.append('f');
+                            break;
+                        case '\r':
+                            sb.append('\\');
+                            sb.append('r');
+                            break;
+                        case '\"':
+                        case '\\':
+                            sb.append('\\');
+                            sb.append(c);
+                            break;
+                        default:
+                            String hex = "000" + Integer.toHexString(c);
+                            sb.append("\\u").append(hex.substring(hex.length() - 4));
+                    }
+                }
+            }
+
+            sb.append('\"');
+            return sb.toString();
+        }
+
+        private void doIndent(PrinterState state) {
+            if (charsPerLevel > 0) {
+                state.append("\n");
+            }
+            int level = state.getLevel();
+            if (level > 0) {
+                level *= charsPerLevel;
+                while (level > indents.length) {
+                    state.append(indents, 0, indents.length);
+                    level -= indents.length;
+                }
+                state.append(indents, 0, level);
+            }
         }
     }
 }

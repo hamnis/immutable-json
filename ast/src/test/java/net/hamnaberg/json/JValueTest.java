@@ -41,8 +41,8 @@ public class JValueTest {
     public void JBoolean() {
         Json.JBoolean tru = Json.jBoolean(true);
         Json.JBoolean fals = Json.jBoolean(false);
-        assertTrue(tru.value);
-        assertFalse(fals.value);
+        assertTrue(tru.value());
+        assertFalse(fals.value());
         assertNotEquals(tru, fals);
         assertEquals("true", tru.scalarToString().orElse(""));
         assertEquals("false", fals.scalarToString().orElse(""));

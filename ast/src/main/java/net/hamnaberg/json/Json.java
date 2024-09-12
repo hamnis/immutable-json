@@ -55,12 +55,12 @@ public abstract class Json {
 
     public static JArray jArray(Iterable<JValue> iterable) {
         Objects.requireNonNull(iterable, "iterable was null");
-        List<JValue> list = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toUnmodifiableList());
+        List<JValue> list = StreamSupport.stream(iterable.spliterator(), false).toList();
         return new JArray(list);
     }
 
     public static JArray jArray(JValue first, JValue... rest) {
-        return new JArray(Stream.concat(Stream.of(first), Stream.of(rest)).collect(Collectors.toUnmodifiableList()));
+        return new JArray(Stream.concat(Stream.of(first), Stream.of(rest)).toList());
     }
 
     public static JObject jEmptyObject() {
@@ -68,10 +68,7 @@ public abstract class Json {
     }
 
     public static JObject jObject(String name, JValue value) {
-        return new JObject(Map.of(
-                Objects.requireNonNull(name, "Name for entry may not be null"),
-                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
-        ));
+        return new JObject(Map.of(Objects.requireNonNull(name, "Name for entry may not be null"), Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))));
     }
 
     public static JObject jObject(String name, String value) {
@@ -118,157 +115,40 @@ public abstract class Json {
         return new JObject(copyOf(value));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2) {
+        return jObject(tuple(k1, v1), tuple(k2, v2));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5,
-            String k6, JValue v6) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5),
-                tuple(k6, v6)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5, String k6, JValue v6) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5), tuple(k6, v6));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5,
-            String k6, JValue v6,
-            String k7, JValue v7) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5),
-                tuple(k6, v6),
-                tuple(k7, v7)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5, String k6, JValue v6, String k7, JValue v7) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5), tuple(k6, v6), tuple(k7, v7));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5,
-            String k6, JValue v6,
-            String k7, JValue v7,
-            String k8, JValue v8) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5),
-                tuple(k6, v6),
-                tuple(k7, v7),
-                tuple(k8, v8)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5, String k6, JValue v6, String k7, JValue v7, String k8, JValue v8) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5), tuple(k6, v6), tuple(k7, v7), tuple(k8, v8));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5,
-            String k6, JValue v6,
-            String k7, JValue v7,
-            String k8, JValue v8,
-            String k9, JValue v9) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5),
-                tuple(k6, v6),
-                tuple(k7, v7),
-                tuple(k8, v8),
-                tuple(k9, v9)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5, String k6, JValue v6, String k7, JValue v7, String k8, JValue v8, String k9, JValue v9) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5), tuple(k6, v6), tuple(k7, v7), tuple(k8, v8), tuple(k9, v9));
     }
 
-    public static JObject jObject(
-            String k1, JValue v1,
-            String k2, JValue v2,
-            String k3, JValue v3,
-            String k4, JValue v4,
-            String k5, JValue v5,
-            String k6, JValue v6,
-            String k7, JValue v7,
-            String k8, JValue v8,
-            String k9, JValue v9,
-            String k10, JValue v10) {
-        return jObject(
-                tuple(k1, v1),
-                tuple(k2, v2),
-                tuple(k3, v3),
-                tuple(k4, v4),
-                tuple(k5, v5),
-                tuple(k6, v6),
-                tuple(k7, v7),
-                tuple(k8, v8),
-                tuple(k9, v9),
-                tuple(k10, v10)
-        );
+    public static JObject jObject(String k1, JValue v1, String k2, JValue v2, String k3, JValue v3, String k4, JValue v4, String k5, JValue v5, String k6, JValue v6, String k7, JValue v7, String k8, JValue v8, String k9, JValue v9, String k10, JValue v10) {
+        return jObject(tuple(k1, v1), tuple(k2, v2), tuple(k3, v3), tuple(k4, v4), tuple(k5, v5), tuple(k6, v6), tuple(k7, v7), tuple(k8, v8), tuple(k9, v9), tuple(k10, v10));
     }
 
     public static JObject jObject(Map<String, JValue> value) {
@@ -276,10 +156,7 @@ public abstract class Json {
     }
 
     public static Map.Entry<String, JValue> tuple(String name, JValue value) {
-        return Map.entry(
-                Objects.requireNonNull(name, "Name for entry may not be null"),
-                Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name))
-        );
+        return Map.entry(Objects.requireNonNull(name, "Name for entry may not be null"), Objects.requireNonNull(value, String.format("Value for named entry '%s' may not be null", name)));
     }
 
     public static Map.Entry<String, JValue> tuple(String name, Optional<JValue> opt) {
@@ -350,14 +227,176 @@ public abstract class Json {
         return (ignore) -> Optional.empty();
     }
 
-    public static abstract class JValue implements Serializable {
+    public interface Folder<A> {
+        A onNull();
 
-        private JValue() {
+        A onBoolean(JBoolean b);
+
+        A onNumber(JNumber n);
+
+        A onString(JString s);
+
+        A onArray(JArray a);
+
+        A onObject(JObject o);
+
+        default VoidFolder toVoid() {
+            var self = this;
+            return new VoidFolder() {
+                @Override
+                public void onNull() {
+                    self.onNull();
+                }
+
+                @Override
+                public void onBoolean(JBoolean b) {
+                    self.onBoolean(b);
+                }
+
+                @Override
+                public void onNumber(JNumber n) {
+                    self.onNumber(n);
+                }
+
+                @Override
+                public void onString(JString s) {
+                    self.onString(s);
+                }
+
+                @Override
+                public void onArray(JArray a) {
+                    self.onArray(a);
+                }
+
+                @Override
+                public void onObject(JObject o) {
+                    self.onObject(o);
+                }
+            };
         }
 
-        public abstract boolean equals(Object obj);
+        static <X> Folder<X> from(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
+            return new Folder<>() {
+                @Override
+                public X onNull() {
+                    return fNull.get();
+                }
 
-        public abstract int hashCode();
+                @Override
+                public X onBoolean(JBoolean b) {
+                    return fBoolean.apply(b);
+                }
+
+                @Override
+                public X onNumber(JNumber n) {
+                    return fNumber.apply(n);
+                }
+
+                @Override
+                public X onString(JString s) {
+                    return fString.apply(s);
+                }
+
+                @Override
+                public X onArray(JArray a) {
+                    return fArray.apply(a);
+                }
+
+                @Override
+                public X onObject(JObject o) {
+                    return fObject.apply(o);
+                }
+            };
+        }
+    }
+
+    public static class OptionalFolder<A> implements Folder<Optional<A>> {
+        @Override
+        public Optional<A> onNull() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<A> onBoolean(JBoolean b) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<A> onNumber(JNumber n) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<A> onString(JString s) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<A> onArray(JArray a) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<A> onObject(JObject o) {
+            return Optional.empty();
+        }
+    }
+
+    public interface VoidFolder {
+        default void onNull() {
+        }
+
+        default void onBoolean(JBoolean b) {
+        }
+
+        default void onNumber(JNumber n) {
+        }
+
+        default void onString(JString s) {
+        }
+
+        default void onArray(JArray a) {
+        }
+
+        default void onObject(JObject o) {
+        }
+
+        static VoidFolder from(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
+            return new VoidFolder() {
+                @Override
+                public void onNull() {
+                    fNull.run();
+                }
+
+                @Override
+                public void onBoolean(JBoolean b) {
+                    fBoolean.accept(b);
+                }
+
+                @Override
+                public void onNumber(JNumber n) {
+                    fNumber.accept(n);
+                }
+
+                @Override
+                public void onString(JString s) {
+                    fString.accept(s);
+                }
+
+                @Override
+                public void onArray(JArray a) {
+                    fArray.accept(a);
+                }
+
+                @Override
+                public void onObject(JObject o) {
+                    fObject.accept(o);
+                }
+            };
+        }
+    }
+
+    public sealed interface JValue extends Serializable permits JNull, JBoolean, JNumber, JString, JObject, JArray {
 
         /**
          * This is NOT the json representation. For that you
@@ -365,91 +404,151 @@ public abstract class Json {
          *
          * @return as String describing the data structure.
          */
-        public abstract String toString();
+        String toString();
 
-        public abstract <X> X fold(Function<JString, X> fString,
-                                   Function<JBoolean, X> fBoolean,
-                                   Function<JNumber, X> fNumber,
-                                   Function<JObject, X> fObject,
-                                   Function<JArray, X> fArray,
-                                   Supplier<X> fNull);
+        <X> X fold(Folder<X> folder);
 
-        public abstract void foldUnit(Consumer<JString> fString,
-                                      Consumer<JBoolean> fBoolean,
-                                      Consumer<JNumber> fNumber,
-                                      Consumer<JObject> fObject,
-                                      Consumer<JArray> fArray,
-                                      Runnable fNull);
+        void foldUnit(VoidFolder folder);
 
-        public final Optional<JArray> asJsonArray() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::of, Optional::empty);
+        default Optional<JArray> asJsonArray() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JArray> onArray(JArray a) {
+                    return Optional.of(a);
+                }
+            });
         }
 
-        public final JArray asJsonArrayOrEmpty() {
+        default JArray asJsonArrayOrEmpty() {
             return asJsonArray().orElse(jEmptyArray());
         }
 
-        public final Optional<JObject> asJsonObject() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::of, Json.emptyOption(), Optional::empty);
+        default Optional<JObject> asJsonObject() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JObject> onObject(JObject o) {
+                    return Optional.of(o);
+                }
+            });
         }
 
-        public final JObject asJsonObjectOrEmpty() {
+        default JObject asJsonObjectOrEmpty() {
             return asJsonObject().orElse(jEmptyObject());
         }
 
-        public final Optional<JBoolean> asJsonBoolean() {
-            return fold(Json.emptyOption(), Optional::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::empty);
+        default Optional<JBoolean> asJsonBoolean() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JBoolean> onBoolean(JBoolean b) {
+                    return Optional.of(b);
+                }
+            });
         }
 
-        public final Optional<Boolean> asBoolean() {
+        default Optional<Boolean> asBoolean() {
             return asJsonBoolean().map(j -> j.value);
         }
 
-        public final Optional<JNull> asJsonNull() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), () -> Optional.of(jNull()));
+        default Optional<JNull> asJsonNull() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JNull> onNull() {
+                    return Optional.of(JNull.INSTANCE);
+                }
+            });
         }
 
-        public final Optional<JString> asJsonString() {
-            return fold(Optional::of, Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Json.emptyOption(), Optional::empty);
+        default Optional<JString> asJsonString() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JString> onString(JString s) {
+                    return Optional.of(s);
+                }
+            });
         }
 
-        public final Optional<String> asString() {
+        default Optional<String> asString() {
             return asJsonString().map(j -> j.value);
         }
 
-        public final Optional<JNumber> asJsonNumber() {
-            return fold(Json.emptyOption(), Json.emptyOption(), Optional::of, Json.emptyOption(), Json.emptyOption(), Optional::empty);
+        default Optional<JNumber> asJsonNumber() {
+            return fold(new OptionalFolder<>() {
+                @Override
+                public Optional<JNumber> onNumber(JNumber n) {
+                    return Optional.of(n);
+                }
+            });
         }
 
-        public final Optional<BigDecimal> asBigDecimal() {
+        default Optional<BigDecimal> asBigDecimal() {
             return asJsonNumber().map(j -> j.value);
         }
 
 
-        public final boolean isObject() { return asJsonObject().isPresent(); }
-        public final boolean isArray() { return asJsonArray().isPresent(); }
-        public final boolean isString() { return asJsonString().isPresent(); }
-        public final boolean isNull() { return asJsonNull().isPresent(); }
-        public final boolean isBoolean() { return asJsonBoolean().isPresent(); }
-        public final boolean isNumber() { return asJsonNumber().isPresent(); }
-
-        public final boolean isScalar() {
-            return fold(j -> true, j -> true, j -> true, j -> false, j -> false, () -> true);
+        default boolean isObject() {
+            return asJsonObject().isPresent();
         }
 
-        public final JValue mapJson(Function<JValue, JValue> f) {
+        default boolean isArray() {
+            return asJsonArray().isPresent();
+        }
+
+        default boolean isString() {
+            return asJsonString().isPresent();
+        }
+
+        default boolean isNull() {
+            return asJsonNull().isPresent();
+        }
+
+        default boolean isBoolean() {
+            return asJsonBoolean().isPresent();
+        }
+
+        default boolean isNumber() {
+            return asJsonNumber().isPresent();
+        }
+
+        default boolean isScalar() {
+            return fold(IsScalarFolder.INSTANCE);
+        }
+
+        default JValue mapJson(Function<JValue, JValue> f) {
             return f.apply(this);
         }
 
-        public final Optional<String> scalarToString() {
-            return fold(
-                    j -> Optional.of(j.value),
-                    j -> Optional.of(String.valueOf(j.value)),
-                    j -> Optional.of(j.value.toString()),
-                    emptyOption(),
-                    emptyOption(),
-                    () -> Optional.of("null")
-            );
+        default Optional<String> scalarToString() {
+            return fold(new Folder<>() {
+                @Override
+                public Optional<String> onNull() {
+                    return Optional.of("null");
+                }
+
+                @Override
+                public Optional<String> onBoolean(JBoolean b) {
+                    return Optional.of(String.valueOf(b.value));
+                }
+
+                @Override
+                public Optional<String> onNumber(JNumber n) {
+                    return Optional.of(n.value.toString());
+                }
+
+                @Override
+                public Optional<String> onString(JString s) {
+                    return Optional.of(s.value);
+                }
+
+                @Override
+                public Optional<String> onArray(JArray a) {
+                    return Optional.empty();
+                }
+
+                @Override
+                public Optional<String> onObject(JObject o) {
+                    return Optional.empty();
+                }
+            });
         }
 
         /**
@@ -463,80 +562,93 @@ public abstract class Json {
          * and values from the argument JSON completely replace values
          * from this JSON.
          */
-        public final JValue deepmerge(JValue value) {
+        default JValue deepmerge(JValue value) {
             Optional<JObject> first = asJsonObject();
             Optional<JObject> second = value.asJsonObject();
 
             if (first.isPresent() && second.isPresent()) {
                 return second.get().stream().reduce(first.get(), (obj, kv) -> {
                     Optional<JValue> v1 = obj.get(kv.getKey());
-                    if (v1.isPresent()) {
-                        return obj.put(kv.getKey(), v1.get().deepmerge(kv.getValue()));
-                    } else {
-                        return obj.put(kv.getKey(), kv.getValue());
-                    }
+                    return v1.map(jValue -> obj.put(kv.getKey(), jValue.deepmerge(kv.getValue()))).orElseGet(() -> obj.put(kv.getKey(), kv.getValue()));
                 }, JObject::concat);
             } else {
                 return value;
             }
         }
 
-        public final JValue asJValue() {
+        default JValue asJValue() {
             return this;
         }
 
-        public final String nospaces() {
+        default String nospaces() {
             return pretty(PrettyPrinter.nospaces());
         }
 
-        public final String spaces2() {
+        default String spaces2() {
             return pretty(PrettyPrinter.spaces2());
         }
 
-        public final String spaces4() {
+        default String spaces4() {
             return pretty(PrettyPrinter.spaces4());
         }
 
-        public final String pretty(PrettyPrinter p) {
+        default String pretty(PrettyPrinter p) {
             return p.writeString(this);
+        }
+
+        enum IsScalarFolder implements Folder<Boolean> {
+            INSTANCE;
+
+            @Override
+            public Boolean onNull() {
+                return true;
+            }
+
+            @Override
+            public Boolean onBoolean(JBoolean b) {
+                return true;
+            }
+
+            @Override
+            public Boolean onNumber(JNumber n) {
+                return true;
+            }
+
+            @Override
+            public Boolean onString(JString s) {
+                return true;
+            }
+
+            @Override
+            public Boolean onArray(JArray a) {
+                return false;
+            }
+
+            @Override
+            public Boolean onObject(JObject o) {
+                return false;
+            }
         }
     }
 
-    public static final class JString extends JValue {
-        public final String value;
-
-        private JString(String value) {
+    public record JString(String value) implements JValue {
+        public JString(String value) {
             this.value = Objects.requireNonNull(value, "String may not be null");
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JString jString = (JString) o;
-            return Objects.equals(value, jString.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
-        }
-
-        @Override
         public String toString() {
-            return "JString{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "JString{" + "value='" + value + "\"'}";
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fString.apply(this);
+        public <X> X fold(Folder<X> f) {
+            return f.onString(this);
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fString.accept(this);
+        public void foldUnit(VoidFolder f) {
+            f.onString(this);
         }
 
         public String getValue() {
@@ -544,41 +656,20 @@ public abstract class Json {
         }
     }
 
-    public static final class JBoolean extends JValue {
-        public final boolean value;
-
-        private JBoolean(boolean value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JBoolean jBoolean = (JBoolean) o;
-            return value == jBoolean.value;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
-        }
-
+    public record JBoolean(boolean value) implements JValue {
         @Override
         public String toString() {
-            return "JBoolean{" +
-                    "value=" + value +
-                    '}';
+            return "JBoolean{" + "value=" + value + "}";
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fBoolean.apply(this);
+        public <X> X fold(Folder<X> f) {
+            return f.onBoolean(this);
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fBoolean.accept(this);
+        public void foldUnit(VoidFolder f) {
+            f.onBoolean(this);
         }
 
         public boolean isValue() {
@@ -586,22 +677,8 @@ public abstract class Json {
         }
     }
 
-    public static final class JNull extends JValue {
-        public static final JNull INSTANCE = new JNull();
-
-        private JNull() {
-        }
-
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            return 31;
-        }
+    public enum JNull implements JValue {
+        INSTANCE;
 
         @Override
         public String toString() {
@@ -609,52 +686,35 @@ public abstract class Json {
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fNull.get();
+        public <X> X fold(Folder<X> f) {
+            return f.onNull();
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fNull.run();
+        public void foldUnit(VoidFolder f) {
+            f.onNull();
         }
     }
 
-    public static final class JNumber extends JValue {
-        public final BigDecimal value;
+    public record JNumber(BigDecimal value) implements JValue {
 
-        private JNumber(BigDecimal value) {
+        public JNumber(BigDecimal value) {
             this.value = Objects.requireNonNull(value, "Number may not be null");
-        }
-
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JNumber jNumber = (JNumber) o;
-            return Objects.equals(value, jNumber.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
         }
 
         @Override
         public String toString() {
-            return "JNumber{" +
-                    "value=" + value +
-                    '}';
+            return "JNumber{" + "value=" + value + "}";
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fNumber.apply(this);
+        public <X> X fold(Folder<X> f) {
+            return f.onNumber(this);
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fNumber.accept(this);
+        public void foldUnit(VoidFolder f) {
+            f.onNumber(this);
         }
 
         public long asLong() {
@@ -674,41 +734,25 @@ public abstract class Json {
         }
     }
 
-    public static final class JArray extends JValue implements Iterable<JValue> {
-        public final List<JValue> value;
+    public record JArray(List<JValue> value) implements JValue, Iterable<JValue> {
 
-        private JArray(List<JValue> value) {
+        public JArray(List<JValue> value) {
             this.value = Objects.requireNonNull(value, "You may not supply a null List in JArray");
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JArray jValues = (JArray) o;
-            return Objects.equals(value, jValues.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
-        }
-
-        @Override
         public String toString() {
-            return "JArray{" +
-                    "value=" + value +
-                    '}';
+            return "JArray{" + "value=" + value + "}";
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fArray.apply(this);
+        public <X> X fold(Folder<X> f) {
+            return f.onArray(this);
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fArray.accept(this);
+        public void foldUnit(VoidFolder f) {
+            f.onArray(this);
         }
 
         public List<JValue> getValue() {
@@ -745,11 +789,11 @@ public abstract class Json {
         }
 
         public <A> List<A> mapOpt(Function<JValue, Optional<A>> f) {
-            return this.value.stream().flatMap(f.andThen(Optional::stream)).collect(Collectors.toUnmodifiableList());
+            return this.value.stream().flatMap(f.andThen(Optional::stream)).toList();
         }
 
         public <A> List<A> mapToList(Function<JValue, A> f) {
-            return value.stream().map(f).collect(Collectors.toUnmodifiableList());
+            return value.stream().map(f).toList();
         }
 
         public JArray map(Function<JValue, JValue> f) {
@@ -762,7 +806,7 @@ public abstract class Json {
         }
 
         public <A> List<A> flatMapToList(Function<JValue, List<A>> f) {
-            return value.stream().flatMap(f.andThen(List::stream)).collect(Collectors.toUnmodifiableList());
+            return value.stream().flatMap(f.andThen(List::stream)).toList();
         }
 
         public int size() {
@@ -770,7 +814,7 @@ public abstract class Json {
         }
 
         public JArray append(JValue toAdd) {
-            List<JValue> list = Stream.concat(value.stream(), Stream.of(toAdd)).collect(Collectors.toUnmodifiableList());
+            List<JValue> list = Stream.concat(value.stream(), Stream.of(toAdd)).toList();
             return new JArray(list);
         }
 
@@ -804,7 +848,7 @@ public abstract class Json {
 
 
         public JArray prepend(JValue toAdd) {
-            List<JValue> list = Stream.concat(Stream.of(toAdd), value.stream()).collect(Collectors.toUnmodifiableList());
+            List<JValue> list = Stream.concat(Stream.of(toAdd), value.stream()).toList();
             return new JArray(list);
         }
 
@@ -870,15 +914,14 @@ public abstract class Json {
         }
 
         public JArray concat(JArray other) {
-            return new JArray(Stream.concat(this.value.stream(), other.stream()).collect(Collectors.toUnmodifiableList()));
+            return new JArray(Stream.concat(this.value.stream(), other.stream()).toList());
         }
     }
 
-    public static final class JObject extends JValue implements Iterable<Map.Entry<String, JValue>> {
+    public record JObject(Map<String, JValue> value) implements JValue, Iterable<Map.Entry<String, JValue>> {
         public static final Collector<Entry<String, JValue>, ?, Map<String, JValue>> MapCollector = Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue);
-        public final Map<String, JValue> value;
 
-        private JObject(Map<String, JValue> value) {
+        public JObject(Map<String, JValue> value) {
             this.value = Objects.requireNonNull(value, "You may not supply a null Map to JObject");
         }
 
@@ -897,19 +940,17 @@ public abstract class Json {
 
         @Override
         public String toString() {
-            return "JObject{" +
-                    "value=" + value +
-                    '}';
+            return "JObject{" + "value=" + value + "}";
         }
 
         @Override
-        public <X> X fold(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return fObject.apply(this);
+        public <X> X fold(Folder<X> f) {
+            return f.onObject(this);
         }
 
         @Override
-        public void foldUnit(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            fObject.accept(this);
+        public void foldUnit(VoidFolder f) {
+            f.onObject(this);
         }
 
         public Map<String, JValue> getValue() {
@@ -1007,9 +1048,7 @@ public abstract class Json {
         }
 
         public <B> List<B> mapToList(BiFunction<String, JValue, B> f) {
-            return value.entrySet().stream().map(
-                    e -> f.apply(e.getKey(), e.getValue())
-            ).collect(Collectors.toUnmodifiableList());
+            return value.entrySet().stream().map(e -> f.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableList());
         }
 
         public <B> List<B> mapValues(Function<JValue, B> f) {
