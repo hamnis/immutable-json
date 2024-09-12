@@ -1,5 +1,6 @@
 package net.hamnaberg.json.pointer;
 
+import net.hamnaberg.json.Folder;
 import net.hamnaberg.json.Json;
 
 import java.util.Iterator;
@@ -113,7 +114,7 @@ public final class JsonPointer {
     }
 
     private Json.JValue foldToJson(Json.JValue value, Function<Json.JObject, Json.JValue> fObject, Function<Json.JArray, Json.JValue> fArray) {
-        return value.fold(Json.Folder.from(
+        return value.fold(Folder.from(
                 Json.JValue::asJValue,
                 Json.JValue::asJValue,
                 Json.JValue::asJValue,

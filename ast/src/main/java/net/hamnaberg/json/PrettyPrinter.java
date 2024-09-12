@@ -84,7 +84,7 @@ public final class PrettyPrinter {
         }
     }
 
-    private class PrinterStateFolder implements Json.VoidFolder {
+    private class PrinterStateFolder implements VoidFolder {
         private final PrinterState state;
         private final char[] indents;
 

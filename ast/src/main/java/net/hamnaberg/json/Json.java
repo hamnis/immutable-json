@@ -223,179 +223,6 @@ public abstract class Json {
         return map;
     }
 
-    private static <A, B> Function<A, Optional<B>> emptyOption() {
-        return (ignore) -> Optional.empty();
-    }
-
-    public interface Folder<A> {
-        A onNull();
-
-        A onBoolean(JBoolean b);
-
-        A onNumber(JNumber n);
-
-        A onString(JString s);
-
-        A onArray(JArray a);
-
-        A onObject(JObject o);
-
-        default VoidFolder toVoid() {
-            var self = this;
-            return new VoidFolder() {
-                @Override
-                public void onNull() {
-                    self.onNull();
-                }
-
-                @Override
-                public void onBoolean(JBoolean b) {
-                    self.onBoolean(b);
-                }
-
-                @Override
-                public void onNumber(JNumber n) {
-                    self.onNumber(n);
-                }
-
-                @Override
-                public void onString(JString s) {
-                    self.onString(s);
-                }
-
-                @Override
-                public void onArray(JArray a) {
-                    self.onArray(a);
-                }
-
-                @Override
-                public void onObject(JObject o) {
-                    self.onObject(o);
-                }
-            };
-        }
-
-        static <X> Folder<X> from(Function<JString, X> fString, Function<JBoolean, X> fBoolean, Function<JNumber, X> fNumber, Function<JObject, X> fObject, Function<JArray, X> fArray, Supplier<X> fNull) {
-            return new Folder<>() {
-                @Override
-                public X onNull() {
-                    return fNull.get();
-                }
-
-                @Override
-                public X onBoolean(JBoolean b) {
-                    return fBoolean.apply(b);
-                }
-
-                @Override
-                public X onNumber(JNumber n) {
-                    return fNumber.apply(n);
-                }
-
-                @Override
-                public X onString(JString s) {
-                    return fString.apply(s);
-                }
-
-                @Override
-                public X onArray(JArray a) {
-                    return fArray.apply(a);
-                }
-
-                @Override
-                public X onObject(JObject o) {
-                    return fObject.apply(o);
-                }
-            };
-        }
-    }
-
-    public static class OptionalFolder<A> implements Folder<Optional<A>> {
-        @Override
-        public Optional<A> onNull() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<A> onBoolean(JBoolean b) {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<A> onNumber(JNumber n) {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<A> onString(JString s) {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<A> onArray(JArray a) {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<A> onObject(JObject o) {
-            return Optional.empty();
-        }
-    }
-
-    public interface VoidFolder {
-        default void onNull() {
-        }
-
-        default void onBoolean(JBoolean b) {
-        }
-
-        default void onNumber(JNumber n) {
-        }
-
-        default void onString(JString s) {
-        }
-
-        default void onArray(JArray a) {
-        }
-
-        default void onObject(JObject o) {
-        }
-
-        static VoidFolder from(Consumer<JString> fString, Consumer<JBoolean> fBoolean, Consumer<JNumber> fNumber, Consumer<JObject> fObject, Consumer<JArray> fArray, Runnable fNull) {
-            return new VoidFolder() {
-                @Override
-                public void onNull() {
-                    fNull.run();
-                }
-
-                @Override
-                public void onBoolean(JBoolean b) {
-                    fBoolean.accept(b);
-                }
-
-                @Override
-                public void onNumber(JNumber n) {
-                    fNumber.accept(n);
-                }
-
-                @Override
-                public void onString(JString s) {
-                    fString.accept(s);
-                }
-
-                @Override
-                public void onArray(JArray a) {
-                    fArray.accept(a);
-                }
-
-                @Override
-                public void onObject(JObject o) {
-                    fObject.accept(o);
-                }
-            };
-        }
-    }
-
     public sealed interface JValue extends Serializable permits JNull, JBoolean, JNumber, JString, JObject, JArray {
 
         /**
@@ -638,7 +465,7 @@ public abstract class Json {
 
         @Override
         public String toString() {
-            return "JString{" + "value='" + value + "\"'}";
+            return "JString{value=\"" + value + "\"}";
         }
 
         @Override
@@ -659,7 +486,7 @@ public abstract class Json {
     public record JBoolean(boolean value) implements JValue {
         @Override
         public String toString() {
-            return "JBoolean{" + "value=" + value + "}";
+            return "JBoolean{value=" + value + "}";
         }
 
         @Override
@@ -704,7 +531,7 @@ public abstract class Json {
 
         @Override
         public String toString() {
-            return "JNumber{" + "value=" + value + "}";
+            return "JNumber{value=" + value + "}";
         }
 
         @Override
@@ -742,7 +569,7 @@ public abstract class Json {
 
         @Override
         public String toString() {
-            return "JArray{" + "value=" + value + "}";
+            return "JArray{value=" + value + "}";
         }
 
         @Override
@@ -940,7 +767,7 @@ public abstract class Json {
 
         @Override
         public String toString() {
-            return "JObject{" + "value=" + value + "}";
+            return "JObject{value=" + value + "}";
         }
 
         @Override
