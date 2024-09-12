@@ -223,7 +223,7 @@ public abstract class Json {
         return map;
     }
 
-    public sealed interface JValue extends Serializable permits JNull, JBoolean, JNumber, JString, JObject, JArray {
+    public sealed interface JValue extends Serializable permits JScalarValue, JObject, JArray {
 
         /**
          * This is NOT the json representation. For that you
@@ -337,46 +337,13 @@ public abstract class Json {
         }
 
         default boolean isScalar() {
-            return fold(IsScalarFolder.INSTANCE);
+            return false;
         }
 
         default JValue mapJson(Function<JValue, JValue> f) {
             return f.apply(this);
         }
 
-        default Optional<String> scalarToString() {
-            return fold(new Folder<>() {
-                @Override
-                public Optional<String> onNull() {
-                    return Optional.of("null");
-                }
-
-                @Override
-                public Optional<String> onBoolean(JBoolean b) {
-                    return Optional.of(String.valueOf(b.value));
-                }
-
-                @Override
-                public Optional<String> onNumber(JNumber n) {
-                    return Optional.of(n.value.toString());
-                }
-
-                @Override
-                public Optional<String> onString(JString s) {
-                    return Optional.of(s.value);
-                }
-
-                @Override
-                public Optional<String> onArray(JArray a) {
-                    return Optional.empty();
-                }
-
-                @Override
-                public Optional<String> onObject(JObject o) {
-                    return Optional.empty();
-                }
-            });
-        }
 
         /**
          * Perform a deep merge of this JSON value with another JSON value.
@@ -422,43 +389,32 @@ public abstract class Json {
         default String pretty(PrettyPrinter p) {
             return p.writeString(this);
         }
+    }
 
-        enum IsScalarFolder implements Folder<Boolean> {
-            INSTANCE;
+    public sealed interface JScalarValue extends JValue permits JNull, JBoolean, JNumber, JString {
+        @Override
+        default boolean isScalar() {
+            return true;
+        }
 
-            @Override
-            public Boolean onNull() {
-                return true;
-            }
-
-            @Override
-            public Boolean onBoolean(JBoolean b) {
-                return true;
-            }
-
-            @Override
-            public Boolean onNumber(JNumber n) {
-                return true;
-            }
-
-            @Override
-            public Boolean onString(JString s) {
-                return true;
-            }
-
-            @Override
-            public Boolean onArray(JArray a) {
-                return false;
-            }
-
-            @Override
-            public Boolean onObject(JObject o) {
-                return false;
+        default String scalarToString() {
+            // todo: replace with switch pattern match expression when moving to 21
+            if (this instanceof JNull) {
+                return "null";
+            } else if (this instanceof JBoolean b) {
+                return String.valueOf(b.value);
+            } else if (this instanceof JNumber n) {
+                return n.value.toString();
+            } else if (this instanceof JString s) {
+                return s.value;
+            } else {
+                throw new UnsupportedOperationException("Not supported");
+                //not needed in 21, since we have exhaustiveness checking
             }
         }
     }
 
-    public record JString(String value) implements JValue {
+    public record JString(String value) implements JScalarValue {
         public JString(String value) {
             this.value = Objects.requireNonNull(value, "String may not be null");
         }
@@ -483,7 +439,7 @@ public abstract class Json {
         }
     }
 
-    public record JBoolean(boolean value) implements JValue {
+    public record JBoolean(boolean value) implements JScalarValue {
         @Override
         public String toString() {
             return "JBoolean{value=" + value + "}";
@@ -504,7 +460,7 @@ public abstract class Json {
         }
     }
 
-    public enum JNull implements JValue {
+    public enum JNull implements JScalarValue {
         INSTANCE;
 
         @Override
@@ -523,7 +479,7 @@ public abstract class Json {
         }
     }
 
-    public record JNumber(BigDecimal value) implements JValue {
+    public record JNumber(BigDecimal value) implements JScalarValue {
 
         public JNumber(BigDecimal value) {
             this.value = Objects.requireNonNull(value, "Number may not be null");
