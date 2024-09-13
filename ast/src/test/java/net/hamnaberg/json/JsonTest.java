@@ -16,7 +16,7 @@ public class JsonTest {
         Json.JString hello = Json.jString("hello");
         assertEquals("hello", hello.getValue());
         assertEquals(hello, Json.jString("hello"));
-        assertNotEquals(hello.toString(), Json.jString("hello").value);
+        assertNotEquals(hello.toString(), Json.jString("hello").value());
     }
 
     @Test
@@ -37,9 +37,9 @@ public class JsonTest {
         Json.JBoolean no = Json.jBoolean(false);
         assertEquals(yes, Json.jBoolean(true));
         assertEquals(no, Json.jBoolean(false));
-        assertNotEquals(yes.value, no.value);
-        assertEquals(yes.value, true);
-        assertEquals(no.value, false);
+        assertNotEquals(yes.value(), no.value());
+        assertTrue(yes.value());
+        assertFalse(no.value());
     }
 
     @Test

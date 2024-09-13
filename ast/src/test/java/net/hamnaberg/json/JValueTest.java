@@ -17,7 +17,7 @@ public class JValueTest {
         assertEquals(expected, Json.jNumber(20.0));
         assertTrue(expected.isNumber());
         assertTrue(expected.isScalar());
-        assertEquals("20", expected.scalarToString().orElse(""));
+        assertEquals("20", expected.scalarToString());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class JValueTest {
         Json.JString string = Json.jString("Hello");
         assertTrue(string.isString());
         assertTrue(string.isScalar());
-        assertEquals("Hello", string.scalarToString().orElse(""));
+        assertEquals("Hello", string.scalarToString());
     }
 
     @Test
@@ -34,18 +34,18 @@ public class JValueTest {
         assertTrue(nullable.isNull());
         assertTrue(nullable.isScalar());
         assertFalse(nullable.isString());
-        assertEquals("null", nullable.scalarToString().orElse(""));
+        assertEquals("null", nullable.scalarToString());
     }
 
     @Test
     public void JBoolean() {
-        Json.JBoolean tru = Json.jBoolean(true);
-        Json.JBoolean fals = Json.jBoolean(false);
-        assertTrue(tru.value);
-        assertFalse(fals.value);
-        assertNotEquals(tru, fals);
-        assertEquals("true", tru.scalarToString().orElse(""));
-        assertEquals("false", fals.scalarToString().orElse(""));
+        Json.JBoolean truthy = Json.jBoolean(true);
+        Json.JBoolean falsy = Json.jBoolean(false);
+        assertTrue(truthy.value());
+        assertFalse(falsy.value());
+        assertNotEquals(truthy, falsy);
+        assertEquals("true", truthy.scalarToString());
+        assertEquals("false", falsy.scalarToString());
     }
 
     @Test

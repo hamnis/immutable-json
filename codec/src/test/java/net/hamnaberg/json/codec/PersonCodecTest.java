@@ -107,7 +107,7 @@ public class PersonCodecTest {
 
         @Override
         public Person reverseGet(Tuple3<String, Integer, Address> t) {
-            return new Person(t._1, t._2, t._3);
+            return new Person(t._1(), t._2(), t._3());
         }
 
         @Override
@@ -121,7 +121,7 @@ public class PersonCodecTest {
 
         @Override
         public Person2 reverseGet(Tuple3<String, Integer, Optional<Address>> t) {
-            return new Person2(t._1, t._2, t._3);
+            return new Person2(t._1(), t._2(), t._3());
         }
 
         @Override
@@ -135,7 +135,7 @@ public class PersonCodecTest {
 
         @Override
         public Address reverseGet(Tuple2<String, String>t) {
-            return new Address(t._1, t._2);
+            return new Address(t._1(), t._2());
         }
 
         @Override

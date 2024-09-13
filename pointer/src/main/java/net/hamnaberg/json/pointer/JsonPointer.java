@@ -1,5 +1,6 @@
 package net.hamnaberg.json.pointer;
 
+import net.hamnaberg.json.Folder;
 import net.hamnaberg.json.Json;
 
 import java.util.Iterator;
@@ -113,14 +114,14 @@ public final class JsonPointer {
     }
 
     private Json.JValue foldToJson(Json.JValue value, Function<Json.JObject, Json.JValue> fObject, Function<Json.JArray, Json.JValue> fArray) {
-        return value.fold(
+        return value.fold(Folder.from(
                 Json.JValue::asJValue,
                 Json.JValue::asJValue,
                 Json.JValue::asJValue,
                 fObject,
                 fArray,
                 Json::jNull
-        );
+        ));
     }
 
     private Json.JValue updateImpl(Iterator<Ref> path, Ref ref, Json.JValue context, Optional<Json.JValue> updateValue) {
@@ -135,8 +136,7 @@ public final class JsonPointer {
                                 if (updateValue.isPresent()) {
                                     array.get(index).orElseThrow(() -> new IllegalStateException("No value at index: " + index));
                                     return array.replace(index, updateValue.get());
-                                }
-                                else {
+                                } else {
                                     return array.remove(index);
                                 }
                             } else {
@@ -179,8 +179,7 @@ public final class JsonPointer {
                             if (!path.hasNext()) {
                                 if (arr.size() >= index) {
                                     return arr.insert(index, valueToInsert);
-                                }
-                                else {
+                                } else {
                                     throw new IllegalStateException(String.format("List index %s is out-of-bounds", index));
                                 }
                             } else {
@@ -195,16 +194,16 @@ public final class JsonPointer {
                         Json.JValue::asJValue
                 ),
                 () ->
-                    foldToJson(
-                            context,
-                            j -> j,
-                            arr -> {
-                                if (path.hasNext()) {
-                                    throw new IllegalStateException("Nonsense to have more values after a end-of-array");
+                        foldToJson(
+                                context,
+                                j -> j,
+                                arr -> {
+                                    if (path.hasNext()) {
+                                        throw new IllegalStateException("Nonsense to have more values after a end-of-array");
+                                    }
+                                    return arr.append(valueToInsert);
                                 }
-                                return arr.append(valueToInsert);
-                            }
-                    )
+                        )
         );
     }
 
