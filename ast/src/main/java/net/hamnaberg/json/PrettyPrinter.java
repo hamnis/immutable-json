@@ -2,6 +2,7 @@ package net.hamnaberg.json;
 
 
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.Map;
 
 public final class PrettyPrinter {
@@ -91,7 +92,7 @@ public final class PrettyPrinter {
 
         void append(char[] chars, int i, int length) {
             try {
-                appendable.append(new String(chars), i, length);
+                appendable.append(CharBuffer.wrap(chars), i, length);
             } catch (IOException e) {
                 throw new JsonWriteException("Unable to append to writer", e);
             }
