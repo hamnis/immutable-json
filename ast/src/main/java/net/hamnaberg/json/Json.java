@@ -386,6 +386,16 @@ public abstract class Json {
         default String pretty(PrettyPrinter p) {
             return p.writeString(this);
         }
+
+        /**
+         * Can emit directly to an Appendable without having to realize a String
+         *
+         * @param p          the pretty printer
+         * @param appendable for instance a Writer instance
+         */
+        default void writeTo(PrettyPrinter p, Appendable appendable) {
+            p.writeTo(this, appendable);
+        }
     }
 
     public sealed interface JScalarValue extends JValue permits JNull, JBoolean, JNumber, JString {

@@ -1,17 +1,18 @@
 package net.hamnaberg.json;
 
 
+import java.io.IOException;
 import java.util.Map;
 
 public final class PrettyPrinter {
     private final static int INDENT_LEVELS = 16;
 
     private final int charsPerLevel;
-    private final boolean spaceafterColon;
+    private final boolean spaceAfterColon;
     private final boolean dropNullKeys;
 
     public PrettyPrinter(int charsPerLevel, boolean spaceAfterColon, boolean dropNullKeys) {
-        this.spaceafterColon = spaceAfterColon;
+        this.spaceAfterColon = spaceAfterColon;
         this.charsPerLevel = charsPerLevel;
         this.dropNullKeys = dropNullKeys;
     }
@@ -33,38 +34,39 @@ public final class PrettyPrinter {
     }
 
     public PrettyPrinter dropNullKeys(boolean choice) {
-        return new PrettyPrinter(charsPerLevel, spaceafterColon, choice);
+        return new PrettyPrinter(charsPerLevel, spaceAfterColon, choice);
     }
 
     public String writeString(Json.JValue value) {
-        PrinterState state = new PrinterState();
+        StringBuilder sb = new StringBuilder();
+        writeTo(value, sb);
+        return sb.toString();
+    }
+
+    public void writeTo(Json.JValue value, Appendable appendable) {
+        PrinterState state = new PrinterState(appendable);
         writeValue(value, state);
-        return state.toString();
     }
 
     private void writeValue(Json.JValue value, PrinterState state) {
         value.foldUnit(new PrinterStateFolder(state, charsPerLevel));
     }
 
+    public static class JsonWriteException extends RuntimeException {
+        public JsonWriteException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
 
     private class PrinterState {
+        private final Appendable appendable;
         private int level = 0;
-        private final StringBuilder sb = new StringBuilder();
 
-        PrinterState append(String s) {
-            sb.append(s);
-            return this;
+
+        private PrinterState(Appendable appendable) {
+            this.appendable = appendable;
         }
 
-        PrinterState append(char[] chars, int i, int length) {
-            sb.append(chars, i, length);
-            return this;
-        }
-
-        PrinterState append(boolean s) {
-            sb.append(s);
-            return this;
-        }
 
         void levelUp() {
             level++;
@@ -78,9 +80,25 @@ public final class PrettyPrinter {
             return level;
         }
 
-        @Override
-        public String toString() {
-            return sb.toString();
+        PrinterState append(String s) {
+            try {
+                appendable.append(s);
+            } catch (IOException e) {
+                throw new JsonWriteException("Unable to append to writer", e);
+            }
+            return this;
+        }
+
+        void append(char[] chars, int i, int length) {
+            try {
+                appendable.append(new String(chars), i, length);
+            } catch (IOException e) {
+                throw new JsonWriteException("Unable to append to writer", e);
+            }
+        }
+
+        void append(boolean s) {
+            append(String.valueOf(s));
         }
     }
 
@@ -166,7 +184,7 @@ public final class PrettyPrinter {
 
         private void writeProperty(String name, Json.JValue value, PrinterState state) {
             state.append(escape(name)).append(":");
-            if (spaceafterColon) {
+            if (spaceAfterColon) {
                 state.append(" ");
             }
             writeValue(value, state);
