@@ -20,7 +20,7 @@
   <parent>
     <groupId>net.hamnaberg.json</groupId>
     <artifactId>immutable-json</artifactId>
-    <version>8.0.0-RC1</version>
+    <version>8.0.0-SNAPSHOT</version>
   </parent>
   <name>Immutable JSON :: Codec</name>
   <artifactId>immutable-json-codec</artifactId>
