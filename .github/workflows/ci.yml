@@ -56,15 +56,21 @@ jobs:
 
       - name: set version
         run: |
-          mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false 
+          mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
 
-      - name: Release Maven package
-        uses: WasiqB/maven-publish-action@v2
-        with:
-          settings_path: .github/release-settings.xml
-          server_id: sonatype
-          maven_profiles: release
-          gpg_private_key: ${{ secrets.PGP_SECRET }}
-          gpg_passphrase: ${{ secrets.PGP_PASSPHRASE }}
-          server_username: ${{ secrets.SONATYPE_USERNAME }}
-          server_password: ${{ secrets.SONATYPE_PASSWORD }}
+      - name: Import signing key
+        if: env.PGP_SECRET != '' && env.PGP_PASSPHRASE != ''
+        env:
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+        run: |
+          echo "$PGP_SECRET" | base64 -d -i - > /tmp/signing-key.gpg
+          echo "$PGP_PASSPHRASE" | gpg --pinentry-mode loopback --passphrase-fd 0 --import /tmp/signing-key.gpg          
+
+      - name: Deploy release
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+        run: |
+          mvn -Prelease --settings .github/release-settings.xml --batch-mode clean deploy

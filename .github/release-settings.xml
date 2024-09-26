@@ -11,16 +11,15 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<gpg.executable>gpg</gpg.executable>
-				<gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+				<gpg.executable>gpg</gpg.executable>				
 			</properties>
 		</profile>
 	</profiles>
 	<servers>
 		<server>
-			<id>${env.SERVER_ID}</id>
-			<username>${env.SERVER_USERNAME}</username>
-			<password>${env.SERVER_PASSWORD}</password>
+			<id>sonatype</id>
+			<username>${env.SONATYPE_USERNAME}</username>
+			<password>${env.SONATYPE_PASSWORD}</password>
 		</server>
 	</servers>
 </settings>
