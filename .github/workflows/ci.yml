@@ -61,7 +61,7 @@ jobs:
       - name: Release Maven package
         uses: WasiqB/maven-publish-action@v2
         with:
-          settings_path: ${{ env.GITHUB_WORKSPACE }}/.github/release-settings.xml
+          settings_path: .github/release-settings.xml
           server_id: sonatype
           maven_profiles: release
           gpg_private_key: ${{ secrets.PGP_SECRET }}
