@@ -185,23 +185,23 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.10.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.3.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -221,7 +221,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>3.5.0</version>
@@ -255,7 +254,6 @@
             <version>1.7.0</version>
             <extensions>true</extensions>
             <configuration>
-              <stagingProfileId>net.hamnaberg</stagingProfileId>
               <serverId>sonatype</serverId>
               <nexusUrl>https://oss.sonatype.org</nexusUrl>
               <autoReleaseAfterClose>true</autoReleaseAfterClose>
