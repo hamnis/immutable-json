@@ -4,16 +4,12 @@
  for Json and provide a useful way to work with that tree.
  
  ## Note
-Starting with version 7, we require JDK11.
-Vavr has been dropped as a dependency.
-
+Starting with version 8, we require JDK17.
 
 ## Status
 
- [![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json)
- [![Build Status](https://travis-ci.org/hamnis/immutable-json.png)](https://travis-ci.org/hamnis/immutable-json)
- [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hamnis/immutable-json)
-
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json)
+[![Build Status](https://github.com/hamnis/immutable-json/actions/workflows/ci.yml/badge.svg)](https://github.com/hamnis/immutable-json/actions/workflows/ci.yml)
 
 # Community
 
@@ -86,6 +82,7 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
 ```
 
 # Where can we find this
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.hamnaberg.json/immutable-json)
 
  Using maven, you download it from Maven Central using these coordinates:
 
@@ -93,98 +90,53 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-ast</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-pointer</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-patch</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-jackson</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-javax</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
 <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-gson</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-codec</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
 
  <dependency>
    <groupId>net.hamnaberg.json</groupId>
    <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>7.0.1</version>
+   <version>VERSION</version> <!-- Version from badge -->
  </dependency>
  ```
 
  Snapshots can be found from [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/):
-
-
- ```xml
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-ast</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-pointer</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-jackson</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-native</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
-  </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-javax</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-codec</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-
- <dependency>
-   <groupId>net.hamnaberg.json</groupId>
-   <artifactId>immutable-json-reflection-codec</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
- </dependency>
-  ```
 
 ## License
 
@@ -194,4 +146,4 @@ Also note that the `Tuples` type is from `net.hamnaberg.json.util` to have Tuple
 ## Contributing 
 All contributions are welcome! Documentation is sorely lacking and really needs some love.
 If you find a missing combinator, please open a PR or issue so we can discuss it.
-Any bugs or missing features are also welcome. 
+Any bugfixes or pointing out missing features are also welcome. 
